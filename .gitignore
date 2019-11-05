@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+/.vs/Computing-Equipment/v16/.suo
+/.vs/Computing-Equipment/v16/Browse.VC.db
+/.vs/Computing-Equipment/v16/Browse.VC.opendb
+/.vs/ProjectSettings.json
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
+/.vs/Computing-Equipment/v16/ipch/AutoPCH/ca6f9168b8e9ee1a/计算工具.ipch
