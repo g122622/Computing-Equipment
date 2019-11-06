@@ -1,7 +1,7 @@
-// ¹¤³ÌÃû³Æ£º¼ÆËã¹¤¾ß
-// ÈÕÆÚ£º20190912
-// °æ±¾£ºv1.4.4
-// ¿ª·¢Æ½Ì¨£ºWindows£ºMicrosoft Visual Studio£»Android£ºc4droid
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ã¹¤ï¿½ï¿½
+// ï¿½ï¿½ï¿½Ú£ï¿½20190912
+// ï¿½æ±¾ï¿½ï¿½v1.4.4
+// ï¿½ï¿½ï¿½ï¿½Æ½Ì¨ï¿½ï¿½Windowsï¿½ï¿½Microsoft Visual Studioï¿½ï¿½Androidï¿½ï¿½c4droid
 // test2332
 
 
@@ -11,40 +11,40 @@
 
 
 // changelog:
-// v1.1.0 ¸Ä±äÒòÊý¼ÆËãÏÈºóË³Ðò£¬ÈÃµÈ´ýÊ±¼ä¸ü·ûºÏÈÏÖªÏ°¹ß¡£
-// v1.1.1 ÐÞ¸ÄÎÞÏÞÑ­»·µÄãÐÖµµ½20000£¬±ÜÃâÌØÊâÇé¿ö¡£
-// v1.2.0 ÕÒÒòÊýÐÞ¸´¸´Î»bug;Ôö¼Ó¼ÆËãÎ»Êý¡£
-// v1.2.1 ÎÄ°¸ÓÅ»¯¡£
-// v1.2.2 Ôö¼ÓÍê³ÉÑÕÉ«¡£
-// v1.3.0 Ôö¼ÓÁËÕÒÒòÊýµÄÔ¤¹À²âËÙ¹¦ÄÜ¡£
-// v1.4.0 ÓÅ»¯ÕÒÒòÊýµÄÔËËãËÙ¶È£¬Ìá¸ßÔ¼50%;¶ÔÏÔÊ¾½øÐÐÓÅ»¯£¬²»»áÏÔÊ¾1ºÍÊý×Ö±¾Éí¡£
-// v1.4.1 ÕÒÒòÊýµÄ²âËÙÓÅ»¯£¬¸ñÊ½ÓÅ»¯;¶þÔªÒ»´Î·½³ÌÔö¼Óa=0Ê±µÄÅÐ±ð¹¦ÄÜ;³ÌÐò¿ªÍ·ÊäÈëÊý´íÎóÊ±»á³öÏÖÌáÊ¾ÁË¡£
-// v1.4.2 ÐÞ¸´ÁËÕÒÒòÊýÖÐÊäÈë2Ê±ÏÔÊ¾ÓÐÒòÊýµÄbug¡£
-// v1.4.3 Ëõ¼õ·½³Ì²¿·Ö´úÂëÌå»ý;ÕÒÒòÊýÖÐÔö¼ÓÁËÖÊÊýÏÔÊ¾;ÐÞ¸´ÕÒÒòÊýÖÐÊäÈë0Ê±ÏÔÊ¾ÓÐÒòÊýµÄbug¡£
-// v1.4.4 ÒòÊý·Ö½âÔö¼Ó´óÐÍÈÎÎñÅÐ¶ÏÄ£¿é¡£
-// v2.0.0 1.´úÂëÓÅ»¯£¬ÖÕÓÚÃ»ÓÐwarningÁË;2.ÓÅ»¯ÕÒÒòÊý´óÐÍÈÎÎñÅÐ¶Ï²¿·ÖµÄ½»»¥;3.ÓÅ»¯·½³ÌÊäÈëa=0Ê±µÄ½»»¥;4.ÓÅ»¯·½³Ì²½ÖèµÄÏÔÊ¾;
-// 5.ÕÒÒòÊýÔö¼ÓÊäÈëÎª¸ºÊýÊ±µÄÌáÊ¾;6.switch·ÖÖ§½á¹¹µÄÅÐ¶ÏÊý¾ÝÀàÐÍ¸ÄÎªlong long£¬ÊäÈë¸üÄÍÜ³;
-// ¼ÓÈë´úÂëÀúÊ·°æ±¾
+// v1.1.0 ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Èºï¿½Ë³ï¿½ï¿½ï¿½ÃµÈ´ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÖªÏ°ï¿½ß¡ï¿½
+// v1.1.1 ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½20000ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// v1.2.0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½Î»bug;ï¿½ï¿½Ó¼ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+// v1.2.1 ï¿½Ä°ï¿½ï¿½Å»ï¿½ï¿½ï¿½
+// v1.2.2 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½
+// v1.3.0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½Ù¹ï¿½ï¿½Ü¡ï¿½
+// v1.4.0 ï¿½Å»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È£ï¿½ï¿½ï¿½ï¿½Ô¼50%;ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Å»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾1ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½
+// v1.4.1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½Å»ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½Å»ï¿½;ï¿½ï¿½ÔªÒ»ï¿½Î·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½a=0Ê±ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½;ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½Ë¡ï¿½
+// v1.4.2 ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2Ê±ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bugï¿½ï¿½
+// v1.4.3 ï¿½ï¿½ï¿½Ì²ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾;ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0Ê±ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bugï¿½ï¿½
+// v1.4.4 ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½Ó´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ä£ï¿½é¡£
+// v2.0.0 1.ï¿½ï¿½ï¿½ï¿½ï¿½Å»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½warningï¿½ï¿½;2.ï¿½Å»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï²ï¿½ï¿½ÖµÄ½ï¿½ï¿½ï¿½;3.ï¿½Å»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½a=0Ê±ï¿½Ä½ï¿½ï¿½ï¿½;4.ï¿½Å»ï¿½ï¿½ï¿½ï¿½Ì²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾;
+// 5.ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ê¾;6.switchï¿½ï¿½Ö§ï¿½á¹¹ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½Îªlong longï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü³;
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê·ï¿½æ±¾
 
 
-//bug·´À¡1:ÎÞ·¨Ïû³ýÐ¡ÊýÏÔÊ¾ÏÞÖÆ
-//bug·´À¡2:aÎªÐ¡ÓÚµÈÓÚ-2µÄÊýÊ±£¬ÎÞ·¨·Ö½â¡£½â¾ö:µ±¼ì²âµ½aÎª¸ºÊýÊ±£¬´¥·¢if£¬µ÷×ªabcµÄ·ûºÅ¡£
-//£¡£¡£¡¿ÉÄÜ´¥·¢ÖØ´óÒþ±Îbug:ÒòÊ½·Ö½âÔÚÊ¹ÓÃÕûÊý±äÁ¿(int,long)µÈÊ±£¬ÈôÎÞÇ¿ÖÆÀàÐÍ×ª»»Ð¡Êý£¬Ôò»áµ¼ÖÂÊä³öÒì³£
+//bugï¿½ï¿½ï¿½1:ï¿½Þ·ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
+//bugï¿½ï¿½ï¿½2:aÎªÐ¡ï¿½Úµï¿½ï¿½ï¿½-2ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Þ·ï¿½ï¿½Ö½â¡£ï¿½ï¿½ï¿½:ï¿½ï¿½ï¿½ï¿½âµ½aÎªï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ifï¿½ï¿½ï¿½ï¿½×ªabcï¿½Ä·ï¿½Å¡ï¿½
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½bug:ï¿½ï¿½Ê½ï¿½Ö½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(int,long)ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½áµ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì³£
 //
 
 /*
-Èç¹ûÊÇÔÚ main º¯ÊýÖ®ºó½øÐÐº¯Êý¶¨ÒåµÄ£¬ÄÇÃ´µ÷ÓÃÊ±¾ÍÒ»¶¨ÒªÔÚ main º¯ÊýÖ®Ç°½øÐÐÉùÃ÷£¬
-Èç¹ûÔÚ×Ô¶¨Òåº¯ÊýÔÚ main º¯ÊýÖ®Ç°¶¨ÒåµÄ£¬¾Í¿ÉÒÔ²»ÐèÒª½øÐÐÉùÃ÷£¬main º¯ÊýÄÜ¹»×Ô¶¯ÕÒµ½¸Ãº¯Êý¡£
-Èç¹û²»½øÐÐº¯ÊýÉùÃ÷£¬ÔÚÆäËûµÄ±àÒëÆ÷ÖÐ¾Í»á³öÏÖ×Ô¶¨Òåº¯ÊýÕÒ²»µ½µÄÏÖÏó
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ main ï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½ï¿½ï¿½Ðºï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ò»ï¿½ï¿½Òªï¿½ï¿½ main ï¿½ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½åº¯ï¿½ï¿½ï¿½ï¿½ main ï¿½ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½Í¿ï¿½ï¿½Ô²ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½main ï¿½ï¿½ï¿½ï¿½ï¿½Ü¹ï¿½ï¿½Ô¶ï¿½ï¿½Òµï¿½ï¿½Ãºï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½ï¿½Ðºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¾Í»ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½åº¯ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 */
 
    // system("pause");
-// ¼ÆËã¹¤¾ß.cpp : ´ËÎÄ¼þ°üº¬ "main"
-// º¯Êý¡£³ÌÐòÖ´ÐÐ½«ÔÚ´Ë´¦¿ªÊ¼²¢½áÊø¡£
-// ÏÈÈÃuserÅÐ¶ÏÓÐÎÞ·ÖÊý£¬»¹Òª½â¾öaÎª²»Îª0µÄÇé¿ö£¬aÎªÁãµÄÊ±ºò·ÖÄ¸ÊÇÎÞÒâÒåµÄ£»
-// ¸ùÊ½»¹Òª¼ÌÐø»¯¼ò£¬ÌáÊý³öÀ´
+// ï¿½ï¿½ï¿½ã¹¤ï¿½ï¿½.cpp : ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ "main"
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð½ï¿½ï¿½Ú´Ë´ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ï¿½ï¿½ï¿½ï¿½userï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½aÎªï¿½ï¿½Îª0ï¿½ï¿½ï¿½ï¿½ï¿½aÎªï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½
+// ï¿½ï¿½Ê½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-/*----------Ô¤´¦ÀíÆ÷/Ô¤±àÒëÓï¾ä¼ÓÔØÇø----------*/
+/*----------Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½----------*/
 #include <iostream>
 #include <stdio.h>
 #include <cmath>
@@ -56,33 +56,33 @@
 using namespace std;
 
 
-/*----------½á¹¹ÌåÉùÃ÷Çø----------*/
-// ¶þ´Î¸ùÊ½»¯¼ò½á¹¹Ìå
+/*----------ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½----------*/
+// ï¿½ï¿½ï¿½Î¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½
 struct simplify_quadratic_radical_struct
 {
 	long in_radical;
 	long out_radical;
 };
 
-// Ã°ÅÝÅÅÐò½á¹¹Ìå
+// Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½
 struct getSortedData_struct
 {
 	long data_array[512];
 	long swapcount = 0;
 };
 
-// ·ÖÊýÔ¼·Ö½á¹¹Ìå
+// ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½Ö½á¹¹ï¿½ï¿½
 struct simplify_fraction_struct
 {
-	long simplified_numerator;		// ·Ö×Ó
-	long simplified_denominator;	// ·ÖÄ¸
-	long greatest_common_divisor;	// ×î´ó¹«Ô¼Êý
+	long simplified_numerator;		// ï¿½ï¿½ï¿½ï¿½
+	long simplified_denominator;	// ï¿½ï¿½Ä¸
+	long greatest_common_divisor;	// ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½
 	short single_display_state;
 	short minus_display_state;
 };
 
 
-/*----------º¯ÊýÉùÃ÷Çø----------*/
+/*----------ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½----------*/
 double getRandData(long, long);
 simplify_quadratic_radical_struct simplify_quadratic_radical(long);
 void swapData(long&, long&);
@@ -93,33 +93,33 @@ long getAbsoluteData(long);
 void displayFraction(simplify_fraction_struct);
 
 
-// Éú³ÉËæ»úÊýÁÐµÄº¯Êý
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÄºï¿½ï¿½ï¿½
 double getRandData(long min, long max)
-{	// ¼ÆËã 0£¬1Ö®¼äµÄËæ»úÐ¡Êý,µÃµ½µÄÖµÓò½üËÆÎª(0,1)
+{	// ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½1Ö®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½,ï¿½Ãµï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½Îª(0,1)
 	double m1 = (double)(rand() % 101) / 101;
-	// ½«Çø¼ä±äÎª(min+1,max)
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª(min+1,max)
 	min++;
-	// ¼ÆËã min+1,max Ö®¼äµÄËæ»úÕûÊý£¬µÃµ½µÄÖµÓòÎª[min+1,max]
+	// ï¿½ï¿½ï¿½ï¿½ min+1,max Ö®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Öµï¿½ï¿½Îª[min+1,max]
 	double m2 = (double)((rand() % (max - min + 1)) + min);
-	// ÁîÖµÓòÎª[min,max-1]
+	// ï¿½ï¿½Öµï¿½ï¿½Îª[min,max-1]
 	m2 = m2 - 1;
-	// ·µ»ØÖµÓòÎª(min,max),ÎªËùÇóËæ»ú¸¡µãÊý
+	// ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Îª(min,max),Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	return m1 + m2;
 }
 
 
-// ¶þ´Î¸ùÊ½»¯¼òº¯Êý
+// ï¿½ï¿½ï¿½Î¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 simplify_quadratic_radical_struct simplify_quadratic_radical(long numscan)
 {
-	// Ê¹ÓÃ½á¹¹Ìå´«²Î
-	simplify_quadratic_radical_struct temp;	// ¶¨Òåtemp½á¹¹Ìå
+	// Ê¹ï¿½Ã½á¹¹ï¿½å´«ï¿½ï¿½
+	simplify_quadratic_radical_struct temp;	// ï¿½ï¿½ï¿½ï¿½tempï¿½á¹¹ï¿½ï¿½
 	for (long i = numscan; i > 0; i--)
 	{
 		if ((double) numscan / i == (long) numscan / i and (double)sqrt(i) == (long)sqrt(i))
-			// µÚÒ»¸öÌõ¼þ£ºÈ·±£iÎªnumscanµÄÕûÒòÊý£»µÚ¶þ¸öÌõ¼þ£ºÈ·±£iÊÇ×î´óµÄÍêÈ«Æ½·½ÒòÊý
+			// ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½iÎªnumscanï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
-			temp.in_radical =  numscan / i;	// Êä³ö¸ùºÅÄÚÊ£ÓàµÄÊý
-			temp.out_radical =  sqrt(i);	// Êä³ö¸ùºÅÍâ·Ö½â³öÀ´µÄÊý
+			temp.in_radical =  numscan / i;	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½
+			temp.out_radical =  sqrt(i);	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			break;
 		}
 	}
@@ -127,28 +127,28 @@ simplify_quadratic_radical_struct simplify_quadratic_radical(long numscan)
 }
 
 
-// Êý¶Ô½»»»º¯Êý
+// ï¿½ï¿½Ô½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void swapData(long& num1, long& num2)
 {
-	long* temp = new long;	// ¸ø»º´æ·ÖÅäÄÚ´æ¿Õ¼ä
+	long* temp = new long;	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½Õ¼ï¿½
 	*temp = num2;
 	num2 = num1;
 	num1 = *temp;
-	delete temp;			// ÊÍ·ÅÄÚ´æ
+	delete temp;			// ï¿½Í·ï¿½ï¿½Ú´ï¿½
 }
 
 
-// Ã°ÅÝÅÅÐòº¯Êý
+// Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 getSortedData_struct getSortedData(getSortedData_struct temp, long& dataamount)
 {
-	//getSortedData_struct temp;	// ¶¨Òåtemp½á¹¹Ìå
+	//getSortedData_struct temp;	// ï¿½ï¿½ï¿½ï¿½tempï¿½á¹¹ï¿½ï¿½
 	for (int k = 0; k < dataamount; k++)
 	{
 		for (int j = dataamount - 1; j > 0;j--)
 		{
 			if (temp.data_array[j] < temp.data_array[j - 1])
 			{
-				swapData(temp.data_array[j - 1], temp.data_array[j]);	// ½»»»Á½¸ö¶ÔÏó
+				swapData(temp.data_array[j - 1], temp.data_array[j]);	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				(temp.swapcount)++;
 			}
 		}
@@ -157,21 +157,21 @@ getSortedData_struct getSortedData(getSortedData_struct temp, long& dataamount)
 }
 
 
-// ·ÖÊýÔ¼·Öº¯Êý
+// ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½Öºï¿½ï¿½ï¿½
 simplify_fraction_struct simplify_fraction(long numerator, long denominator)
 {
 	simplify_fraction_struct temp;
-	temp.single_display_state = enabled;								// Ä¬ÈÏÆôÓÃÕûÊýÏÔÊ¾
-	long abs_num = getAbsoluteData(numerator);							// È¡¾ø¶ÔÖµ£¬±ÜÃâ´«Èë¸ºÊýÊ±ÄÚ´æÎ´±»³õÊ¼»¯
+	temp.single_display_state = enabled;								// Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
+	long abs_num = getAbsoluteData(numerator);							// È¡ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½â´«ï¿½ë¸ºï¿½ï¿½Ê±ï¿½Ú´ï¿½Î´ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
 	long abs_den = getAbsoluteData(denominator);
-	for (long i = (abs_num + abs_den) / 2; i > 0; i--)					// ab¾ø¶ÔÖµÏà¼Ó³ýÒÔ2£¬±ÜÃâ×öÎÞÓÃÔËËã
-	{																	// jÎª×î´ó¹«Ô¼Êý
+	for (long i = (abs_num + abs_den) / 2; i > 0; i--)					// abï¿½ï¿½ï¿½Öµï¿½ï¿½Ó³ï¿½ï¿½ï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	{																	// jÎªï¿½ï¿½ï¿½Ô¼ï¿½ï¿½
 		if ((double)numerator / i == (long)numerator / i and (double)denominator / i == (long)denominator / i)
 		{
 			temp.greatest_common_divisor = i;
 			temp.simplified_numerator = numerator / i;
 			temp.simplified_denominator = denominator / i;
-			// ÅÐ¶Ï·ÖÊýÊÇ·ñÏÔÊ¾¸ººÅ
+			// ï¿½Ð¶Ï·ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
 			if (temp.simplified_numerator * temp.simplified_denominator >= 0)
 			{
 				temp.minus_display_state = disabled;
@@ -180,10 +180,10 @@ simplify_fraction_struct simplify_fraction(long numerator, long denominator)
 			{
 				temp.minus_display_state = enabled;
 			}
-			// ·Ö×Ó·ÖÄ¸È«²¿È¡¾ø¶ÔÖµ
+			// ï¿½ï¿½ï¿½Ó·ï¿½Ä¸È«ï¿½ï¿½È¡ï¿½ï¿½ï¿½Öµ
 			temp.simplified_numerator = getAbsoluteData(temp.simplified_numerator);
 			temp.simplified_denominator = getAbsoluteData(temp.simplified_denominator);
-			// Èç¹û×î´ó¹«Ô¼ÊýµÈÓÚ·ÖÄ¸µÄ¾ø¶ÔÖµ£¬ÆôÓÃÕûÊýÏÔÊ¾
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½Ú·ï¿½Ä¸ï¿½Ä¾ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 			if (temp.greatest_common_divisor == abs_den)
 			{
 				temp.single_display_state = enabled;
@@ -199,10 +199,10 @@ simplify_fraction_struct simplify_fraction(long numerator, long denominator)
 }
 
 
-// ·ÖÊýÏÔÊ¾º¯Êý
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
 void displayFraction(simplify_fraction_struct temp)
 {
-	if (temp.simplified_numerator != 0)			// ·Ö×ÓÈôÎª0£¬Ö±½ÓÏÔÊ¾0
+	if (temp.simplified_numerator != 0)			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª0ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½Ê¾0
 	{
 		if (temp.minus_display_state == enabled)
 		{
@@ -225,7 +225,7 @@ void displayFraction(simplify_fraction_struct temp)
 }
 
 
-// È¡¾ø¶ÔÖµº¯Êý
+// È¡ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½
 long getAbsoluteData(long numscan)
 {
 	if (numscan < 0)
@@ -236,79 +236,79 @@ long getAbsoluteData(long numscan)
 }
 
 
-// ÒòÊý·Ö½âº¯Êý
+// ï¿½ï¿½ï¿½ï¿½Ö½âº¯ï¿½ï¿½
 
 
-// ¼ÓÔØ×Ü¿ØÖÆÌ¨º¯Êý
+// ï¿½ï¿½ï¿½ï¿½ï¿½Ü¿ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½
 long long loadMasterConsole()
 {
 	long long SwitchNum;
-	cout << "===============[×Ü¿ØÖÆÌ¨]===============" << endl
-		<< "1::½â/·ÖÎö¶þÔªÒ»´Î·½³Ì" << endl
-		<< "2::ÒòÊý·Ö½â" << endl
-		<< "3::ÕÒ×îÐ¡¹«±¶Êý¡¢×î´ó¹«ÒòÊý" << endl
-		<< "4::ÅÐ¶ÏÍêÈ«Æ½·½Êý" << endl
-		<< "5::Êý¾ÝÅÅÐò" << endl
-		<< "6::·ÖÊýÔ¼·Ö" << endl
-		<< "7::¶þ´Î¸ùÊ½»¯¼ò" << endl
-		<< "8::¶þ´Î¸ùÊ½·ÖÄ¸ÓÐÀí»¯" << endl
-		<< "9::Éí·ÝÖ¤ÑéÖ¤Âë¼ÆËã" << endl
-		<< "10::ÌõÐÎÂëÑéÖ¤Âë¼ÆËã" << endl
-		<< "11::¼ÆËãÆ½¾ùÊý¡¢ÖÐÎ»Êý¡¢ÖÚÊý¡¢·½²î" << endl
-		<< "12::¼ÆËã¼ÓÈ¨Æ½¾ùÊý" << endl
-		<< "13::Éú³ÉËæ»úÊý" << endl
-		<< "14::¶þ´Îº¯Êý½âÎöÊ½¼ÆËã" << endl
-		// ±¸·Ý
+	cout << "===============[ï¿½Ü¿ï¿½ï¿½ï¿½Ì¨]===============" << endl
+		<< "1::ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ÔªÒ»ï¿½Î·ï¿½ï¿½ï¿½" << endl
+		<< "2::ï¿½ï¿½ï¿½ï¿½Ö½ï¿½" << endl
+		<< "3::ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl
+		<< "4::ï¿½Ð¶ï¿½ï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½" << endl
+		<< "5::ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl
+		<< "6::ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½" << endl
+		<< "7::ï¿½ï¿½ï¿½Î¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½" << endl
+		<< "8::ï¿½ï¿½ï¿½Î¸ï¿½Ê½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½" << endl
+		<< "9::ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½" << endl
+		<< "10::ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½" << endl
+		<< "11::ï¿½ï¿½ï¿½ï¿½Æ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl
+		<< "12::ï¿½ï¿½ï¿½ï¿½ï¿½È¨Æ½ï¿½ï¿½ï¿½ï¿½" << endl
+		<< "13::ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl
+		<< "14::ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½" << endl
+		// ï¿½ï¿½ï¿½ï¿½
 		/*
 		<< "11::" << endl
 		<< "11::" << endl
 		<< "11::" << endl
 		*/
-		<< "0::ÏÔÊ¾¿ØÖÆÌ¨" << endl
-		<< "[ÊäÈë]";
+		<< "0::ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Ì¨" << endl
+		<< "[ï¿½ï¿½ï¿½ï¿½]";
 	cin >> SwitchNum;
 	cout << "====================" << endl << endl;
 	return SwitchNum;
 }
 
-clock_t start, stop;				// ³õÊ¼»¯¼ÆÊ±º¯Êý
+clock_t start, stop;				// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
 
-int main(void)						// ¿ªÊ¼Ö´ÐÐÖ÷º¯Êý
+int main(void)						// ï¿½ï¿½Ê¼Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 {
 	long double pretime;
-	short speedTestState = enabled;	// ±ÜÃâ¶à´Î²âËÙ
+	short speedTestState = enabled;	// ï¿½ï¿½ï¿½ï¿½ï¿½Î²ï¿½ï¿½ï¿½
 Select_Num_Scan:
-	switch (loadMasterConsole())	// ¼ÓÔØ×Ü¿ØÖÆÌ¨
+	switch (loadMasterConsole())	// ï¿½ï¿½ï¿½ï¿½ï¿½Ü¿ï¿½ï¿½ï¿½Ì¨
 	{
-	case 1:		// ½â/·ÖÎö¶þÔªÒ»´Î·½³Ì
+	case 1:		// ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ÔªÒ»ï¿½Î·ï¿½ï¿½ï¿½
 	{
-		float* a = new float;		// ÓÃÓÚ·½³ÌµÄÊäÈë
+		float* a = new float;		// ï¿½ï¿½ï¿½Ú·ï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½
 		float* b = new float;
 		float* c = new float;
 		float* Delta = new float;
-		float* mid2 = new float;	// ·½³ÌÁ½¸ù
+		float* mid2 = new float;	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		float* mid3 = new float;
 
 		int* fzacount = new int;
-		long* fzmid1 = new long;					//ÓÃÓÚ³ýaºÍc
-		long double* fzmid2 = new long double;		//ÓÃÓÚ±»a³ý
+		long* fzmid1 = new long;					//ï¿½ï¿½ï¿½Ú³ï¿½aï¿½ï¿½c
+		long double* fzmid2 = new long double;		//ï¿½ï¿½ï¿½Ú±ï¿½aï¿½ï¿½
 		int* FZA = new int[512];
 		*fzacount = 0;
 		*fzmid1 = 1;
 		// int m1, d1, m2, d2, m3, d3, mid4, mid5, mid6, d = 0; //
-		// ·ÖÊýÔËËãÐèÒªÓÃµ½µÄÔÚÕâÀï¶¨Òå£¬ÔÝÊ±»¹ÓÃ²»µ½
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¶¨ï¿½å£¬ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½
 		// float mid7, mid8, mid9; //
-		// ÓÃÓÚ·ÖÊý³ý·¨£¬ÔÝÊ±»¹ÓÃ²»µ½
+		// ï¿½ï¿½ï¿½Ú·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½
 
-		std::cout << "{!}³ÌÐòÆô¶¯£¬·½³ÌÀàÐÍ£ºax^2+bx+c=0 \n" << std::endl;
+		std::cout << "{!}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ax^2+bx+c=0 \n" << std::endl;
 	A_Scan:
-		printf("{!}ÇëÊäÈëaµÄÖµ¡£ \n");
+		printf("{!}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½aï¿½ï¿½Öµï¿½ï¿½ \n");
 		printf("[a]");
 		cin >> *a;
 		if (*a == 0)
 		{
 			cout <<
-				"¡ßa=0£¬¡à¸Ã·½³Ì²»ÊôÓÚ¶þÔªÒ»´Î·½³Ì£¬ÇëÖØÐÂÊäÈëaµÄÖµ."
+				"ï¿½ï¿½a=0ï¿½ï¿½ï¿½ï¿½Ã·ï¿½ï¿½Ì²ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ÔªÒ»ï¿½Î·ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½aï¿½ï¿½Öµ."
 				<< endl;
 			goto A_Scan;
 		}
@@ -317,31 +317,31 @@ Select_Num_Scan:
 			goto B_Scan;
 		}
 	B_Scan:
-		printf("{!}ÇëÊäÈëbµÄÖµ¡£ \n");
+		printf("{!}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½Öµï¿½ï¿½ \n");
 		printf("[b]");
 		cin >> *b;
-		printf("{!}ÇëÊäÈëcµÄÖµ¡£ \n");
+		printf("{!}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½ï¿½Öµï¿½ï¿½ \n");
 		printf("[c]");
 		cin >> *c;
-		// ÊäÈë½áÊø
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-		cout << endl;	// Êä³ö¿ÕÐÐ
+		cout << endl;	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		printf("%gx^2+%gx+%g=0 \n\n", *a, *b, *c);
 
-		cout << "ÓÉÎ¤´ï¶¨Àí£¬\nx(1)+x(2) = -b/a = " << -*b / *a << "." << endl
+		cout << "ï¿½ï¿½Î¤ï¿½ï¶¨ï¿½ï¿½\nx(1)+x(2) = -b/a = " << -*b / *a << "." << endl
 			<< "x(1)x(2) = c/a = " << *c / *a << "." << endl << endl;
 
-		std::cout << "[½â·¨1£ºÒòÊ½·Ö½â·¨(ÊµÑéÐÔ£¬bug¿ÉÄÜ½Ï¶à)]" << std::endl;
+		std::cout << "[ï¿½â·¨1ï¿½ï¿½ï¿½ï¿½Ê½ï¿½Ö½â·¨(Êµï¿½ï¿½ï¿½Ô£ï¿½bugï¿½ï¿½ï¿½Ü½Ï¶ï¿½)]" << std::endl;
 		do
-			// ¿ªÊ¼aµÄÒòÊý¼ÆËãÑ­»·£¬aµÄ·Ö½âÖ»ÐèÒªÕýÖµ¼´¿É
+			// ï¿½ï¿½Ê¼aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½aï¿½Ä·Ö½ï¿½Ö»ï¿½ï¿½Òªï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½
 		{
 			*fzmid2 = *a / *fzmid1;
 			if (*fzmid2 == (long long)* fzmid2)
 			{
 				FZA[*fzacount] = *fzmid1;
-				//cout << *fzacount+1 << "¡ú";
+				//cout << *fzacount+1 << "ï¿½ï¿½";
 				//cout << FZA[*fzacount] << endl;
-				//Êä³öÁ÷µ÷ÊÔ
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				(*fzmid1)++;
 				(*fzacount)++;
 			}			// if
@@ -350,13 +350,13 @@ Select_Num_Scan:
 				(*fzmid1)++;
 			}			// else
 		}				// do
-		while (*fzmid1 <= *a and *fzacount <= 20000);	//Òì³£ÖÐ¶Ï
+		while (*fzmid1 <= *a and *fzacount <= 20000);	//ï¿½ì³£ï¿½Ð¶ï¿½
 
-		// ///////¿ªÊ¼*cµÄÒòÊý¼ÆËãÑ­»·£¬Õý¸ºÖµ¶¼Òª¼ÆËã£¬ÏÈÌÖÂÛ*cµÄÕý¸ºÐÔ
+		// ///////ï¿½ï¿½Ê¼*cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Òªï¿½ï¿½ï¿½ã£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		long* fzmid3 = new long;
-		*fzmid3 = (long)-*c;	// ÉèÁ¢fzmid3ÊÇÎªÁË±ÜÃâÊý¾ÝÀàÐÍ×ª»»µÄwarning
-		*fzmid1 = *fzmid3;		// ¸´Î»
-		delete fzmid3;			// ¸³Öµºó¼´Ïú»Ù
+		*fzmid3 = (long)-*c;	// ï¿½ï¿½ï¿½fzmid3ï¿½ï¿½Îªï¿½Ë±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½warning
+		*fzmid1 = *fzmid3;		// ï¿½ï¿½Î»
+		delete fzmid3;			// ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½
 		int* fzccount = new int;
 		*fzccount = 0;
 		int* FZC = new int[512];
@@ -368,7 +368,7 @@ Select_Num_Scan:
 				if (*fzmid2 == (long long)* fzmid2)
 				{
 					FZC[*fzccount] = *fzmid1;
-					//cout << FZC[fzccount] << endl;	// Êä³öÁ÷ÓÃÓÚµ÷ÊÔ
+					//cout << FZC[fzccount] << endl;	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½
 					(*fzmid1)++;
 					(*fzccount)++;
 				}			// if
@@ -377,18 +377,18 @@ Select_Num_Scan:
 					(*fzmid1)++;
 				}			// else
 			}				// do
-			while (*fzmid1 <= *c and *fzccount <= 20000);	//Òì³£ÖÐ¶Ï
+			while (*fzmid1 <= *c and *fzccount <= 20000);	//ï¿½ì³£ï¿½Ð¶ï¿½
 		}					// if (*c>0)
-		else				//*cµÄ¸ºÊýÒòÊý¼ÆËãÄ£¿é£¨ÐÂ£©
+		else				//*cï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½é£¨ï¿½Â£ï¿½
 		{
 			do
-				// ¿ªÊ¼*cµÄÒòÊý¼ÆËãÑ­»·£¬Õý¸ºÖµ¶¼Òª¼ÆËã
+				// ï¿½ï¿½Ê¼*cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
 			{
 				*fzmid2 = *c / *fzmid1;
 				if (*fzmid2 == (long long)* fzmid2)
 				{
 					FZC[*fzccount] = *fzmid1;
-					//cout << FZC[fzccount] << "test" << endl;	// Êä³öÁ÷ÓÃÓÚµ÷ÊÔ
+					//cout << FZC[fzccount] << "test" << endl;	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½
 					(*fzmid1)--;
 					(*fzccount)++;
 				}			// if
@@ -397,18 +397,18 @@ Select_Num_Scan:
 					(*fzmid1)--;
 				}			// else
 			}				// do
-			while (*fzmid1 >= *c and *fzccount <= 20000);	//Òì³£ÖÐ¶Ï
-		}					//if£¨first-else£©
+			while (*fzmid1 >= *c and *fzccount <= 20000);	//ï¿½ì³£ï¿½Ð¶ï¿½
+		}					//ifï¿½ï¿½first-elseï¿½ï¿½
 
-							// ÒòÊý¼ÆËãÍê³É£¬¿ªÊ¼forÑ­»·+ifÌõ¼þÆ¥Åä
+							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½ï¿½Ê¼forÑ­ï¿½ï¿½+ifï¿½ï¿½ï¿½Æ¥ï¿½ï¿½
 		for (int i = 0; i <= *fzccount; i++)
 		{
 			for (int j = 0; j <= *fzacount; j++)
 			{
-				if (FZA[j] * (*c / FZC[i]) + FZC[i] * (*a / FZA[j]) == *b)//´¥·¢Êä³öµÄÌõ¼þ
+				if (FZA[j] * (*c / FZC[i]) + FZC[i] * (*a / FZA[j]) == *b)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				{
-					// £¡£¡£¡¿ªÊ¼Êä³ö Output
-					if (FZC[i] == *c / FZC[i] and FZA[j] == *a / FZA[j]) //Êä³öÍêÈ«Æ½·½
+					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ Output
+					if (FZC[i] == *c / FZC[i] and FZA[j] == *a / FZA[j]) //ï¿½ï¿½ï¿½ï¿½ï¿½È«Æ½ï¿½ï¿½
 					{
 						cout << "( ";
 						if (FZA[j] != 1) /////1
@@ -458,11 +458,11 @@ Select_Num_Scan:
 					}
 					if (FZC[i] < 0)
 					{
-						cout << "x " << FZC[i] << " = 0£¬»ò ";
+						cout << "x " << FZC[i] << " = 0ï¿½ï¿½ï¿½ï¿½ ";
 					}
 					else
 					{
-						cout << "x + " << FZC[i] << " = 0£¬»ò ";
+						cout << "x + " << FZC[i] << " = 0ï¿½ï¿½ï¿½ï¿½ ";
 					}
 					if (*a / FZA[j] != 1) /////2
 					{
@@ -482,101 +482,101 @@ Select_Num_Scan:
 					cout << *c / FZC[i] << " ) = 0" << endl;
 
 					cout << "( " << FZA[j];
-					cout << "x + " << FZC[i] << " ) = 0£¬»ò ( ";
+					cout << "x + " << FZC[i] << " ) = 0ï¿½ï¿½ï¿½ï¿½ ( ";
 					cout << *a / FZA[j] << "x + " << *c / FZC[i] << " ) = 0" << endl;
 					*/
-					if ((float)-FZC[i] / FZA[j] == (float)(-*c / FZC[i]) / (*a / FZA[j]))	//ÒÔµÈ¸ùÐÎÊ½Êä³ö½á¹û
+					if ((float)-FZC[i] / FZA[j] == (float)(-*c / FZC[i]) / (*a / FZA[j]))	//ï¿½ÔµÈ¸ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½
 					{
 					EqualRoot_Output:
-						cout << "¡àx(1)=x(2)=" << (float)-FZC[i] / FZA[j] << "." << endl << endl;
+						cout << "ï¿½ï¿½x(1)=x(2)=" << (float)-FZC[i] / FZA[j] << "." << endl << endl;
 					}
-					else	//ÒÔ²»µÈ¸ùÐÎÊ½Êä³ö½á¹û
+					else	//ï¿½Ô²ï¿½ï¿½È¸ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½
 					{
-						cout << "¡àx(1)=" << (float)-FZC[i] / FZA[j];
-						cout << "£¬x(2)=" << (float)(-*c / FZC[i]) / (*a / FZA[j]) << "." << endl;
-						cout << endl;	// ¿ÕÒ»ÐÐ
+						cout << "ï¿½ï¿½x(1)=" << (float)-FZC[i] / FZA[j];
+						cout << "ï¿½ï¿½x(2)=" << (float)(-*c / FZC[i]) / (*a / FZA[j]) << "." << endl;
+						cout << endl;	// ï¿½ï¿½Ò»ï¿½ï¿½
 					}
-					goto Method_2;	// Ìø³öÁ½²ãforÑ­»·
+					goto Method_2;	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½forÑ­ï¿½ï¿½
 				}		// if
 			}			// for Aj
 		}				// for Ci
 
-		cout << "{!}¸Ã·½³Ì²»¿ÉÒòÊ½·Ö½â!" << endl << endl;
+		cout << "{!}ï¿½Ã·ï¿½ï¿½Ì²ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½Ö½ï¿½!" << endl << endl;
 	Method_2:
-		std::cout << "[½â·¨2£º¹«Ê½·¨]" << std::endl;
-		// ÅÐ¶Ï&ÔËËãÄ£¿éof¹«Ê½·¨
+		std::cout << "[ï¿½â·¨2ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½]" << std::endl;
+		// ï¿½Ð¶ï¿½&ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ofï¿½ï¿½Ê½ï¿½ï¿½
 		*Delta = pow(*b, 2) - 4 * *a * *c;
-		printf("¦¤=%g^2-4¡Á%g¡Á%g=%g. \n", *b, *a, *c, *Delta);
-		if (*Delta > 0)	// ///Èç¹ûÅÐ±ðÊ½´óÓÚÁã
+		printf("ï¿½ï¿½=%g^2-4ï¿½ï¿½%gï¿½ï¿½%g=%g. \n", *b, *a, *c, *Delta);
+		if (*Delta > 0)	// ///ï¿½ï¿½ï¿½ï¿½Ð±ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 			if (sqrt(*Delta) == (int)sqrt(*Delta))
 			{
-				//ÊÇÍêÈ«Æ½·½Êý
+				//ï¿½ï¿½ï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½
 				*mid2 = (-1 * *b + sqrt(*Delta)) / (2 * *a);
 				*mid3 = (-1 * *b - sqrt(*Delta)) / (2 * *a);
-				// =====¹«Ê½·¨¿ªÊ¼Êä³ö=====
-	 /*------------------Êä³öÄ£¿é£¨ÅÐ±ðÊ½´óÓÚÁã,ÇÒÎªÍêÈ«Æ½·½£©of¹«Ê½·¨------------------*/
-				std::cout << "¡ß¦¤>0£¬¡à·½³ÌÓÐÁ½¸ö²»ÏàµÈµÄÊµÊý¸ù." <<
+				// =====ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½=====
+	 /*------------------ï¿½ï¿½ï¿½Ä£ï¿½é£¨ï¿½Ð±ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Îªï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½ofï¿½ï¿½Ê½ï¿½ï¿½------------------*/
+				std::cout << "ï¿½ß¦ï¿½>0ï¿½ï¿½ï¿½à·½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Èµï¿½Êµï¿½ï¿½ï¿½." <<
 					std::endl;
-				printf("¡àx(1)=%g£¬x(2)=%g. \n", *mid2, *mid3);
+				printf("ï¿½ï¿½x(1)=%gï¿½ï¿½x(2)=%g. \n", *mid2, *mid3);
 			}
 			else
 			{
-				//²»ÊÇÍêÈ«Æ½·½Êý
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½
 				*mid2 = -*b;
 				*mid3 = 2 * *a;
-				/*------------------Êä³öÄ£¿é£¨ÅÐ±ðÊ½´óÓÚÁã,ÇÒ²»ÎªÍêÈ«Æ½·½£©of¹«Ê½·¨------------------*/
-				std::cout << "¡ß¦¤>0£¬¡à·½³ÌÓÐÁ½¸ö²»ÏàµÈµÄÊµÊý¸ù." <<
+				/*------------------ï¿½ï¿½ï¿½Ä£ï¿½é£¨ï¿½Ð±ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½Ò²ï¿½Îªï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½ofï¿½ï¿½Ê½ï¿½ï¿½------------------*/
+				std::cout << "ï¿½ß¦ï¿½>0ï¿½ï¿½ï¿½à·½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Èµï¿½Êµï¿½ï¿½ï¿½." <<
 					std::endl;
-				printf("¡àx(1) =£¨%g+¡Ì%g£©/ %g£¬x(2) =£¨%g-¡Ì%g£©/ %g. \n", *mid2,
+				printf("ï¿½ï¿½x(1) =ï¿½ï¿½%g+ï¿½ï¿½%gï¿½ï¿½/ %gï¿½ï¿½x(2) =ï¿½ï¿½%g-ï¿½ï¿½%gï¿½ï¿½/ %g. \n", *mid2,
 					*Delta, *mid3, *mid2, *Delta, *mid3);
 			}
 		}
-		else			// Èç¹ûÅÐ±ðÊ½²»´óÓÚÁã
+		else			// ï¿½ï¿½ï¿½ï¿½Ð±ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
-			if (*Delta == 0)	// ///Èç¹ûÅÐ±ðÊ½ÎªÁã£¬Ôò²»ÐèÒªÅÐ¶¨¦¤ÊÇ·ñÎªÍêÈ«Æ½·½
+			if (*Delta == 0)	// ///ï¿½ï¿½ï¿½ï¿½Ð±ï¿½Ê½Îªï¿½ã£¬ï¿½ï¿½ï¿½ï¿½Òªï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½È«Æ½ï¿½ï¿½
 			{
 				*mid2 = (-1 * *b + sqrt(*Delta)) / (2 * *a);
-				/*------------------Êä³öÄ£¿é£¨ÅÐ±ðÊ½µÈÓÚÁã£¬ÇÒÎªÍêÈ«Æ½·½£©of¹«Ê½·¨------------------*/
-				std::cout << "¡ß¦¤=0£¬¡à·½³ÌÓÐÁ½¸öÏàµÈµÄÊµÊý¸ù." <<
+				/*------------------ï¿½ï¿½ï¿½Ä£ï¿½é£¨ï¿½Ð±ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ã£¬ï¿½ï¿½Îªï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½ofï¿½ï¿½Ê½ï¿½ï¿½------------------*/
+				std::cout << "ï¿½ß¦ï¿½=0ï¿½ï¿½ï¿½à·½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Èµï¿½Êµï¿½ï¿½ï¿½." <<
 					std::endl;
-				printf("¡àx(1)=x(2)=%g. \n", *mid2);
+				printf("ï¿½ï¿½x(1)=x(2)=%g. \n", *mid2);
 			}
-			else		// ///ÅÐ±ðÊ½Îª¸º£¬ÎÞÊµÊý¸ù
+			else		// ///ï¿½Ð±ï¿½Ê½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½
 			{
-				/*------------------Êä³öÄ£¿é£¨ÅÐ±ðÊ½Ð¡ÓÚÁã£©of¹«Ê½·¨------------------*/
-				std::cout << "¡ß¦¤<0,¡à·½³ÌÃ»ÓÐÊµÊý¸ù.\n{!}¼ÆËãÖÐÖ¹." <<
+				/*------------------ï¿½ï¿½ï¿½Ä£ï¿½é£¨ï¿½Ð±ï¿½Ê½Ð¡ï¿½ï¿½ï¿½ã£©ofï¿½ï¿½Ê½ï¿½ï¿½------------------*/
+				std::cout << "ï¿½ß¦ï¿½<0,ï¿½à·½ï¿½ï¿½Ã»ï¿½ï¿½Êµï¿½ï¿½ï¿½.\n{!}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹." <<
 					std::endl;
 			}			// else
 		}				// else
-						// =====·ÖÊýÄ£¿é
-						/* }//À´×Ôif mid1 = 0,1,2,3,4,5,6,7,8,9 Îª¼ÙµÄÅÐ¶Ï//
+						// =====ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
+						/* }//ï¿½ï¿½ï¿½if mid1 = 0,1,2,3,4,5,6,7,8,9 Îªï¿½Ùµï¿½ï¿½Ð¶ï¿½//
 		   else { std::cout <<
-		   "ÊäÈë·ÖÊýÇëÓÃ¡°/¡±×÷Îª·ÖÊýÏß " << std::endl;
-		   std::cout << "ÇëÊäÈëaµÄÖµ " << std::endl;
-		   scanf("%d/%d", &m1, &d1); std::cout << "ÇëÊäÈë*bµÄÖµ "
+		   "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¡ï¿½/ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ " << std::endl;
+		   std::cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½aï¿½ï¿½Öµ " << std::endl;
+		   scanf("%d/%d", &m1, &d1); std::cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*bï¿½ï¿½Öµ "
 		   << std::endl; scanf("%d/%d", &m2, &d2); std::cout <<
-		   "ÇëÊäÈëcµÄÖµ " << std::endl; scanf("%d/%d", &m3, &d3);
+		   "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½ï¿½Öµ " << std::endl; scanf("%d/%d", &m3, &d3);
 		   }			*/
-		   //ÊÍ·ÅÄÚ´æ
+		   //ï¿½Í·ï¿½ï¿½Ú´ï¿½
 		delete a, b, c, Delta, mid2, mid3;
 		delete[] FZA, FZC;
 		delete fzacount, fzccount, fzmid1, fzmid2;
 		goto Select_Num_Scan;
 	}						// case1
 
-	case 2:		// ÒòÊý·Ö½â
+	case 2:		// ï¿½ï¿½ï¿½ï¿½Ö½ï¿½
 	{
 		long double prenumscan = 4777778;
-		if (speedTestState == enabled) // ±ÜÃâÖØ¸´²âËÙ
+		if (speedTestState == enabled) // ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 			long double* premid1 = new long double;
 			long double* premid2 = new long double;
 			int* precount = new int;
 			*premid1 = 2;
 			*precount = 1;
-			cout << "{!}³ÌÐò¿ªÊ¼Ö´ÐÐ¡£\n[ÕýÔÚ²âËÙ£¬ÇëÉÔºî¡£µ÷ÊÔÐÅÏ¢ÇëºöÂÔ¡£]" << endl;
-			start = clock();	// ¿ªÊ¼²âËÙ
+			cout << "{!}ï¿½ï¿½ï¿½ï¿½Ê¼Ö´ï¿½Ð¡ï¿½\n[ï¿½ï¿½ï¿½Ú²ï¿½ï¿½Ù£ï¿½ï¿½ï¿½ï¿½Ôºî¡£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½Ô¡ï¿½]" << endl;
+			start = clock();	// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
 			do
 			{
 				*premid2 = prenumscan / *premid1;
@@ -584,7 +584,7 @@ Select_Num_Scan:
 				{
 					printf("IF_%d = ", *precount);
 					cout << *premid1;
-					cout << endl;	// Êä³öÒ»¸ö»»ÐÐ·û
+					cout << endl;	// ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ð·ï¿½
 					(*premid1)++;
 					(*precount)++;
 				}
@@ -592,14 +592,14 @@ Select_Num_Scan:
 				{
 					(*premid1)++;
 				}
-			} while (*premid1 <= (prenumscan / 2) and *precount <= 20000);	// whileÒì³£ÖÐ¶Ï
-			stop = clock();		// Í£Ö¹²âËÙ
+			} while (*premid1 <= (prenumscan / 2) and *precount <= 20000);	// whileï¿½ì³£ï¿½Ð¶ï¿½
+			stop = clock();		// Í£Ö¹ï¿½ï¿½ï¿½ï¿½
 			pretime = (float)(stop - start) / CLOCKS_PER_SEC;
-			cout << "Time=" << pretime << endl << "²âËÙÍê³É¡£" << endl << endl;
+			cout << "Time=" << pretime << endl << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¡ï¿½" << endl << endl;
 			speedTestState = disabled;
 			delete premid1, premid2, precount;
 		}
-		// ²âËÙ½áÊø
+		// ï¿½ï¿½ï¿½Ù½ï¿½ï¿½ï¿½
 		double* duration = new double;
 		long double* numscan = new long double;
 		long double* predicttime = new long double;
@@ -610,49 +610,49 @@ Select_Num_Scan:
 		*mid1 = 2;
 		// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
 		// FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN |
-		// FOREGROUND_BLUE);/////set°×É«
+		// FOREGROUND_BLUE);/////setï¿½ï¿½É«
 	Case2_Scan:
-		printf("{!}ÇëÊäÈëÒ»¸öÕûÊý£¬Ê®Ò»Î»Êý¼°ÒÔÏÂ£¬°´»Ø³µ¼ü¼ÌÐø¡£\n");
+		printf("{!}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê®Ò»Î»ï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½Ø³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n");
 		//			printf
 		("   Please enter an integer,eleven digits or less,press enter to continue.\n\n");
-		printf("[ÊäÈëÕûÊý]");
+		printf("[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]");
 		cin >> *numscan;
 		if (*numscan < 0)
 		{
-			cout << endl << "ÏµÍ³ÏûÏ¢£ºÔÝ²»Ö§³Ö¸ºÊýµÄ¼ÆËã¡£Ìø×ª»Øµ½¿ªÍ·¡£" << endl << endl;
+			cout << endl << "ÏµÍ³ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½Ý²ï¿½Ö§ï¿½Ö¸ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ã¡£ï¿½ï¿½×ªï¿½Øµï¿½ï¿½ï¿½Í·ï¿½ï¿½" << endl << endl;
 			goto Case2_Scan;
 		}
-		cout << fixed << setprecision(6);	// Ëø¶¨¸¡µãÊýÏÔÊ¾£¬²»Ê¹ÓÃ¿ÆÑ§¼ÆÊý·¨£¬Ð¡ÊýÏÔÊ¾6Î»
+		cout << fixed << setprecision(6);	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¿ï¿½Ñ§ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½Ê¾6Î»
 		*predicttime = (pretime / prenumscan) * *numscan;
-		cout << "[Ô¤¼ÆºÄÊ±]" << *predicttime << " sec." << endl << endl;
-		cout << fixed << setprecision(0);	// Ëø¶¨¸¡µãÊýÏÔÊ¾£¬²»Ê¹ÓÃ¿ÆÑ§¼ÆÊý·¨£¬Ð¡Êý²»ÏÔÊ¾
+		cout << "[Ô¤ï¿½Æºï¿½Ê±]" << *predicttime << " sec." << endl << endl;
+		cout << fixed << setprecision(0);	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¿ï¿½Ñ§ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½Ê¾
 		if (*predicttime >= 60)
 		{
 		Select_BigTask_Scan_Default:
 			cout <<
-				"ÄãÊäÈëµÄÊýÔ¤¼ÆÔËËãÊ±¼ä´óÓÚÒ»·ÖÖÓ£¬¼ì²âµ½´óÐÍÈÎÎñ£¬ÊÇ·ñ¼ÌÐø£¿"
+				"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ó£ï¿½ï¿½ï¿½âµ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½"
 				<< endl;
-			cout << "ÇëÊäÈë[0:Y/1:N]";
+			cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[0:Y/1:N]";
 			long* Select_BigTask_Scan = new long;
 			cin >> *Select_BigTask_Scan;
-			cout << endl;	// ¿ÕÒ»ÐÐ
+			cout << endl;	// ï¿½ï¿½Ò»ï¿½ï¿½
 			switch (*Select_BigTask_Scan)
 			{
 			case 0:
 				goto Select_BigTask_Scan_0;
 			case 1:
-				cout << "¼ÆËãÖÐÖ¹£¬Ìø×ª»Øµ½¿ªÍ·¡£" << endl <<
+				cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½×ªï¿½Øµï¿½ï¿½ï¿½Í·ï¿½ï¿½" << endl <<
 					"==============================" << endl << endl;
 				goto Case2_Scan;
 			default:
-				cout << "ÊäÈë·Ç·¨£¡ÇëÖØÐÂÊäÈë¡£" << endl << endl;
+				cout << "ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë¡£" << endl << endl;
 				goto Select_BigTask_Scan_Default;
 			}			// switch
 
 		}				// if
 	Select_BigTask_Scan_0:
-		start = clock();	// ¿ªÊ¼¼ÆÊ±
-		if (*numscan == 0 or *numscan == 2)	// ÅÐ¶ÏÊäÈëÊÇ·ñÎª0,2
+		start = clock();	// ï¿½ï¿½Ê¼ï¿½ï¿½Ê±
+		if (*numscan == 0 or *numscan == 2)	// ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Îª0,2
 		{
 			goto PrimeNum_Output;
 		}
@@ -661,13 +661,13 @@ Select_Num_Scan:
 			goto Default_Output;
 		}
 	Default_Output:
-		// ºËÐÄËã·¨²¿·Ö
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ã·¨ï¿½ï¿½ï¿½ï¿½
 		do
 		{
 			*mid2 = *numscan / *mid1;
 			if (*mid2 == (long long)* mid2)
 			{
-				printf("[ÕûÒòÊý%d] = ", *count);
+				printf("[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%d] = ", *count);
 				cout << *mid1 << endl;
 				(*mid1)++;
 				(*count)++;
@@ -676,176 +676,176 @@ Select_Num_Scan:
 			{
 				(*mid1)++;
 			}
-		} while (*mid1 <= (*numscan / 2) and *count <= 20000);	// whileÒì³£ÖÐ¶Ï
+		} while (*mid1 <= (*numscan / 2) and *count <= 20000);	// whileï¿½ì³£ï¿½Ð¶ï¿½
 	PrimeNum_Output:
 		if (*count == 1)
 		{
-			cout << "{!}¸ÃÊýÊÇÖÊÊý¡£" << endl;
+			cout << "{!}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl;
 		}
-		stop = clock();	// Í£Ö¹¼ÆÊ±
+		stop = clock();	// Í£Ö¹ï¿½ï¿½Ê±
 		*duration = (float)(stop - start) / CLOCKS_PER_SEC;
-		printf("\n{!}±¾´Î¼ÆËã¹²ºÄÊ±%fÃë¡£\n", *duration);
+		printf("\n{!}ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ã¹²ï¿½ï¿½Ê±%fï¿½ë¡£\n", *duration);
 		//			printf("   Processing time is %f sec.\n", *duration);
 					// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
-					// FOREGROUND_INTENSITY | FOREGROUND_GREEN);/////setÂÌÉ«
-		printf("{!}Ö´ÐÐÍê±Ï£¬ÎÞ´íÎó¡£No errors.\n");
+					// FOREGROUND_INTENSITY | FOREGROUND_GREEN);/////setï¿½ï¿½É«
+		printf("{!}Ö´ï¿½ï¿½ï¿½ï¿½Ï£ï¿½ï¿½Þ´ï¿½ï¿½ï¿½No errors.\n");
 		// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
 		// FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN |
-		// FOREGROUND_BLUE);/////set°×É«
-		cout.unsetf(ios::fixed); // Ïû³ýÏÔÊ¾Ëø¶¨
+		// FOREGROUND_BLUE);/////setï¿½ï¿½É«
+		cout.unsetf(ios::fixed); // ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½
 		delete duration;
 		delete numscan, predicttime, mid1, mid2, count;
 		goto Select_Num_Scan;
 	}						// case 2
 
-	case 3:		// ÕÒ×îÐ¡¹«±¶Êý¡¢×î´ó¹«ÒòÊý
+	case 3:		// ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		double* numscan1 = new double;
 		double* numscan2 = new double;
-		cout << "{!}³ÌÐò¿ªÊ¼Ö´ÐÐ¡£" << endl;
+		cout << "{!}ï¿½ï¿½ï¿½ï¿½Ê¼Ö´ï¿½Ð¡ï¿½" << endl;
 	Case3_Scan:
-		cout << "{!}ÇëÊäÈëÁ½¸öÕýÕûÊý£º" << endl << "[a]=";
+		cout << "{!}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl << "[a]=";
 		cin >> *numscan1;
 		cout << "[b]=";
 		cin >> *numscan2;
 		if (*numscan1 * *numscan2 <= 0 or *numscan1 + *numscan2 < 0)
 		{
-			cout << endl << "{!}a,bÖÐÈÎÒ»Öµ²»¿ÉÎª0»ò¸ºÊý£¬ÇëÖØÐÂÊäÈë¡£" << endl << endl;
+			cout << endl << "{!}a,bï¿½ï¿½ï¿½ï¿½Ò»Öµï¿½ï¿½ï¿½ï¿½Îª0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë¡£" << endl << endl;
 			goto Case3_Scan;
 		}
 		for (long i = 1; i < *numscan1 + *numscan2; i++)
 		{
 			if (*numscan1 * i / *numscan2 == (long)* numscan1 * i / (long)* numscan2)
 			{
-				cout << "×îÐ¡¹«±¶ÊýÎª£º" << *numscan1 * i << endl;
+				cout << "ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½" << *numscan1 * i << endl;
 				break;
 			}
 		}
-		for (long j = (*numscan1 + *numscan2) / 2; j > 0; j--)	//abÏà¼Ó³ýÒÔ2£¬±ÜÃâ×öÎÞÓÃÔËËã
+		for (long j = (*numscan1 + *numscan2) / 2; j > 0; j--)	//abï¿½ï¿½Ó³ï¿½ï¿½ï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 			if (*numscan1 / j == (long)* numscan1 / j and *numscan2 / j == (long)* numscan2 / j)
 			{
-				cout << "×î´ó¹«Ô¼ÊýÎª£º" << j << endl;
+				cout << "ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½Îªï¿½ï¿½" << j << endl;
 				break;
 			}
 		}
-		//ÊÍ·ÅÄÚ´æ
+		//ï¿½Í·ï¿½ï¿½Ú´ï¿½
 		delete numscan1, numscan2;
 		goto Select_Num_Scan;
 	}						// case 3
 
-	case 4:		// ÅÐ¶ÏÍêÈ«Æ½·½Êý
+	case 4:		// ï¿½Ð¶ï¿½ï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½
 	{
 		double* numscan = new double;
-		cout << "{!}³ÌÐò¿ªÊ¼Ö´ÐÐ¡£" << endl;
+		cout << "{!}ï¿½ï¿½ï¿½ï¿½Ê¼Ö´ï¿½Ð¡ï¿½" << endl;
 	Case4_Scan:
-		cout << "{!}ÇëÊäÈëÒ»¸öÕýÕûÊý£º" << endl << "[a]=";
+		cout << "{!}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl << "[a]=";
 		cin >> *numscan;
 		if (sqrt(*numscan) == (long long)sqrt(*numscan))
 		{
-			cout << "¸ÃÊýÊÇÍêÈ«Æ½·½Êý¡£¿ª·½ÖµÎª£º" << sqrt(*numscan) << "." << endl;
+			cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½ï¿½ÖµÎªï¿½ï¿½" << sqrt(*numscan) << "." << endl;
 		}
 		else
 		{
-			cout << "¸ÃÊý²»ÊÇÍêÈ«Æ½·½Êý¡£" << endl;
+			cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½" << endl;
 		}
 		delete numscan;
 		goto Select_Num_Scan;
 	}						// case 4
 
-	case 5:		// Êý¾ÝÅÅÐò
+	case 5:		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		getSortedData_struct input;
 		long* numamount = new long;
 	Case5_Scan:
-		cout << "ÇëÊäÈëÊý¾ÝµÄÊýÁ¿" << endl << "[ÊýÁ¿]";
+		cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½ï¿½ï¿½ï¿½" << endl << "[ï¿½ï¿½ï¿½]";
 		cin >> *numamount;
 		if (*numamount > 512)
 		{
-			cout << "ÔÝ²»Ö§³Ö512¸öÒÔÉÏÊý¾Ý£¬ÇëÖØÐÂÊäÈë¡£" << endl;
-			goto Case5_Scan;					// ÖØÐÂÊäÈë
+			cout << "ï¿½Ý²ï¿½Ö§ï¿½ï¿½512ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë¡£" << endl;
+			goto Case5_Scan;					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		}
-		cout << "ÇëÒÀ´ÎÊäÈë¸÷¸öÊý¾Ý" << endl;		// ÊäÈëÊý¾Ý
+		cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl;		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		for (int i = 0; i < *numamount;i++)
 		{
-			printf("[ÊäÈëÊý%ld] = ", i + 1);
+			printf("[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%ld] = ", i + 1);
 			cin >> input.data_array[i];
 		}
 		input = getSortedData(input, *numamount);
 		
-		cout << endl							// ¼ÆËãÍê±Ï£¬Êä³ö½á¹û
-			 << "´ÓÐ¡µ½´óÅÅÐò½á¹ûÎª£º" << endl;
+		cout << endl							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			 << "ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½" << endl;
 		for (int m = 0; m < *numamount; m++)
 		{
-			printf("[Êä³öÊý%ld] = ", m + 1);
+			printf("[ï¿½ï¿½ï¿½ï¿½ï¿½%ld] = ", m + 1);
 			cout << input.data_array[m] << endl;
 		}
-		printf("¹²½øÐÐÁË%ld´Î½»»»¡£\n", input.swapcount);
+		printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%ldï¿½Î½ï¿½ï¿½ï¿½ï¿½ï¿½\n", input.swapcount);
 		delete numamount;
 		goto Select_Num_Scan;
 	}
 
-	case 6:		// ·ÖÊýÔ¼·Ö
+	case 6:		// ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½
 	{
 		long long* numscan1 = new long long;
 		long long* numscan2 = new long long;
 		simplify_fraction_struct simplified;
-		cout << "ÇëÊäÈëÁ½¸öÕýÕûÊý£¬·Ö±ð×÷Îª·Ö×ÓºÍ·ÖÄ¸¡£" << endl
-			<< "[·Ö×Ó]";
+		cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ÓºÍ·ï¿½Ä¸ï¿½ï¿½" << endl
+			<< "[ï¿½ï¿½ï¿½ï¿½]";
 		cin >> *numscan1;
-		cout << "[·ÖÄ¸]";
+		cout << "[ï¿½ï¿½Ä¸]";
 		cin >> *numscan2;
 		cout << endl;
 		simplified = simplify_fraction(*numscan1, *numscan2);
-				cout << "×î´ó¹«Ô¼Êý£º" << simplified.greatest_common_divisor << endl
-					 << "Ô¼·Ö½á¹ûÎª£º" << endl;
-				cout << "[·Ö×Ó]" << simplified.simplified_numerator << endl
-					 << "[·ÖÄ¸]" << simplified.simplified_denominator << endl;
+				cout << "ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½" << simplified.greatest_common_divisor << endl
+					 << "Ô¼ï¿½Ö½ï¿½ï¿½Îªï¿½ï¿½" << endl;
+				cout << "[ï¿½ï¿½ï¿½ï¿½]" << simplified.simplified_numerator << endl
+					 << "[ï¿½ï¿½Ä¸]" << simplified.simplified_denominator << endl;
 		delete numscan1, numscan2;
 		goto Select_Num_Scan;
 	}
 
-	case 7:		// ¶þ´Î¸ùÊ½»¯¼ò
+	case 7:		// ï¿½ï¿½ï¿½Î¸ï¿½Ê½ï¿½ï¿½ï¿½ï¿½
 	{
 		long* numscan = new long;
-		cout << "ÇëÊäÈëÒª»¯¼òµÄ¶þ´Î¸ùÊ½£º" << endl << "¡Ì";
+		cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½Î¸ï¿½Ê½ï¿½ï¿½" << endl << "ï¿½ï¿½";
 		cin >> *numscan;
 		simplify_quadratic_radical_struct returnNums ;
 		returnNums = simplify_quadratic_radical(*numscan);
-		cout << "[ÒòÊ½·Ö½â] " << *numscan << " = " << pow(returnNums.out_radical, 2) << " * "
+		cout << "[ï¿½ï¿½Ê½ï¿½Ö½ï¿½] " << *numscan << " = " << pow(returnNums.out_radical, 2) << " * "
 			 << *numscan / pow(returnNums.out_radical, 2) << endl;
-		cout << "[»¯¼ò½á¹û]" << "¡Ì" << *numscan << " = ";
+		cout << "[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]" << "ï¿½ï¿½" << *numscan << " = ";
 		if (returnNums.out_radical != 1)
 		{
 			cout << returnNums.out_radical;
 		}
 		if (returnNums.in_radical != 1)
 		{
-			cout << "¡Ì" << returnNums.in_radical;
+			cout << "ï¿½ï¿½" << returnNums.in_radical;
 		}
 		cout << endl;
 		delete numscan;
 		goto Select_Num_Scan;
 	}
 
-	case 13:	// Éú³ÉËæ»úÊý
+	case 13:	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
-		// ÉêÇëÄÚ´æ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½
 		long* max = new long;
 		long* min = new long;
 		long* randnum = new long;
 		long* randnumamount = new long;
-		cout << "ÇëÊäÈëÒªÉú³ÉµÄËæ»úÊýµÄÇø¼ä¡£" << endl;
-		cout << "[×îÐ¡Öµ]" << endl;
+		cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Éµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä¡£" << endl;
+		cout << "[ï¿½ï¿½Ð¡Öµ]" << endl;
 		cin >> *min;
-		cout << "[×î´óÖµ]" << endl;
+		cout << "[ï¿½ï¿½ï¿½Öµ]" << endl;
 		cin >> *max;
-		cout << "ÇëÊäÈëÒªÉú³ÉµÄËæ»úÊýµÄ¸öÊý¡£" << endl
-			<< "[¸öÊý]";
+		cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Éµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½" << endl
+			<< "[ï¿½ï¿½ï¿½ï¿½]";
 		cin >> *randnumamount;
 		cout << endl;
 		// bug unfixed
-		if (*min >= 0)	 // minÀÛ¼Ó/¼õÒ»´Î£¬±ÜÃâÖµÓò³öÎÊÌâµÄbug
+		if (*min >= 0)	 // minï¿½Û¼ï¿½/ï¿½ï¿½Ò»ï¿½Î£ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bug
 		{
 			(*min)++;
 			for (int i = 0;i < 3;i++)
@@ -862,11 +862,11 @@ Select_Num_Scan:
 				(*max)++;
 			}
 		}
-		// ¿ªÊ¼µ÷ÓÃ£¬Éú³ÉËæ»úÊý
+		// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		for (long i = 0;i < *randnumamount;i++)
 		{
 			*randnum = getRandData(*min, *max);
-			printf("[Êä³öÊý%ld] = ", i+1);
+			printf("[ï¿½ï¿½ï¿½ï¿½ï¿½%ld] = ", i+1);
 			cout << *randnum << endl;
 		}
 		
@@ -875,23 +875,23 @@ Select_Num_Scan:
 		goto Select_Num_Scan;
 	}
 
-	case 14:	// ¶þ´Îº¯Êý½âÎöÊ½¼ÆËã
+	case 14:	// ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½
 		double a, b, c;
-		cout << "Çë·Ö±ðÊäÈëÅ×ÎïÏßÒ»°ãÊ½µÄa,b,cµÄÖµ" << endl;
+		cout << "ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ê½ï¿½ï¿½a,b,cï¿½ï¿½Öµ" << endl;
 		cout << "[a] = ";
 		cin >> a;
 		cout << "[b] = ";
 		cin >> b;
 		cout << "[c] = ";
 		cin >> c;
-		double x_numerator, x_denominator, y_numerator, y_denominator;				// ÉùÃ÷xÖá¡¢yÖá×ø±ê
-		// ¿ªÊ¼ÔËËã£¬¸³Öµ
+		double x_numerator, x_denominator, y_numerator, y_denominator;				// ï¿½ï¿½ï¿½ï¿½xï¿½á¡¢yï¿½ï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ã£¬ï¿½ï¿½Öµ
 		x_numerator = -b;
 		x_denominator = 2 * a;
 		y_numerator = 4 * a * c - b * b;
 		y_denominator = 4 * a;
-		// µ÷ÓÃº¯Êý
-		cout << "¶Ô³ÆÖá(¶¥µã×ø±ê) : ( ";
+		// ï¿½ï¿½ï¿½Ãºï¿½ï¿½ï¿½
+		cout << "ï¿½Ô³ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½) : ( ";
 		displayFraction(simplify_fraction(x_numerator, x_denominator));
 		cout << " , ";
 		displayFraction(simplify_fraction(y_numerator, y_denominator));
@@ -899,34 +899,34 @@ Select_Num_Scan:
 		goto Select_Num_Scan;
 
 
-	case 0:		// ÏÔÊ¾¿ØÖÆÌ¨
+	case 0:		// ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Ì¨
 	{
 		loadMasterConsole();
-		/*exit(0);			// ÍË³ö³ÌÐò*/
+		/*exit(0);			// ï¿½Ë³ï¿½ï¿½ï¿½ï¿½*/
 	}						// case 0
 
-	default:	// ÊäÈë´íÎó
+	default:	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
-		cout << "ÏµÍ³ÏûÏ¢:ÇëÊäÈëÕýÈ·µÄÊý¡£\n" << endl;
+		cout << "ÏµÍ³ï¿½ï¿½Ï¢:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½\n" << endl;
 		goto Select_Num_Scan;
 	}						// default
 	}						// switch
 	return 0;
 }							// main
 
-/*// ÒªÓÃµ½µÄº¯Êý£ºsqrt(num)¿ªÆ½·½ pow(num, 2)Æ½·½
-   ÍêÈ«Æ½·½ÊýÅÐ¶ÏÄ£¿é int n; scanf("%d", &n); if (sqrt(n) ==
-   (int)sqrt(n)) { printf("ÊÇÍêÈ«Æ½·½Êý"); } else {
-   printf("²»ÊÇÍêÈ«Æ½·½Êý"); } */
+/*// Òªï¿½Ãµï¿½ï¿½Äºï¿½ï¿½ï¿½sqrt(num)ï¿½ï¿½Æ½ï¿½ï¿½ pow(num, 2)Æ½ï¿½ï¿½
+   ï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ä£ï¿½ï¿½ int n; scanf("%d", &n); if (sqrt(n) ==
+   (int)sqrt(n)) { printf("ï¿½ï¿½ï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½"); } else {
+   printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½"); } */
 
-   // ÔËÐÐ³ÌÐò: Ctrl + F5 »òµ÷ÊÔ >¡°¿ªÊ¼Ö´ÐÐ(²»µ÷ÊÔ)¡±²Ëµ¥
-   // µ÷ÊÔ³ÌÐò: F5 »òµ÷ÊÔ >¡°¿ªÊ¼µ÷ÊÔ¡±²Ëµ¥
-   // ÈëÃÅÊ¹ÓÃ¼¼ÇÉ: 
-   // 1. Ê¹ÓÃ½â¾ö·½°¸×ÊÔ´¹ÜÀíÆ÷´°¿ÚÌí¼Ó/¹ÜÀíÎÄ¼þ
-   // 2. Ê¹ÓÃÍÅ¶Ó×ÊÔ´¹ÜÀíÆ÷´°¿ÚÁ¬½Óµ½Ô´´úÂë¹ÜÀí
-   // 3. Ê¹ÓÃÊä³ö´°¿Ú²é¿´Éú³ÉÊä³öºÍÆäËûÏûÏ¢
-   // 4. Ê¹ÓÃ´íÎóÁÐ±í´°¿Ú²é¿´´íÎó
+   // ï¿½ï¿½ï¿½Ð³ï¿½ï¿½ï¿½: Ctrl + F5 ï¿½ï¿½ï¿½ï¿½ï¿½ >ï¿½ï¿½ï¿½ï¿½Ê¼Ö´ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½Ëµï¿½
+   // ï¿½ï¿½ï¿½Ô³ï¿½ï¿½ï¿½: F5 ï¿½ï¿½ï¿½ï¿½ï¿½ >ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ô¡ï¿½ï¿½Ëµï¿½
+   // ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¼ï¿½ï¿½ï¿½: 
+   // 1. Ê¹ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+   // 2. Ê¹ï¿½ï¿½ï¿½Å¶ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+   // 3. Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½Ú²é¿´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+   // 4. Ê¹ï¿½Ã´ï¿½ï¿½ï¿½ï¿½Ð±ï¿½ï¿½Ú²é¿´ï¿½ï¿½ï¿½ï¿½
    // 5.
-   // ×ªµ½¡°ÏîÄ¿¡±>¡°Ìí¼ÓÐÂÏî¡±ÒÔ´´½¨ÐÂµÄ´úÂëÎÄ¼þ£¬»ò×ªµ½¡°ÏîÄ¿¡±>¡°Ìí¼ÓÏÖÓÐÏî¡±ÒÔ½«ÏÖÓÐ´úÂëÎÄ¼þÌí¼Óµ½ÏîÄ¿
+   // ×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½î¡±ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ÂµÄ´ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½î¡±ï¿½Ô½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½Ä¿
    // 6.
-   // ½«À´£¬ÈôÒªÔÙ´Î´ò¿ª´ËÏîÄ¿£¬Çë×ªµ½¡°ÎÄ¼þ¡±>¡°´ò¿ª¡±>¡°ÏîÄ¿¡±²¢Ñ¡Ôñ .sln ÎÄ¼þ 
+   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ù´Î´ò¿ª´ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½>ï¿½ï¿½ï¿½ò¿ª¡ï¿½>ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ .sln ï¿½Ä¼ï¿½ 
