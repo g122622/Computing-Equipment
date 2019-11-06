@@ -92,7 +92,7 @@ long getAbsoluteData(long);
 void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(long[],long&);
 
-
+/*
 // 获取最大公约数函数
 long getGreatestCommonDivisor(long data_array[], long& data_amount)
 {
@@ -104,7 +104,7 @@ long getGreatestCommonDivisor(long data_array[], long& data_amount)
 	}
 	temp = getSortedData(temp, data_amount) // 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
 	temp.data_array[0]
-}
+}*/
 
 // 生成随机数列的函数
 double getRandData(long min, long max)
@@ -769,7 +769,7 @@ Select_Num_Scan:
 	{
 		getSortedData_struct input;
 		long* numamount = new long;
-	Case5_Scan:
+Case5_Scan:
 		cout << "请输入数据的数量" << endl << "[数量]";
 		cin >> *numamount;
 		if (*numamount > 512)
@@ -890,8 +890,14 @@ Select_Num_Scan:
 	case 14:	// 二次函数解析式计算
 		double a, b, c;
 		cout << "请分别输入抛物线一般式的a,b,c的值" << endl;
+Case5_a_Scan:
 		cout << "[a] = ";
 		cin >> a;
+		if (a == 0)
+		{
+			cout << "a不可为0！" << endl;
+			goto Case5_a_Scan;
+		}
 		cout << "[b] = ";
 		cin >> b;
 		cout << "[c] = ";
