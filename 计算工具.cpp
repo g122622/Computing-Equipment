@@ -50,7 +50,6 @@
 #include <cmath>
 #include <ctime>
 #include <iomanip>
-//#include <cstdlib>
 #define enabled 0
 #define disabled 1
 using namespace std;
@@ -91,7 +90,21 @@ long long loadMasterConsole(long long);
 simplify_fraction_struct simplify_fraction(long, long);
 long getAbsoluteData(long);
 void displayFraction(simplify_fraction_struct);
+long getGreatestCommonDivisor(long[],long&);
 
+
+// 获取最大公约数函数
+long getGreatestCommonDivisor(long data_array[], long& data_amount)
+{
+	// 声明结构体，以后再考虑内存释放
+	getSortedData_struct temp;	
+	for (int i = 0; i< data_amount; i++) // 输入数全部取绝对值，同时赋值给temp
+	{
+		temp.data_array[i] = getAbsoluteData(data_array[i]);
+	}
+	temp = getSortedData(temp, data_amount) // 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
+	temp.data_array[0]
+}
 
 // 生成随机数列的函数
 double getRandData(long min, long max)
@@ -141,7 +154,6 @@ void swapData(long& num1, long& num2)
 // 冒泡排序函数
 getSortedData_struct getSortedData(getSortedData_struct temp, long& dataamount)
 {
-	//getSortedData_struct temp;	// 定义temp结构体
 	for (int k = 0; k < dataamount; k++)
 	{
 		for (int j = dataamount - 1; j > 0;j--)
