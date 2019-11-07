@@ -145,8 +145,18 @@ getSortedData_struct getSortedData(getSortedData_struct temp, long& dataamount)
 simplify_fraction_struct simplify_fraction(long numerator, long denominator)
 {
 	simplify_fraction_struct temp;
+	// 判断分数是否显示负号
+	if (temp.simplified_numerator * temp.simplified_denominator >= 0)
+	{
+		temp.minus_display_state = disabled;
+	}
+	else
+	{
+		temp.minus_display_state = enabled;
+	}*/
 	temp.single_display_state = enabled;								// 默认启用整数显示
-	long abs_num = getAbsoluteData(numerator);							// 取绝对值，避免传入负数时内存未被初始化
+	temp.greatest_common_divisor = getGreatestCommonDivisor(, 2);
+	/*long abs_num = getAbsoluteData(numerator);							// 取绝对值，避免传入负数时内存未被初始化
 	long abs_den = getAbsoluteData(denominator);
 	for (long i = (abs_num + abs_den) / 2; i > 0; i--)					// ab绝对值相加除以2，避免做无用运算
 	{																	// j为最大公约数
@@ -163,7 +173,7 @@ simplify_fraction_struct simplify_fraction(long numerator, long denominator)
 			else
 			{
 				temp.minus_display_state = enabled;
-			}
+			}*/
 			// 分子分母全部取绝对值
 			temp.simplified_numerator = getAbsoluteData(temp.simplified_numerator);
 			temp.simplified_denominator = getAbsoluteData(temp.simplified_denominator);
