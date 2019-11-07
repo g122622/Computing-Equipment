@@ -92,19 +92,31 @@ long getAbsoluteData(long);
 void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(long[],long&);
 
-/*
+
 // 获取最大公约数函数
 long getGreatestCommonDivisor(long data_array[], long& data_amount)
 {
+	long GreatestCommonDivisor;
 	// 声明结构体，以后再考虑内存释放
 	getSortedData_struct temp;	
-	for (int i = 0; i< data_amount; i++) // 输入数全部取绝对值，同时赋值给temp
+	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
 	{
 		temp.data_array[i] = getAbsoluteData(data_array[i]);
 	}
-	temp = getSortedData(temp, data_amount) // 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
-	temp.data_array[0]
-}*/
+	temp = getSortedData(temp, data_amount);	// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
+	for (int j = temp.data_array[0]; j > 0; j--)// j的最终结果为最大公约数
+	{
+		for (int k = 0; k < data_amount; k++)
+		{
+			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)	// 判断是否整除，若无法则直接break
+			{
+				break;
+			}
+			GreatestCommonDivisor = j;			// 如果一直都没有break,则此时j为最大公约数
+		}
+	}
+	return GreatestCommonDivisor;
+}
 
 // 生成随机数列的函数
 double getRandData(long min, long max)
