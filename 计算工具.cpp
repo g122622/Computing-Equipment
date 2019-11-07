@@ -108,7 +108,7 @@ long getGreatestCommonDivisor(long data_array[], long& data_amount)
 	{
 		for (int k = 0; k < data_amount; k++)
 		{
-			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)	// 判断是否整除，若无法则直接break
+			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)	// 判断是否能整除，若不能则直接break
 			{
 				break;
 			}
