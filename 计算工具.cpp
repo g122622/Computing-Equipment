@@ -145,6 +145,9 @@ getSortedData_struct getSortedData(getSortedData_struct temp, long& dataamount)
 simplify_fraction_struct simplify_fraction(long numerator, long denominator)
 {
 	simplify_fraction_struct temp;
+	long data_array = new long[2];
+	numerator = data_array[0];
+	denominator = data_array[1];
 	// 判断分数是否显示负号
 	if (temp.simplified_numerator * temp.simplified_denominator >= 0)
 	{
@@ -153,7 +156,7 @@ simplify_fraction_struct simplify_fraction(long numerator, long denominator)
 	else
 	{
 		temp.minus_display_state = enabled;
-	}*/
+	}
 	temp.single_display_state = enabled;								// 默认启用整数显示
 	temp.greatest_common_divisor = getGreatestCommonDivisor(, 2);
 	/*long abs_num = getAbsoluteData(numerator);							// 取绝对值，避免传入负数时内存未被初始化
