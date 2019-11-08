@@ -43,11 +43,11 @@ struct simplify_fraction_struct
 
 /*----------函数声明区----------*/
 double getRandData(long, long);
-simplify_quadratic_radical_struct simplify_quadratic_radical(long);
+simplify_quadratic_radical_struct getSimplifiedQuadraticRadical(long);
 void swapData(long&, long&);
 getSortedData_struct getSortedData(getSortedData_struct, long&);
 long long loadMasterConsole(long long);
-simplify_fraction_struct simplify_fraction(long, long);
+simplify_fraction_struct getSimplifiedFraction(long&, long&);
 long getAbsoluteData(long);
 void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(long[],long&);
@@ -94,7 +94,7 @@ double getRandData(long min, long max)
 
 
 // 二次根式化简函数
-simplify_quadratic_radical_struct simplify_quadratic_radical(long numscan)
+getSimplifiedQuadraticRadical_struct simplify_quadratic_radical(long numscan)
 {
 	// 使用结构体传参
 	simplify_quadratic_radical_struct temp;	// 定义temp结构体
@@ -142,12 +142,13 @@ getSortedData_struct getSortedData(getSortedData_struct temp, long& dataamount)
 
 
 // 分数约分函数
-simplify_fraction_struct simplify_fraction(long numerator, long denominator)
+simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominator)	// 传引用，减少内存占用 
 {
-	simplify_fraction_struct temp;
-	long data_array = new long[2];
-	numerator = data_array[0];
-	denominator = data_array[1];
+	simplify_fraction_struct temp;				// 声明要返回的结构体
+	long data_array = new long[2];				// 内存中分配一个数组，用于给公约数模块传参
+	// 数组赋值
+	data_array[0] = numerator;
+	data_array[1] = denominator;
 	// 判断分数是否显示负号
 	if (temp.simplified_numerator * temp.simplified_denominator >= 0)
 	{
@@ -157,40 +158,24 @@ simplify_fraction_struct simplify_fraction(long numerator, long denominator)
 	{
 		temp.minus_display_state = enabled;
 	}
-	temp.single_display_state = enabled;								// 默认启用整数显示
-	temp.greatest_common_divisor = getGreatestCommonDivisor(, 2);
-	/*long abs_num = getAbsoluteData(numerator);							// 取绝对值，避免传入负数时内存未被初始化
-	long abs_den = getAbsoluteData(denominator);
-	for (long i = (abs_num + abs_den) / 2; i > 0; i--)					// ab绝对值相加除以2，避免做无用运算
-	{																	// j为最大公约数
-		if ((double)numerator / i == (long)numerator / i and (double)denominator / i == (long)denominator / i)
-		{
-			temp.greatest_common_divisor = i;
-			temp.simplified_numerator = numerator / i;
-			temp.simplified_denominator = denominator / i;
-			// 判断分数是否显示负号
-			if (temp.simplified_numerator * temp.simplified_denominator >= 0)
-			{
-				temp.minus_display_state = disabled;
-			}
-			else
-			{
-				temp.minus_display_state = enabled;
-			}*/
-			// 分子分母全部取绝对值
-			temp.simplified_numerator = getAbsoluteData(temp.simplified_numerator);
-			temp.simplified_denominator = getAbsoluteData(temp.simplified_denominator);
-			// 如果最大公约数等于分母的绝对值，启用整数显示
-			if (temp.greatest_common_divisor == abs_den)
-			{
-				temp.single_display_state = enabled;
-			}
-			else
-			{
-				temp.single_display_state = disabled;
-			}
-			break;
-		}
+	temp.single_display_state = enabled;			// 默认启用整数显示
+	// 调用公约数函数
+	temp.greatest_common_divisor = getGreatestCommonDivisor(data_array[], 2);
+	delete[] data_array;					// 释放数组内存
+	// 计算约分后的分子和分母
+	temp.simplified_numerator = numerator / temp.greatest_common_divisor;
+	temp.simplified_denominator = denominator / temp.greatest_common_divisor;
+	// 分子分母全部取绝对值
+	temp.simplified_numerator = getAbsoluteData(temp.simplified_numerator);
+	temp.simplified_denominator = getAbsoluteData(temp.simplified_denominator);
+	// 判断是否采用整数显示：如果最大公约数等于分母的绝对值，则启用整数显示
+	if (temp.greatest_common_divisor == getAbsoluteData(numerator))
+	{
+		temp.single_display_state = enabled;
+	}
+	else
+	{
+		temp.single_display_state = disabled;
 	}
 	return temp;
 }
