@@ -94,7 +94,7 @@ double getRandData(long min, long max)
 
 
 // 二次根式化简函数
-getSimplifiedQuadraticRadical_struct simplify_quadratic_radical(long numscan)
+simplify_quadratic_radical_struct getSimplifiedQuadraticRadical(long numscan)
 {
 	// 使用结构体传参
 	simplify_quadratic_radical_struct temp;	// 定义temp结构体
@@ -145,7 +145,7 @@ getSortedData_struct getSortedData(getSortedData_struct temp, long& dataamount)
 simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominator)	// 传引用，减少内存占用 
 {
 	simplify_fraction_struct temp;				// 声明要返回的结构体
-	long data_array = new long[2];				// 内存中分配一个数组，用于给公约数模块传参
+	long* data_array = new long[2];				// 内存中分配一个数组，用于给公约数模块传参
 	// 数组赋值
 	data_array[0] = numerator;
 	data_array[1] = denominator;
@@ -160,7 +160,7 @@ simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominato
 	}
 	temp.single_display_state = enabled;			// 默认启用整数显示
 	// 调用公约数函数
-	temp.greatest_common_divisor = getGreatestCommonDivisor(data_array[], 2);
+	temp.greatest_common_divisor = getGreatestCommonDivisor(*data_array[], 2);
 	delete[] data_array;					// 释放数组内存
 	// 计算约分后的分子和分母
 	temp.simplified_numerator = numerator / temp.greatest_common_divisor;
