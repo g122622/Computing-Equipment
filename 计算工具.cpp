@@ -11,8 +11,10 @@
 #include <cmath>
 #include <ctime>
 #include <iomanip>
+#include <vector>
 #define enabled 0
 #define disabled 1
+
 using namespace std;
 
 
@@ -24,11 +26,11 @@ struct simplify_quadratic_radical_struct
 	long out_radical;
 };
 
-// 冒泡排序结构体
-struct getSortedData_struct
+// 通用结构体1
+struct general_struct_1
 {
-	long data_array[512];
-	long swapcount = 0;
+	vector<long> data_array;	// 这里使用了vector动态向量容器（高度实验性）
+	long count = 0;
 };
 
 // 分数约分结构体
@@ -46,34 +48,34 @@ struct simplify_fraction_struct
 double getRandData(long, long);
 simplify_quadratic_radical_struct getSimplifiedQuadraticRadical(long);
 void swapData(long&, long&);
-getSortedData_struct getSortedData(getSortedData_struct, long&);
+general_struct_1 getSortedData(general_struct_1, long&);
 long long loadMasterConsole(long long);
 simplify_fraction_struct getSimplifiedFraction(long&, long&);
 long getAbsoluteData(long);
 void displayFraction(simplify_fraction_struct);
-long getGreatestCommonDivisor(long[],long&);
+long getGreatestCommonDivisor(general_struct_1);
 
 
 // 获取最大公约数函数
-long getGreatestCommonDivisor(long data_array[], long& data_amount)
+long getGreatestCommonDivisor(general_struct_1 temp)
 {
+	long data_amount = temp.count;				// 避免误解
 	long GreatestCommonDivisor;
-	// 声明结构体，以后再考虑内存释放
-	getSortedData_struct temp;	
 	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
 	{
-		temp.data_array[i] = getAbsoluteData(data_array[i]);
+		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	}
 	temp = getSortedData(temp, data_amount);	// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
-	for (int j = temp.data_array[0]; j > 0; j--)// j的最终结果为最大公约数
+	for (int j = temp.data_array[0]; j > 0; j--)// 嵌套循环，j的最终结果为最大公约数
 	{
 		for (int k = 0; k < data_amount; k++)
 		{
-			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)	// 判断是否能整除，若不能则直接break
+			// 判断是否能整除，若不能则直接break
+			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)
 			{
 				break;
 			}
-			GreatestCommonDivisor = j;			// 如果一直都没有break,则此时j为最大公约数
+			GreatestCommonDivisor = j;			// 如果一直都没有break，则此时j为最大公约数
 		}
 	}
 	return GreatestCommonDivisor;
@@ -95,7 +97,7 @@ double getRandData(long min, long max)
 
 
 // 二次根式化简函数
-getSimplifiedQuadraticRadical_struct simplify_quadratic_radical(long numscan)
+simplify_quadratic_radical_struct simplify_quadratic_radical(long numscan)
 {
 	// 使用结构体传参
 	simplify_quadratic_radical_struct temp;	// 定义temp结构体
@@ -125,7 +127,7 @@ void swapData(long& num1, long& num2)
 
 
 // 冒泡排序函数
-getSortedData_struct getSortedData(getSortedData_struct temp, long& dataamount)
+general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 {
 	for (int k = 0; k < dataamount; k++)
 	{
@@ -134,7 +136,7 @@ getSortedData_struct getSortedData(getSortedData_struct temp, long& dataamount)
 			if (temp.data_array[j] < temp.data_array[j - 1])
 			{
 				swapData(temp.data_array[j - 1], temp.data_array[j]);	// 交换两个对象
-				(temp.swapcount)++;
+				(temp.count)++;
 			}
 		}
 	}
@@ -146,10 +148,11 @@ getSortedData_struct getSortedData(getSortedData_struct temp, long& dataamount)
 simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominator)	// 传引用，减少内存占用 
 {
 	simplify_fraction_struct temp;				// 声明要返回的结构体
-	long data_array = new long[2];				// 内存中分配一个数组，用于给公约数模块传参
+	general_struct_1 gcd;						// 公约数传参用此结构体
 	// 数组赋值
-	data_array[0] = numerator;
-	data_array[1] = denominator;
+	gcd.data_array[0] = numerator;
+	gcd.data_array[1] = denominator;
+	gcd.count = 2;
 	// 判断分数是否显示负号
 	if (temp.simplified_numerator * temp.simplified_denominator >= 0)
 	{
@@ -161,8 +164,7 @@ simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominato
 	}
 	temp.single_display_state = enabled;			// 默认启用整数显示
 	// 调用公约数函数
-	temp.greatest_common_divisor = getGreatestCommonDivisor(data_array[], 2);
-	delete[] data_array;					// 释放数组内存
+	temp.greatest_common_divisor = getGreatestCommonDivisor(gcd);
 	// 计算约分后的分子和分母
 	temp.simplified_numerator = numerator / temp.greatest_common_divisor;
 	temp.simplified_denominator = denominator / temp.greatest_common_divisor;
