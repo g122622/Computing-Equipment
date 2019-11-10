@@ -740,7 +740,7 @@ Select_Num_Scan:
 
 	case 5:		// 数据排序
 	{
-		getSortedData_struct input;
+		general_struct_1 input;
 		long* numamount = new long;
 Case5_Scan:
 		cout << "请输入数据的数量" << endl << "[数量]";
@@ -765,15 +765,15 @@ Case5_Scan:
 			printf("[输出数%ld] = ", m + 1);
 			cout << input.data_array[m] << endl;
 		}
-		printf("共进行了%ld次交换。\n", input.swapcount);
+		printf("共进行了%ld次交换。\n", input.count);
 		delete numamount;
 		goto Select_Num_Scan;
 	}
 
 	case 6:		// 分数约分
 	{
-		long long* numscan1 = new long long;
-		long long* numscan2 = new long long;
+		long* numscan1 = new long;
+		long* numscan2 = new long;
 		simplify_fraction_struct simplified;
 		cout << "请输入两个正整数，分别作为分子和分母。" << endl
 			<< "[分子]";
@@ -781,7 +781,7 @@ Case5_Scan:
 		cout << "[分母]";
 		cin >> *numscan2;
 		cout << endl;
-		simplified = simplify_fraction(*numscan1, *numscan2);
+		simplified = getSimplifiedFraction(*numscan1, *numscan2);
 				cout << "最大公约数：" << simplified.greatest_common_divisor << endl
 					 << "约分结果为：" << endl;
 				cout << "[分子]" << simplified.simplified_numerator << endl
@@ -875,7 +875,7 @@ Case5_a_Scan:
 		cin >> b;
 		cout << "[c] = ";
 		cin >> c;
-		double x_numerator, x_denominator, y_numerator, y_denominator;				// 声明x轴、y轴坐标
+		long x_numerator, x_denominator, y_numerator, y_denominator;				// 声明x轴、y轴坐标
 		// 开始运算，赋值
 		x_numerator = -b;
 		x_denominator = 2 * a;
@@ -883,9 +883,9 @@ Case5_a_Scan:
 		y_denominator = 4 * a;
 		// 调用函数
 		cout << "对称轴(顶点坐标) : ( ";
-		displayFraction(simplify_fraction(x_numerator, x_denominator));
+		displayFraction(getSimplifiedFraction(x_numerator, x_denominator));
 		cout << " , ";
-		displayFraction(simplify_fraction(y_numerator, y_denominator));
+		displayFraction(getSimplifiedFraction(y_numerator, y_denominator));
 		cout << " )" << endl;
 		goto Select_Num_Scan;
 
