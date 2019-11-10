@@ -63,6 +63,8 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 	long GreatestCommonDivisor;
 	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
 	{
+		// 初始化容器
+		temp.data_array.push_back(0);
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	}
 	temp = getSortedData(temp, data_amount);	// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
