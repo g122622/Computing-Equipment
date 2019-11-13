@@ -70,7 +70,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 	temp = getSortedData(temp, data_amount);	// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
 	for (int j = temp.data_array[0]; j > 0; j--)// 嵌套循环，j的最终结果为最大公约数
 	{
-		for (int k = 0; k < data_amount; k++)
+		for (int k = temp.data_amount - 1; k > 0; k--)
 		{
 			// 判断是否能整除，若不能则直接break
 			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)
