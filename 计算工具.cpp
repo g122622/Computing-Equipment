@@ -155,6 +155,11 @@ simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominato
 	gcd.data_array[0] = numerator;
 	gcd.data_array[1] = denominator;
 	gcd.count = 2;
+	// 调用公约数函数
+	temp.greatest_common_divisor = getGreatestCommonDivisor(gcd);
+	// 计算约分后的分子和分母
+	temp.simplified_numerator = numerator / temp.greatest_common_divisor;
+	temp.simplified_denominator = denominator / temp.greatest_common_divisor;
 	// 判断分数是否显示负号
 	if (temp.simplified_numerator * temp.simplified_denominator >= 0)
 	{
@@ -164,15 +169,10 @@ simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominato
 	{
 		temp.minus_display_state = enabled;
 	}
-	temp.single_display_state = enabled;			// 默认启用整数显示
-	// 调用公约数函数
-	temp.greatest_common_divisor = getGreatestCommonDivisor(gcd);
-	// 计算约分后的分子和分母
-	temp.simplified_numerator = numerator / temp.greatest_common_divisor;
-	temp.simplified_denominator = denominator / temp.greatest_common_divisor;
 	// 分子分母全部取绝对值
 	temp.simplified_numerator = getAbsoluteData(temp.simplified_numerator);
 	temp.simplified_denominator = getAbsoluteData(temp.simplified_denominator);
+	temp.single_display_state = enabled;			// 默认启用整数显示（如果有特殊情况）
 	// 判断是否采用整数显示：如果最大公约数等于分母的绝对值，则启用整数显示
 	if (temp.greatest_common_divisor == getAbsoluteData(numerator))
 	{
