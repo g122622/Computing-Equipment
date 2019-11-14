@@ -151,10 +151,14 @@ simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominato
 {
 	simplify_fraction_struct temp;				// 声明要返回的专用结构体
 	general_struct_1 gcd;						// 公约数传参用此通用结构体
+		system("pause");
 	// 数组赋值
+	gcd.data_array.push_back(0);
+	gcd.data_array.push_back(0);
 	gcd.data_array[0] = numerator;
 	gcd.data_array[1] = denominator;
 	gcd.count = 2;
+		system("pause");
 	// 调用公约数函数
 	temp.greatest_common_divisor = getGreatestCommonDivisor(gcd);
 	// 计算约分后的分子和分母
