@@ -59,18 +59,18 @@ long getGreatestCommonDivisor(general_struct_1);
 // 获取最大公约数函数
 long getGreatestCommonDivisor(general_struct_1 temp)
 {
-	long data_amount = temp.count;				// 避免误解
-	long GreatestCommonDivisor;
+	long& data_amount = temp.count;				// 引用，避免误解
+	long GreatestCommonDivisor = 1;				// 初始化默认值为1
 	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
 	{
-		// 初始化容器
+		// 初始化容器，插入新元素
 		temp.data_array.push_back(0);
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	}
 	temp = getSortedData(temp, data_amount);	// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
 	for (int j = temp.data_array[0]; j > 0; j--)// 嵌套循环，j的最终结果为最大公约数
 	{
-		for (int k = temp.data_amount - 1; k > 0; k--)
+		for (int k = data_amount - 1; k >= 0; k--)
 		{
 			// 判断是否能整除，若不能则直接break
 			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)
@@ -149,8 +149,8 @@ general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 // 分数约分函数
 simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominator)	// 传引用，减少内存占用 
 {
-	simplify_fraction_struct temp;				// 声明要返回的结构体
-	general_struct_1 gcd;						// 公约数传参用此结构体
+	simplify_fraction_struct temp;				// 声明要返回的专用结构体
+	general_struct_1 gcd;						// 公约数传参用此通用结构体
 	// 数组赋值
 	gcd.data_array[0] = numerator;
 	gcd.data_array[1] = denominator;
@@ -172,7 +172,8 @@ simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominato
 	// 分子分母全部取绝对值
 	temp.simplified_numerator = getAbsoluteData(temp.simplified_numerator);
 	temp.simplified_denominator = getAbsoluteData(temp.simplified_denominator);
-	temp.single_display_state = enabled;			// 默认启用整数显示（如果有特殊情况）
+	// 默认启用整数显示（如果有特殊情况）
+	temp.single_display_state = enabled;
 	// 判断是否采用整数显示：如果最大公约数等于分母的绝对值，则启用整数显示
 	if (temp.greatest_common_divisor == getAbsoluteData(numerator))
 	{
