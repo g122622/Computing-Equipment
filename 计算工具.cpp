@@ -73,13 +73,14 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 		for (int k = data_amount - 1; k >= 0; k--)
 		{
 			// 判断是否能整除，若不能则直接break
-			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)
+			if ((double)temp.data_array[k] / j == (long)temp.data_array[k] / j)
 			{
-				break;
-			}
 			GreatestCommonDivisor = j;			// 如果一直都没有break，则此时j为最大公约数
+			goto end_gcd;
+			}
 		}
 	}
+end_gcd:
 	return GreatestCommonDivisor;
 }
 
@@ -151,16 +152,15 @@ simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominato
 {
 	simplify_fraction_struct temp;				// 声明要返回的专用结构体
 	general_struct_1 gcd;						// 公约数传参用此通用结构体
-		system("pause");
 	// 数组赋值
 	gcd.data_array.push_back(0);
 	gcd.data_array.push_back(0);
 	gcd.data_array[0] = numerator;
 	gcd.data_array[1] = denominator;
 	gcd.count = 2;
-		system("pause");
 	// 调用公约数函数
 	temp.greatest_common_divisor = getGreatestCommonDivisor(gcd);
+ //	cout << temp.greatest_common_divisor << endl;// 仅调试
 	// 计算约分后的分子和分母
 	temp.simplified_numerator = numerator / temp.greatest_common_divisor;
 	temp.simplified_denominator = denominator / temp.greatest_common_divisor;
@@ -179,7 +179,7 @@ simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominato
 	// 默认启用整数显示（如果有特殊情况）
 	temp.single_display_state = enabled;
 	// 判断是否采用整数显示：如果最大公约数等于分母的绝对值，则启用整数显示
-	if (temp.greatest_common_divisor == getAbsoluteData(numerator))
+	if (temp.greatest_common_divisor == getAbsoluteData(denominator))
 	{
 		temp.single_display_state = enabled;
 	}
