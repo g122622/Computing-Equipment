@@ -232,9 +232,8 @@ long getAbsoluteData(long numscan)
 
 
 // 加载总控制台函数
-long long loadMasterConsole()
+void loadMasterConsole()
 {
-	long long SwitchNum;
 	cout << "===============[总控制台]===============" << endl
 		<< "1::解/分析二元一次方程" << endl
 		<< "2::因数分解" << endl
@@ -256,11 +255,7 @@ long long loadMasterConsole()
 		<< "11::" << endl
 		<< "11::" << endl
 		*/
-		<< "0::显示控制台" << endl
-		<< "[输入]";
-	cin >> SwitchNum;
-	cout << "====================" << endl << endl;
-	return SwitchNum;
+		<< "0::显示控制台" << endl;
 }
 
 clock_t start, stop;				// 初始化计时函数
@@ -269,8 +264,15 @@ int main(void)						// 开始执行主函数
 {
 	long double pretime;
 	short speedTestState = enabled;	// 避免多次测速
+	long long SwitchNum;
+	loadMasterConsole();
 Select_Num_Scan:
-	switch (loadMasterConsole())	// 加载总控制台
+ cout << endl;
+ cout << "[输入]";
+	cin >> SwitchNum;
+	cout << "====================" << endl << endl;
+
+	switch (SwitchNum)	// 加载总控制台
 	{
 	case 1:		// 解/分析二元一次方程
 	{
@@ -900,6 +902,7 @@ Case5_a_Scan:
 	case 0:		// 显示控制台
 	{
 		loadMasterConsole();
+		goto Select_Num_Scan;
 		/*exit(0);			// 退出程序*/
 	}						// case 0
 
