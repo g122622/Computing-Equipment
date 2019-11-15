@@ -73,14 +73,15 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 		for (int k = data_amount - 1; k >= 0; k--)
 		{
 			// 判断是否能整除，若不能则直接break
-			if ((double)(temp.data_array[k] / j) == (long)(temp.data_array[k] / j))
+			if ((double)(temp.data_array[k] / j) != (long)(temp.data_array[k] / j))
 			{
-			GreatestCommonDivisor = j;			// 如果一直都没有break，则此时j为最大公约数
-			goto end_gcd;
+			goto end_gcd_0;
 			}
+			GreatestCommonDivisor = j;		// 如果一直都没有break，则此时j为最大公约数
 		}
+end_gcd_0:
 	}
-end_gcd:
+end_gcd_1:
 	return GreatestCommonDivisor;
 }
 
