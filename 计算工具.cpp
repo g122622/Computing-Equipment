@@ -164,7 +164,6 @@ simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominato
 	gcd.count = 2;
 	// 调用公约数函数
 	temp.greatest_common_divisor = getGreatestCommonDivisor(gcd);
- cout << temp.greatest_common_divisor << endl;// 仅调试
 	// 计算约分后的分子和分母
 	temp.simplified_numerator = numerator / temp.greatest_common_divisor;
 	temp.simplified_denominator = denominator / temp.greatest_common_divisor;
