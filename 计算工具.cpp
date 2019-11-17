@@ -105,11 +105,11 @@ simplify_quadratic_radical_struct simplify_quadratic_radical(long numscan)
 	simplify_quadratic_radical_struct temp;	// 定义temp结构体
 	for (long i = numscan; i > 0; i--)
 	{
-		if ((double) numscan / i == (long) numscan / i and (double)sqrt(i) == (long)sqrt(i))
+		if ((double)numscan / i == (long)numscan / i and (double)sqrt(i) == (long)sqrt(i))
 			// 第一个条件：确保i为numscan的整因数；第二个条件：确保i是最大的完全平方因数
 		{
-			temp.in_radical =  numscan / i;	// 输出根号内剩余的数
-			temp.out_radical =  sqrt(i);	// 输出根号外分解出来的数
+			temp.in_radical = numscan / i;	// 输出根号内剩余的数
+			temp.out_radical = sqrt(i);	// 输出根号外分解出来的数
 			break;
 		}
 	}
@@ -147,7 +147,7 @@ general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 
 
 // 分数约分函数
-simplify_fraction_struct getSimplifiedFraction(long &numerator, long &denominator)	// 传引用，减少内存占用 
+simplify_fraction_struct getSimplifiedFraction(long& numerator, long& denominator)	// 传引用，减少内存占用 
 {
 	simplify_fraction_struct temp;				// 声明要返回的专用结构体
 	general_struct_1 gcd;						// 公约数传参用此通用结构体
@@ -324,7 +324,7 @@ Select_Num_Scan:
 			// 开始a的因数计算循环，a的分解只需要正值即可
 		{
 			*fzmid2 = *a / *fzmid1;
-			if (*fzmid2 == (long long)* fzmid2)
+			if (*fzmid2 == (long long)*fzmid2)
 			{
 				FZA[*fzacount] = *fzmid1;
 				//cout << *fzacount+1 << "→";
@@ -353,7 +353,7 @@ Select_Num_Scan:
 			do
 			{
 				*fzmid2 = *c / *fzmid1;
-				if (*fzmid2 == (long long)* fzmid2)
+				if (*fzmid2 == (long long)*fzmid2)
 				{
 					FZC[*fzccount] = *fzmid1;
 					//cout << FZC[fzccount] << endl;	// 输出流用于调试
@@ -373,7 +373,7 @@ Select_Num_Scan:
 				// 开始*c的因数计算循环，正负值都要计算
 			{
 				*fzmid2 = *c / *fzmid1;
-				if (*fzmid2 == (long long)* fzmid2)
+				if (*fzmid2 == (long long)*fzmid2)
 				{
 					FZC[*fzccount] = *fzmid1;
 					//cout << FZC[fzccount] << "test" << endl;	// 输出流用于调试
@@ -568,7 +568,7 @@ Select_Num_Scan:
 			do
 			{
 				*premid2 = prenumscan / *premid1;
-				if (*premid2 == (long long)* premid2)
+				if (*premid2 == (long long)*premid2)
 				{
 					printf("IF_%d = ", *precount);
 					cout << *premid1;
@@ -653,7 +653,7 @@ Select_Num_Scan:
 		do
 		{
 			*mid2 = *numscan / *mid1;
-			if (*mid2 == (long long)* mid2)
+			if (*mid2 == (long long)*mid2)
 			{
 				printf("[整因数%d] = ", *count);
 				cout << *mid1 << endl;
@@ -703,7 +703,7 @@ Select_Num_Scan:
 		}
 		for (long i = 1; i < *numscan1 + *numscan2; i++)
 		{
-			if (*numscan1 * i / *numscan2 == (long)* numscan1 * i / (long)* numscan2)
+			if (*numscan1 * i / *numscan2 == (long)*numscan1 * i / (long)*numscan2)
 			{
 				cout << "最小公倍数为：" << *numscan1 * i << endl;
 				break;
@@ -711,7 +711,7 @@ Select_Num_Scan:
 		}
 		for (long j = (*numscan1 + *numscan2) / 2; j > 0; j--)	//ab相加除以2，避免做无用运算
 		{
-			if (*numscan1 / j == (long)* numscan1 / j and *numscan2 / j == (long)* numscan2 / j)
+			if (*numscan1 / j == (long)*numscan1 / j and *numscan2 / j == (long)*numscan2 / j)
 			{
 				cout << "最大公约数为：" << j << endl;
 				break;
@@ -745,7 +745,7 @@ Select_Num_Scan:
 	{
 		general_struct_1 input;
 		long* numamount = new long;
-Case5_Scan:
+	Case5_Scan:
 		cout << "请输入数据的数量" << endl << "[数量]";
 		cin >> *numamount;
 		if (*numamount > 512)
@@ -760,9 +760,9 @@ Case5_Scan:
 			cin >> input.data_array[i];
 		}
 		input = getSortedData(input, *numamount);
-		
+
 		cout << endl							// 计算完毕，输出结果
-			 << "从小到大排序结果为：" << endl;
+			<< "从小到大排序结果为：" << endl;
 		for (int m = 0; m < *numamount; m++)
 		{
 			printf("[输出数%ld] = ", m + 1);
@@ -785,10 +785,10 @@ Case5_Scan:
 		cin >> *numscan2;
 		cout << endl;
 		simplified = getSimplifiedFraction(*numscan1, *numscan2);
-				cout << "最大公约数：" << simplified.greatest_common_divisor << endl
-					 << "约分结果为：" << endl;
-				cout << "[分子]" << simplified.simplified_numerator << endl
-					 << "[分母]" << simplified.simplified_denominator << endl;
+		cout << "最大公约数：" << simplified.greatest_common_divisor << endl
+			<< "约分结果为：" << endl;
+		cout << "[分子]" << simplified.simplified_numerator << endl
+			<< "[分母]" << simplified.simplified_denominator << endl;
 		delete numscan1, numscan2;
 		goto Select_Num_Scan;
 	}
@@ -798,10 +798,10 @@ Case5_Scan:
 		long* numscan = new long;
 		cout << "请输入要化简的二次根式：" << endl << "√";
 		cin >> *numscan;
-		simplify_quadratic_radical_struct returnNums ;
+		simplify_quadratic_radical_struct returnNums;
 		returnNums = simplify_quadratic_radical(*numscan);
 		cout << "[因式分解] " << *numscan << " = " << pow(returnNums.out_radical, 2) << " * "
-			 << *numscan / pow(returnNums.out_radical, 2) << endl;
+			<< *numscan / pow(returnNums.out_radical, 2) << endl;
 		cout << "[化简结果]" << "√" << *numscan << " = ";
 		if (returnNums.out_radical != 1)
 		{
@@ -854,10 +854,10 @@ Case5_Scan:
 		for (long i = 0;i < *randnumamount;i++)
 		{
 			*randnum = getRandData(*min, *max);
-			printf("[输出数%ld] = ", i+1);
+			printf("[输出数%ld] = ", i + 1);
 			cout << *randnum << endl;
 		}
-		
+
 
 		delete max, min, randnum, randnumamount;
 		goto Select_Num_Scan;
@@ -866,7 +866,7 @@ Case5_Scan:
 	case 14:	// 二次函数解析式计算
 		double a, b, c;
 		cout << "请分别输入抛物线一般式的a,b,c的值" << endl;
-Case5_a_Scan:
+	Case5_a_Scan:
 		cout << "[a] = ";
 		cin >> a;
 		if (a == 0)
