@@ -65,7 +65,7 @@ general_struct_1 getFactor(long num_input, short minus_display_state)
 	{
 		if ((double)num_input / factor == (long)num_input / factor)
 		{
-			// 初始化容器，插入新元素
+			// 初始化容器内存，插入新元素
 			temp.data_array.push_back(0);
 			temp.data_array[temp.count] = factor;
 			temp.count++;
@@ -73,7 +73,8 @@ general_struct_1 getFactor(long num_input, short minus_display_state)
 	}
 	if (minus_display_state = enabled)
 	{
-		long count_clone = temp.count;
+		long count_clone = temp.count;		// 创建count的克隆，用于for循环
+		// 如果启用负数显示，往内存中再存负数
 		for (long i = 0; i <= count_clone; i++)
 		{
 			temp.data_array[temp.count + 1] = -temp.data_array[i];
@@ -82,6 +83,8 @@ general_struct_1 getFactor(long num_input, short minus_display_state)
 	}
 	return temp;
 }
+
+
 // 获取最大公约数函数
 long getGreatestCommonDivisor(general_struct_1 temp)
 {
@@ -89,7 +92,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 	long GreatestCommonDivisor = 1;				// 初始化默认值为1
 	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
 	{
-		// 初始化容器，插入新元素
+		// 初始化容器内存，插入新元素
 		temp.data_array.push_back(0);
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	}
