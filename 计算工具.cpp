@@ -54,8 +54,34 @@ simplify_fraction_struct getSimplifiedFraction(long&, long&);
 long getAbsoluteData(long);
 void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
+general_struct_1 getFactor(long, short);
 
 
+// 因数分解函数（count从零开始）
+general_struct_1 getFactor(long num_input, short minus_display_state)
+{
+	general_struct_1 temp;
+	for (long factor = 1; factor <= num_input; factor++)
+	{
+		if ((double)num_input / factor == (long)num_input / factor)
+		{
+			// 初始化容器，插入新元素
+			temp.data_array.push_back(0);
+			temp.data_array[temp.count] = factor;
+			temp.count++;
+		}
+	}
+	if (minus_display_state = enabled)
+	{
+		long count_clone = temp.count;
+		for (long i = 0; i <= count_clone; i++)
+		{
+			temp.data_array[temp.count + 1] = -temp.data_array[i];
+			temp.count++;
+		}
+	}
+	return temp;
+}
 // 获取最大公约数函数
 long getGreatestCommonDivisor(general_struct_1 temp)
 {
