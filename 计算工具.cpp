@@ -67,7 +67,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 		temp.data_array.push_back(0);
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	}
-	temp = getSortedData(temp, data_amount);	// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
+	temp = getSortedData(temp, data_amount);// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
 	for (int j = temp.data_array[0]; j > 0; j--)// 嵌套循环，j的最终结果为最大公约数
 	{
 		for (int k = data_amount - 1; k >= 0; k--)
@@ -77,9 +77,14 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 			{
 				break;
 			}
-			GreatestCommonDivisor = j;			// 如果一直都没有break，则此时j为最大公约数
+			if (k == 0)
+			{
+				GreatestCommonDivisor = j;// 如果一直算到k=0，都没有break，则此时j为最大公约数
+				goto getGreatestCommonDivisor_return;
+			}
 		}
 	}
+getGreatestCommonDivisor_return:
 	return GreatestCommonDivisor;
 }
 
@@ -152,6 +157,8 @@ simplify_fraction_struct getSimplifiedFraction(long& numerator, long& denominato
 	simplify_fraction_struct temp;				// 声明要返回的专用结构体
 	general_struct_1 gcd;						// 公约数传参用此通用结构体
 	// 数组赋值
+	gcd.data_array.push_back(0);
+	gcd.data_array.push_back(0);
 	gcd.data_array[0] = numerator;
 	gcd.data_array[1] = denominator;
 	gcd.count = 2;
@@ -175,7 +182,7 @@ simplify_fraction_struct getSimplifiedFraction(long& numerator, long& denominato
 	// 默认启用整数显示（如果有特殊情况）
 	temp.single_display_state = enabled;
 	// 判断是否采用整数显示：如果最大公约数等于分母的绝对值，则启用整数显示
-	if (temp.greatest_common_divisor == getAbsoluteData(numerator))
+	if (temp.greatest_common_divisor == getAbsoluteData(denominator))
 	{
 		temp.single_display_state = enabled;
 	}
@@ -228,9 +235,8 @@ long getAbsoluteData(long numscan)
 
 
 // 加载总控制台函数
-long long loadMasterConsole()
+void loadMasterConsole()
 {
-	long long SwitchNum;
 	cout << "===============[总控制台]===============" << endl
 		<< "1::解/分析二元一次方程" << endl
 		<< "2::因数分解" << endl
@@ -252,11 +258,7 @@ long long loadMasterConsole()
 		<< "11::" << endl
 		<< "11::" << endl
 		*/
-		<< "0::显示控制台" << endl
-		<< "[输入]";
-	cin >> SwitchNum;
-	cout << "====================" << endl << endl;
-	return SwitchNum;
+		<< "0::显示控制台" << endl;
 }
 
 clock_t start, stop;				// 初始化计时函数
@@ -265,8 +267,15 @@ int main(void)						// 开始执行主函数
 {
 	long double pretime;
 	short speedTestState = enabled;	// 避免多次测速
+	long long SwitchNum;
+	loadMasterConsole();
 Select_Num_Scan:
-	switch (loadMasterConsole())	// 加载总控制台
+ cout << endl;
+ cout << "[输入]";
+	cin >> SwitchNum;
+	cout << "====================" << endl << endl;
+
+	switch (SwitchNum)	// 加载总控制台
 	{
 	case 1:		// 解/分析二元一次方程
 	{
@@ -757,6 +766,8 @@ Select_Num_Scan:
 		for (int i = 0; i < *numamount;i++)
 		{
 			printf("[输入数%ld] = ", i + 1);
+			// 初始化
+			input.data_array.push_back(0);
 			cin >> input.data_array[i];
 		}
 		input = getSortedData(input, *numamount);
@@ -896,6 +907,7 @@ Select_Num_Scan:
 	case 0:		// 显示控制台
 	{
 		loadMasterConsole();
+		goto Select_Num_Scan;
 		/*exit(0);			// 退出程序*/
 	}						// case 0
 
