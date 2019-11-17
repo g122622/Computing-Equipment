@@ -79,10 +79,12 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 			}
 			if (k == 0)
 			{
-				GreatestCommonDivisor = j;// 如果一直算到k=0，都没有break，则此时j为最大公约数	
+				GreatestCommonDivisor = j;// 如果一直算到k=0，都没有break，则此时j为最大公约数
+				goto getGreatestCommonDivisor_return;
 			}
 		}
 	}
+getGreatestCommonDivisor_return:
 	return GreatestCommonDivisor;
 }
 
