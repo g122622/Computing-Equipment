@@ -67,7 +67,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 		temp.data_array.push_back(0);
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	}
-	temp = getSortedData(temp, data_amount);	// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
+	temp = getSortedData(temp, data_amount);// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
 	for (int j = temp.data_array[0]; j > 0; j--)// 嵌套循环，j的最终结果为最大公约数
 	{
 		for (int k = data_amount - 1; k >= 0; k--)
@@ -75,9 +75,12 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 			// 判断是否能整除，若不能则直接break
 			if ((double)(temp.data_array[k] / j) != (long)(temp.data_array[k] / j))
 			{
-			goto end_gcd_0;
+				break;
 			}
-			GreatestCommonDivisor = j;		// 如果一直都没有break，则此时j为最大公约数
+			if (k == 0)
+			{
+				GreatestCommonDivisor = j;// 如果一直算到k=0，都没有break，则此时j为最大公约数	
+			}
 		}
 end_gcd_0:
 	}
