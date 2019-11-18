@@ -687,6 +687,8 @@ Select_Num_Scan:
 			goto Default_Output;
 		}
 	Default_Output:
+		getFactor()
+		/*
 		// 核心算法部分
 		do
 		{
@@ -702,7 +704,7 @@ Select_Num_Scan:
 			{
 				(*mid1)++;
 			}
-		} while (*mid1 <= (*numscan / 2) and *count <= 20000);	// while异常中断
+		} while (*mid1 <= (*numscan / 2) and *count <= 20000);	// while异常中断*/
 	PrimeNum_Output:
 		if (*count == 1)
 		{
