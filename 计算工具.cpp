@@ -89,7 +89,6 @@ general_struct_1 getFactor(long num_input, short minus_display_state)
 long getGreatestCommonDivisor(general_struct_1 temp)
 {
 	long& data_amount = temp.count;				// 引用，避免误解
-	long GreatestCommonDivisor = 1;				// 初始化默认值为1
 	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
 	{
 		// 初始化容器内存，插入新元素
@@ -108,13 +107,11 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 			}
 			if (k == 0)
 			{
-				GreatestCommonDivisor = j;// 如果一直算到k=0，都没有break，则此时j为最大公约数
-				goto getGreatestCommonDivisor_return;
+				// 如果一直算到k=0，都没有break，则此时j为最大公约数
+				return j;	// 返回这个值
 			}
 		}
 	}
-getGreatestCommonDivisor_return:
-	return GreatestCommonDivisor;
 }
 
 // 生成随机数列的函数
