@@ -58,7 +58,7 @@ general_struct_1 getFactor(long, short);
 
 
 // 因数分解函数（count从零开始）
-general_struct_1 getFactor(long num_input, short minus_display_state)
+general_struct_1 getFactor(long num_input, short minus_output_state)
 {
 	general_struct_1 temp;
 	for (long factor = 1; factor <= num_input; factor++)
@@ -71,7 +71,7 @@ general_struct_1 getFactor(long num_input, short minus_display_state)
 			temp.count++;
 		}
 	}
-	if (minus_display_state = enabled)
+	if (minus_output_state = enabled)
 	{
 		long count_clone = temp.count;		// 创建count的克隆，用于for循环
 		// 如果启用负数显示，往内存中再存负数
