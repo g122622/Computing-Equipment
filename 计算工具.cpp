@@ -591,42 +591,21 @@ Select_Num_Scan:
 
 	case 2:		// 因数分解
 	{
-		long double prenumscan = 4777778;
+		general_struct_1 factor;
 		if (speedTestState == enabled) // 避免重复测速
 		{
-			long double* premid1 = new long double;
-			long double* premid2 = new long double;
-			int* precount = new int;
-			*premid1 = 2;
-			*precount = 1;
 			cout << "{!}程序开始执行。\n[正在测速，请稍侯。调试信息请忽略。]" << endl;
 			start = clock();	// 开始测速
-			do
-			{
-				*premid2 = prenumscan / *premid1;
-				if (*premid2 == (long long)*premid2)
-				{
-					printf("IF_%d = ", *precount);
-					cout << *premid1;
-					cout << endl;	// 输出一个换行符
-					(*premid1)++;
-					(*precount)++;
-				}
-				else
-				{
-					(*premid1)++;
-				}
-			} while (*premid1 <= (prenumscan / 2) and *precount <= 20000);	// while异常中断
+			factor = getFactor(10000000, disabled);
 			stop = clock();		// 停止测速
 			pretime = (float)(stop - start) / CLOCKS_PER_SEC;
 			cout << "Time=" << pretime << endl << "测速完成。" << endl << endl;
 			speedTestState = disabled;
-			delete premid1, premid2, precount;
 		}
 		// 测速结束
+		long double* predicttime = new long double;
 		double* duration = new double;
 		long* numscan = new long;
-		long double* predicttime = new long double;
 		// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
 		// FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN |
 		// FOREGROUND_BLUE);/////set白色
@@ -642,7 +621,7 @@ Select_Num_Scan:
 			goto Case2_Scan;
 		}
 		cout << fixed << setprecision(6);	// 锁定浮点数显示，不使用科学计数法，小数显示6位
-		*predicttime = (pretime / prenumscan) * *numscan;
+		*predicttime = (pretime / 10000000) * *numscan;
 		cout << "[预计耗时]" << *predicttime << " sec." << endl << endl;
 		cout << fixed << setprecision(0);	// 锁定浮点数显示，不使用科学计数法，小数不显示
 		if (*predicttime >= 60)
@@ -681,31 +660,14 @@ Select_Num_Scan:
 		}
 Default_Output:
 	// 调用函数(不启用负数输出)
-		general_struct_1 factor = getFactor(*numscan, disabled);
+		factor = getFactor(*numscan, disabled);
 		// 开始输出
 		for (long i = 0; i < factor.count; i++)
 		{
-			printf("[整因数 %ld ] = %ld]", i + 1, factor.data_array[i]);
+			printf("[整因数 %ld ] = %ld\n", i + 1, factor.data_array[i]);
 		}
-		/*
-		// 核心算法部分
-		do
-		{
-			*mid2 = *numscan / *mid1;
-			if (*mid2 == (long long)*mid2)
-			{
-				printf("[整因数%d] = ", *count);
-				cout << *mid1 << endl;
-				(*mid1)++;
-				(*count)++;
-			}
-			else
-			{
-				(*mid1)++;
-			}
-		} while (*mid1 <= (*numscan / 2) and *count <= 20000);	// while异常中断*/
 PrimeNum_Output:
-		if (factor.count == 1)
+		if (factor.count <=2)
 		{
 			cout << "{!}该数是质数。" << endl;
 		}
