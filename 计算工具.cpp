@@ -72,7 +72,7 @@ general_struct_1 getFactor(long num_input, short minus_output_state)
 			temp.count++;
 		}
 	}
-	temp.count--;// 避免最后一个时count比预期值大1
+	temp.count--;// 避免循环到最后一个时count比预期值大1
 	if (minus_output_state == enabled)
 	{
 		long count_clone = temp.count;		// 创建count的克隆，用于for循环
