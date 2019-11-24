@@ -2,7 +2,7 @@
 // 日期：20190912
 // 版本：v1.4.4
 // 开发平台：Windows：Microsoft Visual Studio；Android：c4droid
-// test233
+
 
 
 /*----------预处理器/预编译语句加载区----------*/
@@ -15,6 +15,7 @@
 #define enabled 0
 #define disabled 1
 
+// std命名空间
 using namespace std;
 
 
@@ -29,7 +30,7 @@ struct simplify_quadratic_radical_struct
 // 通用结构体1
 struct general_struct_1
 {
-	vector<long> data_array;	// 这里使用了vector动态向量容器（高度实验性）
+	vector<long> data_array;	// 这里使用了vector动态向量容器（实验性）
 	long count = 0;
 };
 
@@ -71,13 +72,15 @@ general_struct_1 getFactor(long num_input, short minus_output_state)
 			temp.count++;
 		}
 	}
-	if (minus_output_state = enabled)
+	temp.count--;// 避免循环到最后一个时count比预期值大1
+	if (minus_output_state == enabled)
 	{
 		long count_clone = temp.count;		// 创建count的克隆，用于for循环
 		// 如果启用负数显示，往内存中再存负数
 		for (long i = 0; i <= count_clone; i++)
 		{
-			temp.data_array[temp.count + 1] = -temp.data_array[i];
+			temp.data_array.push_back(0);
+			temp.data_array[temp.count+1] = -temp.data_array[i];
 			temp.count++;
 		}
 	}
@@ -168,7 +171,7 @@ general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 		{
 			if (temp.data_array[j] < temp.data_array[j - 1])
 			{
-				swapData(temp.data_array[j - 1], temp.data_array[j]);	// 交换两个对象
+				swapData(temp.data_array[j - 1], temp.data_array[j]);	// 交换两个元素
 				(temp.count)++;
 			}
 		}
@@ -592,47 +595,21 @@ Select_Num_Scan:
 
 	case 2:		// 因数分解
 	{
-		long double prenumscan = 4777778;
+		general_struct_1 factor;
 		if (speedTestState == enabled) // 避免重复测速
 		{
-			long double* premid1 = new long double;
-			long double* premid2 = new long double;
-			int* precount = new int;
-			*premid1 = 2;
-			*precount = 1;
 			cout << "{!}程序开始执行。\n[正在测速，请稍侯。调试信息请忽略。]" << endl;
 			start = clock();	// 开始测速
-			do
-			{
-				*premid2 = prenumscan / *premid1;
-				if (*premid2 == (long long)*premid2)
-				{
-					printf("IF_%d = ", *precount);
-					cout << *premid1;
-					cout << endl;	// 输出一个换行符
-					(*premid1)++;
-					(*precount)++;
-				}
-				else
-				{
-					(*premid1)++;
-				}
-			} while (*premid1 <= (prenumscan / 2) and *precount <= 20000);	// while异常中断
+			factor = getFactor(10000000, disabled);
 			stop = clock();		// 停止测速
 			pretime = (float)(stop - start) / CLOCKS_PER_SEC;
 			cout << "Time=" << pretime << endl << "测速完成。" << endl << endl;
 			speedTestState = disabled;
-			delete premid1, premid2, precount;
 		}
 		// 测速结束
-		double* duration = new double;
-		long double* numscan = new long double;
 		long double* predicttime = new long double;
-		long double* mid1 = new long double;
-		long double* mid2 = new long double;
-		int* count = new int;
-		*count = 1;
-		*mid1 = 2;
+		double* duration = new double;
+		long* numscan = new long;
 		// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
 		// FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN |
 		// FOREGROUND_BLUE);/////set白色
@@ -648,7 +625,7 @@ Select_Num_Scan:
 			goto Case2_Scan;
 		}
 		cout << fixed << setprecision(6);	// 锁定浮点数显示，不使用科学计数法，小数显示6位
-		*predicttime = (pretime / prenumscan) * *numscan;
+		*predicttime = (pretime / 10000000) * *numscan;
 		cout << "[预计耗时]" << *predicttime << " sec." << endl << endl;
 		cout << fixed << setprecision(0);	// 锁定浮点数显示，不使用科学计数法，小数不显示
 		if (*predicttime >= 60)
@@ -685,27 +662,16 @@ Select_Num_Scan:
 		{
 			goto Default_Output;
 		}
-	Default_Output:
-		getFactor()
-		/*
-		// 核心算法部分
-		do
+Default_Output:
+	// 调用函数(不启用负数输出)
+		factor = getFactor(*numscan, disabled);
+		// 开始输出
+		for (long i = 0; i <= factor.count; i++)
 		{
-			*mid2 = *numscan / *mid1;
-			if (*mid2 == (long long)*mid2)
-			{
-				printf("[整因数%d] = ", *count);
-				cout << *mid1 << endl;
-				(*mid1)++;
-				(*count)++;
-			}
-			else
-			{
-				(*mid1)++;
-			}
-		} while (*mid1 <= (*numscan / 2) and *count <= 20000);	// while异常中断*/
-	PrimeNum_Output:
-		if (*count == 1)
+			printf("[整因数 %ld ] = %ld\n", i + 1, factor.data_array[i]);
+		}
+PrimeNum_Output:
+		if (factor.count <=2)
 		{
 			cout << "{!}该数是质数。" << endl;
 		}
@@ -721,7 +687,7 @@ Select_Num_Scan:
 		// FOREGROUND_BLUE);/////set白色
 		cout.unsetf(ios::fixed); // 消除显示锁定
 		delete duration;
-		delete numscan, predicttime, mid1, mid2, count;
+		delete numscan, predicttime;
 		goto Select_Num_Scan;
 	}						// case 2
 
