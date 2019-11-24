@@ -72,13 +72,15 @@ general_struct_1 getFactor(long num_input, short minus_output_state)
 			temp.count++;
 		}
 	}
-	if (minus_output_state = enabled)
+	temp.count--;// 避免最后一个时count比预期值大1
+	if (minus_output_state == enabled)
 	{
 		long count_clone = temp.count;		// 创建count的克隆，用于for循环
 		// 如果启用负数显示，往内存中再存负数
 		for (long i = 0; i <= count_clone; i++)
 		{
-			temp.data_array[temp.count + 1] = -temp.data_array[i];
+			temp.data_array.push_back(0);
+			temp.data_array[temp.count+1] = -temp.data_array[i];
 			temp.count++;
 		}
 	}
@@ -662,7 +664,7 @@ Default_Output:
 	// 调用函数(不启用负数输出)
 		factor = getFactor(*numscan, disabled);
 		// 开始输出
-		for (long i = 0; i < factor.count; i++)
+		for (long i = 0; i <= factor.count; i++)
 		{
 			printf("[整因数 %ld ] = %ld\n", i + 1, factor.data_array[i]);
 		}
