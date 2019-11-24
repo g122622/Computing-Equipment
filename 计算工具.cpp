@@ -2,7 +2,7 @@
 // 日期：20190912
 // 版本：v1.4.4
 // 开发平台：Windows：Microsoft Visual Studio；Android：c4droid
-// test233
+
 
 
 /*----------预处理器/预编译语句加载区----------*/
@@ -30,7 +30,7 @@ struct simplify_quadratic_radical_struct
 // 通用结构体1
 struct general_struct_1
 {
-	vector<long> data_array;	// 这里使用了vector动态向量容器（高度实验性）
+	vector<long> data_array;	// 这里使用了vector动态向量容器（实验性）
 	long count = 0;
 };
 
@@ -625,13 +625,8 @@ Select_Num_Scan:
 		}
 		// 测速结束
 		double* duration = new double;
-		long double* numscan = new long double;
+		long* numscan = new long;
 		long double* predicttime = new long double;
-		long double* mid1 = new long double;
-		long double* mid2 = new long double;
-		int* count = new int;
-		*count = 1;
-		*mid1 = 2;
 		// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
 		// FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN |
 		// FOREGROUND_BLUE);/////set白色
@@ -685,7 +680,13 @@ Select_Num_Scan:
 			goto Default_Output;
 		}
 	Default_Output:
-		getFactor()
+	// 调用函数(不启用负数输出)
+		general_struct_1 factor = getFactor(*numscan, disabled);
+		// 开始输出
+		for (long i = 0; i < factor.count; i++)
+		{
+			printf("[整因数 %ld ] = %ld]", i + 1, factor.data_array[i]);
+		}
 		/*
 		// 核心算法部分
 		do
@@ -704,7 +705,7 @@ Select_Num_Scan:
 			}
 		} while (*mid1 <= (*numscan / 2) and *count <= 20000);	// while异常中断*/
 	PrimeNum_Output:
-		if (*count == 1)
+		if (factor.count == 1)
 		{
 			cout << "{!}该数是质数。" << endl;
 		}
@@ -720,7 +721,7 @@ Select_Num_Scan:
 		// FOREGROUND_BLUE);/////set白色
 		cout.unsetf(ios::fixed); // 消除显示锁定
 		delete duration;
-		delete numscan, predicttime, mid1, mid2, count;
+		delete numscan, predicttime;
 		goto Select_Num_Scan;
 	}						// case 2
 
