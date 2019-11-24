@@ -15,6 +15,7 @@
 #define enabled 0
 #define disabled 1
 
+// std命名空间
 using namespace std;
 
 
@@ -168,7 +169,7 @@ general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 		{
 			if (temp.data_array[j] < temp.data_array[j - 1])
 			{
-				swapData(temp.data_array[j - 1], temp.data_array[j]);	// 交换两个对象
+				swapData(temp.data_array[j - 1], temp.data_array[j]);	// 交换两个元素
 				(temp.count)++;
 			}
 		}
