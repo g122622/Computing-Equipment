@@ -679,7 +679,7 @@ Select_Num_Scan:
 		{
 			goto Default_Output;
 		}
-	Default_Output:
+Default_Output:
 	// 调用函数(不启用负数输出)
 		general_struct_1 factor = getFactor(*numscan, disabled);
 		// 开始输出
@@ -704,7 +704,7 @@ Select_Num_Scan:
 				(*mid1)++;
 			}
 		} while (*mid1 <= (*numscan / 2) and *count <= 20000);	// while异常中断*/
-	PrimeNum_Output:
+PrimeNum_Output:
 		if (factor.count == 1)
 		{
 			cout << "{!}该数是质数。" << endl;
