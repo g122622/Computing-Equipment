@@ -287,6 +287,8 @@ void loadMasterConsole()
 		<< "0::显示控制台" << endl;
 }
 
+
+/*----------对象声明区----------*/
 clock_t start, stop;				// 初始化计时函数
 
 int main(void)						// 开始执行主函数
