@@ -260,49 +260,48 @@ long getAbsoluteData(long numscan)
 }
 
 
-// 因数分解函数
-
-
-// 加载总控制台函数
-void loadMasterConsole()
-{
-	cout << "===============[总控制台]===============" << endl
-		<< "1::解/分析二元一次方程" << endl
-		<< "2::因数分解" << endl
-		<< "3::找最小公倍数、最大公因数" << endl
-		<< "4::判断完全平方数" << endl
-		<< "5::数据排序" << endl
-		<< "6::分数约分" << endl
-		<< "7::二次根式化简" << endl
-		<< "8::二次根式分母有理化" << endl
-		<< "9::身份证验证码计算" << endl
-		<< "10::条形码验证码计算" << endl
-		<< "11::计算平均数、中位数、众数、方差" << endl
-		<< "12::计算加权平均数" << endl
-		<< "13::生成随机数" << endl
-		<< "14::二次函数解析式计算" << endl
-		// 备份
-		/*
-		<< "11::" << endl
-		<< "11::" << endl
-		<< "11::" << endl
-		*/
-		<< "0::显示控制台" << endl;
-}
-
-
 /*----------对象声明区----------*/
+class action
+{
+	// 加载总控制台函数
+	void loadMasterConsole()
+	{
+		cout << "===============[总控制台]===============" << endl
+			<< "1::解/分析二元一次方程" << endl
+			<< "2::因数分解" << endl
+			<< "3::找最小公倍数、最大公因数" << endl
+			<< "4::判断完全平方数" << endl
+			<< "5::数据排序" << endl
+			<< "6::分数约分" << endl
+			<< "7::二次根式化简" << endl
+			<< "8::二次根式分母有理化" << endl
+			<< "9::身份证验证码计算" << endl
+			<< "10::条形码验证码计算" << endl
+			<< "11::计算平均数、中位数、众数、方差" << endl
+			<< "12::计算加权平均数" << endl
+			<< "13::生成随机数" << endl
+			<< "14::二次函数解析式计算" << endl
+			// 备份
+			/*
+			<< "11::" << endl
+			<< "11::" << endl
+			<< "11::" << endl
+			*/
+			<< "0::显示控制台" << endl;
+	}
+};
 clock_t start, stop;				// 初始化计时函数
 
 int main(void)						// 开始执行主函数
 {
+	action action;
 	long double pretime;
 	short speedTestState = enabled;	// 避免多次测速
 	long long SwitchNum;
-	loadMasterConsole();
+	action.loadMasterConsole();
 Select_Num_Scan:
- cout << endl;
- cout << "[输入]";
+	cout << endl;
+	cout << "[输入]";
 	cin >> SwitchNum;
 	cout << "====================" << endl << endl;
 
@@ -902,7 +901,7 @@ PrimeNum_Output:
 
 	case 0:		// 显示控制台
 	{
-		loadMasterConsole();
+		action.loadMasterConsole();
 		goto Select_Num_Scan;
 		/*exit(0);			// 退出程序*/
 	}						// case 0
