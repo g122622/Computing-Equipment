@@ -385,7 +385,7 @@ Select_Num_Scan:
 		}				// do
 		while (*fzmid1 <= *a and *fzacount <= 20000);	//异常中断
 
-		// ///////开始*c的因数计算循环，正负值都要计算，先讨论*c的正负性
+		// 开始*c的因数计算循环，正负值都要计算，先讨论*c的正负性
 		long* fzmid3 = new long;
 		*fzmid3 = (long)-*c;	// 设立fzmid3是为了避免数据类型转换的warning
 		*fzmid1 = *fzmid3;		// 复位
