@@ -288,7 +288,7 @@ class action
 			<< "11::" << endl
 			<< "11::" << endl
 			*/
-			<< "0::显示控制台" << endl;
+			<< "0::显示总控制台" << endl;
 	}
 };
 
@@ -303,6 +303,7 @@ int main(void)
 	long double pretime;
 	short speedTestState = enabled;	// 避免多次测速
 	long long SwitchNum;
+	// 加载总控制台
 	action.loadMasterConsole();
 Select_Num_Scan:
 	cout << endl;
@@ -604,6 +605,7 @@ Select_Num_Scan:
 		{
 			cout << "{!}程序开始执行。\n[正在测速，请稍侯。调试信息请忽略。]" << endl;
 			start = clock();	// 开始测速
+			// 调用函数
 			factor = getFactor(10000000, disabled);
 			stop = clock();		// 停止测速
 			pretime = (float)(stop - start) / CLOCKS_PER_SEC;
