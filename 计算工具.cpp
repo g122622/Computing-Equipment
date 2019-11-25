@@ -263,6 +263,7 @@ long getAbsoluteData(long numscan)
 /*----------对象声明区----------*/
 class action
 {
+	public:
 	// 加载总控制台函数
 	void loadMasterConsole()
 	{
@@ -290,9 +291,13 @@ class action
 			<< "0::显示控制台" << endl;
 	}
 };
+
+
 clock_t start, stop;				// 初始化计时函数
 
-int main(void)						// 开始执行主函数
+
+/*----------主函数----------*/
+int main(void)
 {
 	action action;
 	long double pretime;
@@ -305,7 +310,7 @@ Select_Num_Scan:
 	cin >> SwitchNum;
 	cout << "====================" << endl << endl;
 
-	switch (SwitchNum)	// 加载总控制台
+	switch (SwitchNum)
 	{
 	case 1:		// 解/分析二元一次方程
 	{
