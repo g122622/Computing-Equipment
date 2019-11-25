@@ -322,12 +322,6 @@ Select_Num_Scan:
 		float* mid2 = new float;	// 方程两根
 		float* mid3 = new float;
 
-		int* fzacount = new int;
-		long* fzmid1 = new long;					//用于除a和c
-		long double* fzmid2 = new long double;		//用于被a除
-		int* FZA = new int[512];
-		*fzacount = 0;
-		*fzmid1 = 1;
 		// int m1, d1, m2, d2, m3, d3, mid4, mid5, mid6, d = 0; //
 		// 分数运算需要用到的在这里定义，暂时还用不到
 		// float mid7, mid8, mid9; //
@@ -357,16 +351,19 @@ Select_Num_Scan:
 		printf("[c]");
 		cin >> *c;
 		// 输入结束
-
 		cout << endl;	// 输出空行
 		printf("%gx^2+%gx+%g=0 \n\n", *a, *b, *c);
 
 		cout << "由韦达定理，\nx(1)+x(2) = -b/a = " << -*b / *a << "." << endl
 			<< "x(1)x(2) = c/a = " << *c / *a << "." << endl << endl;
 
+		general_struct_1 factor_a, factor_c;
 		std::cout << "[解法1：因式分解法(实验性，bug可能较多)]" << std::endl;
-		do
-			// 开始a的因数计算循环，a的分解只需要正值即可
+		// 开始a的因数计算循环，a的分解只需要正值即可
+		factor_a = getFactor(*a, disabled);
+
+		/*do
+
 		{
 			*fzmid2 = *a / *fzmid1;
 			if (*fzmid2 == (long long)*fzmid2)
@@ -383,18 +380,20 @@ Select_Num_Scan:
 				(*fzmid1)++;
 			}			// else
 		}				// do
-		while (*fzmid1 <= *a and *fzacount <= 20000);	//异常中断
+		while (*fzmid1 <= *a and *fzacount <= 20000);	//异常中断*/
 
 		// 开始*c的因数计算循环，正负值都要计算，先讨论*c的正负性
-		long* fzmid3 = new long;
+		/*long* fzmid3 = new long;
 		*fzmid3 = (long)-*c;	// 设立fzmid3是为了避免数据类型转换的warning
 		*fzmid1 = *fzmid3;		// 复位
 		delete fzmid3;			// 赋值后即销毁
 		int* fzccount = new int;
 		*fzccount = 0;
-		int* FZC = new int[512];
+		int* FZC = new int[512];*/
 		if (*c > 0)
 		{
+		factor_c = getFactor(*c, disabled);
+			/*
 			do
 			{
 				*fzmid2 = *c / *fzmid1;
@@ -411,10 +410,12 @@ Select_Num_Scan:
 				}			// else
 			}				// do
 			while (*fzmid1 <= *c and *fzccount <= 20000);	//异常中断
+			*/
 		}					// if (*c>0)
-		else				//*c的负数因数计算模块（新）
+		else				//计算*c的负数因数
 		{
-			do
+		factor_c = getFactor(*c, enabled);
+			/*do
 				// 开始*c的因数计算循环，正负值都要计算
 			{
 				*fzmid2 = *c / *fzmid1;
@@ -430,7 +431,7 @@ Select_Num_Scan:
 					(*fzmid1)--;
 				}			// else
 			}				// do
-			while (*fzmid1 >= *c and *fzccount <= 20000);	//异常中断
+			while (*fzmid1 >= *c and *fzccount <= 20000);	//异常中断*/
 		}					//if（first-else）
 
 							// 因数计算完成，开始for循环+if条件匹配
