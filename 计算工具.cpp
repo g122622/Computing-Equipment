@@ -374,76 +374,15 @@ Select_Num_Scan:
 		// 开始a的因数计算循环，a的分解只需要正值即可
 		factor_a = getFactor(*a, disabled);
 
-		/*do
-
-		{
-			*fzmid2 = *a / *fzmid1;
-			if (*fzmid2 == (long long)*fzmid2)
-			{
-				FZA[*fzacount] = *fzmid1;
-				//cout << *fzacount+1 << "→";
-				//cout << FZA[*fzacount] << endl;
-				//输出流调试
-				(*fzmid1)++;
-				(*fzacount)++;
-			}			// if
-			else
-			{
-				(*fzmid1)++;
-			}			// else
-		}				// do
-		while (*fzmid1 <= *a and *fzacount <= 20000);	//异常中断*/
 
 		// 开始*c的因数计算循环，正负值都要计算，先讨论*c的正负性
-		/*long* fzmid3 = new long;
-		*fzmid3 = (long)-*c;	// 设立fzmid3是为了避免数据类型转换的warning
-		*fzmid1 = *fzmid3;		// 复位
-		delete fzmid3;			// 赋值后即销毁
-		int* fzccount = new int;
-		*fzccount = 0;
-		int* FZC = new int[512];*/
 		if (*c > 0)
 		{
 		factor_c = getFactor(*c, disabled);
-			/*
-			do
-			{
-				*fzmid2 = *c / *fzmid1;
-				if (*fzmid2 == (long long)*fzmid2)
-				{
-					FZC[*fzccount] = *fzmid1;
-					//cout << FZC[fzccount] << endl;	// 输出流用于调试
-					(*fzmid1)++;
-					(*fzccount)++;
-				}			// if
-				else
-				{
-					(*fzmid1)++;
-				}			// else
-			}				// do
-			while (*fzmid1 <= *c and *fzccount <= 20000);	//异常中断
-			*/
 		}					// if (*c>0)
 		else				//计算*c的负数因数
 		{
 		factor_c = getFactor(*c, enabled);
-			/*do
-				// 开始*c的因数计算循环，正负值都要计算
-			{
-				*fzmid2 = *c / *fzmid1;
-				if (*fzmid2 == (long long)*fzmid2)
-				{
-					FZC[*fzccount] = *fzmid1;
-					//cout << FZC[fzccount] << "test" << endl;	// 输出流用于调试
-					(*fzmid1)--;
-					(*fzccount)++;
-				}			// if
-				else
-				{
-					(*fzmid1)--;
-				}			// else
-			}				// do
-			while (*fzmid1 >= *c and *fzccount <= 20000);	//异常中断*/
 		}					//if（first-else）
 
 							// 因数计算完成，开始for循环+if条件匹配
@@ -522,15 +461,6 @@ Select_Num_Scan:
 					{
 						cout << "x + " << *c / factor_c.data_array[i] << " = 0" << endl;
 					}
-
-					/*
-					cout << *a / FZA[j] << "x + " << *c / FZC[i] << " ) = 0" << endl;
-					cout << *c / FZC[i] << " ) = 0" << endl;
-
-					cout << "( " << FZA[j];
-					cout << "x + " << FZC[i] << " ) = 0，或 ( ";
-					cout << *a / FZA[j] << "x + " << *c / FZC[i] << " ) = 0" << endl;
-					*/
 					if ((float)-FZC[i] / FZA[j] == (float)(-*c / FZC[i]) / (*a / FZA[j]))	//以等根形式输出结果
 					{
 					EqualRoot_Output:
@@ -607,7 +537,6 @@ Select_Num_Scan:
 		   //释放内存
 		delete a, b, c, Delta, mid2, mid3;
 		delete[] FZA, FZC;
-		delete fzacount, fzccount, fzmid1, fzmid2;
 		goto Select_Num_Scan;
 	}						// case1
 
