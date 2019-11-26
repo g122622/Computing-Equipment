@@ -2,6 +2,7 @@
 // 日期：20191126
 // 版本：v1.4.4
 // 开发平台：Windows：Microsoft Visual Studio；Android：c4droid
+
 // 这个程序为解决初中阶段各种繁琐的数学运算而设计。
 // 这是我在学习之余写的程序，下面是所有源代码。
 // 未经允许严禁私自转载！严禁私改版权！
@@ -23,6 +24,8 @@
 #include <vector>
 #define enabled 0
 #define disabled 1
+#define FZA factor_a.data_array
+#define FZC factor_c.data_array
 
 // std命名空间
 using namespace std;
@@ -444,80 +447,80 @@ Select_Num_Scan:
 		}					//if（first-else）
 
 							// 因数计算完成，开始for循环+if条件匹配
-		for (int i = 0; i <= *fzccount; i++)
+		for (int i = 0; i <= factor_c.count; i++)
 		{
-			for (int j = 0; j <= *fzacount; j++)
+			for (int j = 0; j <= factor_a.count; j++)
 			{
-				if (FZA[j] * (*c / FZC[i]) + FZC[i] * (*a / FZA[j]) == *b)//触发输出的条件
+				if (factor_a.data_array[j] * (*c / factor_c.data_array[i]) + factor_c.data_array[i] * (*a / factor_a.data_array[j]) == *b)//触发输出的条件
 				{
 					// ！！！开始输出 Output
-					if (FZC[i] == *c / FZC[i] and FZA[j] == *a / FZA[j]) //输出完全平方
+					if (factor_c.data_array[i] == *c / factor_c.data_array[i] and factor_a.data_array[j] == *a / factor_a.data_array[j]) //输出完全平方
 					{
 						cout << "( ";
-						if (FZA[j] != 1) /////1
+						if (factor_a.data_array[j] != 1) /////1
 						{
-							cout << FZA[j];
+							cout << factor_a.data_array[j];
 						}			//if
-						if (FZC[i] < 0)
+						if (factor_c.data_array[i] < 0)
 						{
-							cout << "x " << FZC[i] << " ) ^ 2 = 0" << endl;
+							cout << "x " << factor_c.data_array[i] << " ) ^ 2 = 0" << endl;
 						}
 						else
 						{
-							cout << "x + " << FZC[i] << " ) ^ 2 = 0" << endl;
+							cout << "x + " << factor_c.data_array[i] << " ) ^ 2 = 0" << endl;
 						}
 						goto EqualRoot_Output;
 					}				//if
 
 					cout << "( ";
-					if (FZA[j] != 1) /////1
+					if (factor_a.data_array[j] != 1) /////1
 					{
-						cout << FZA[j];
+						cout << factor_a.data_array[j];
 					}
-					if (FZC[i] < 0)
+					if (factor_c.data_array[i] < 0)
 					{
-						cout << "x " << FZC[i] << " ) " << "( ";
-					}
-					else
-					{
-						cout << "x + " << FZC[i] << " ) " << "( ";
-					}
-					if (*a / FZA[j] != 1) /////2
-					{
-						cout << *a / FZA[j];
-					}
-					if (*c / FZC[i] < 0)
-					{
-						cout << "x " << *c / FZC[i] << " ) = 0" << endl;
+						cout << "x " << factor_c.data_array[i] << " ) " << "( ";
 					}
 					else
 					{
-						cout << "x + " << *c / FZC[i] << " ) = 0" << endl;
+						cout << "x + " << factor_c.data_array[i] << " ) " << "( ";
+					}
+					if (*a / factor_a.data_array[j] != 1) /////2
+					{
+						cout << *a / factor_a.data_array[j];
+					}
+					if (*c / factor_c.data_array[i] < 0)
+					{
+						cout << "x " << *c / factor_c.data_array[i] << " ) = 0" << endl;
+					}
+					else
+					{
+						cout << "x + " << *c / factor_c.data_array[i] << " ) = 0" << endl;
 					}
 					//line 2 output
-					if (FZA[j] != 1) /////1
+					if (factor_a.data_array[j] != 1) /////1
 					{
-						cout << FZA[j];
+						cout << factor_a.data_array[j];
 					}
-					if (FZC[i] < 0)
+					if (factor_c.data_array[i] < 0)
 					{
-						cout << "x " << FZC[i] << " = 0，或 ";
-					}
-					else
-					{
-						cout << "x + " << FZC[i] << " = 0，或 ";
-					}
-					if (*a / FZA[j] != 1) /////2
-					{
-						cout << *a / FZA[j];
-					}
-					if (*c / FZC[i] < 0)
-					{
-						cout << "x " << *c / FZC[i] << " = 0" << endl;
+						cout << "x " << factor_c.data_array[i] << " = 0，或 ";
 					}
 					else
 					{
-						cout << "x + " << *c / FZC[i] << " = 0" << endl;
+						cout << "x + " << factor_c.data_array[i] << " = 0，或 ";
+					}
+					if (*a / factor_a.data_array[j] != 1) /////2
+					{
+						cout << *a / factor_a.data_array[j];
+					}
+					if (*c / factor_c.data_array[i] < 0)
+					{
+						cout << "x " << *c / factor_c.data_array[i] << " = 0" << endl;
+					}
+					else
+					{
+						cout << "x + " << *c / factor_c.data_array[i] << " = 0" << endl;
 					}
 
 					/*
