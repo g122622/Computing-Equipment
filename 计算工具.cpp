@@ -663,7 +663,7 @@ PrimeNum_Output:
 				break;
 			}
 		}
-		cout << "最大公约数为：" << getGreatestCommonDivisor(temp) << endl;
+		cout << "最大公约数为：" << getGreatestCommonDivisor(temp) <<  endl;
 		goto Select_Num_Scan;
 	}						// case 3
 
