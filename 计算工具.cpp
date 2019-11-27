@@ -110,7 +110,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 		temp.data_array.push_back(0);
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	}
-	temp = getSortedData(temp, data_amount);// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
+	temp = getSortedData(temp, data_amount);	// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
 	for (int j = temp.data_array[0]; j > 0; j--)// 嵌套循环，j的最终结果为最大公约数
 	{
 		for (int k = data_amount - 1; k >= 0; k--)
@@ -120,9 +120,8 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 			{
 				break;
 			}
-			if (k == 0)
+			if (k == 0)	// 如果一直算到k=0，都没有break，则此时j为最大公约数
 			{
-				// 如果一直算到k=0，都没有break，则此时j为最大公约数
 				return j;	// 返回这个值
 			}
 		}
@@ -376,13 +375,13 @@ Select_Num_Scan:
 
 
 		// 开始*c的因数计算循环，正负值都要计算，先讨论*c的正负性
-		if (*c > 0)
+		if (*c >= 0)
 		{
-		factor_c = getFactor(*c, disabled);
-		}					// if (*c>0)
-		else				//计算*c的负数因数
+			factor_c = getFactor(*c, disabled);
+		}
+		else				// 计算*c的负数因数
 		{
-		factor_c = getFactor(*c, enabled);
+			factor_c = getFactor(-*c, enabled);	// 传入c的相反数，使c始终为正
 		}					//if（first-else）
 
 							// 因数计算完成，开始for循环+if条件匹配
@@ -399,7 +398,7 @@ Select_Num_Scan:
 						if (factor_a.data_array[j] != 1) /////1
 						{
 							cout << factor_a.data_array[j];
-						}			//if
+						}
 						if (factor_c.data_array[i] < 0)
 						{
 							cout << "x " << factor_c.data_array[i] << " ) ^ 2 = 0" << endl;
@@ -409,7 +408,7 @@ Select_Num_Scan:
 							cout << "x + " << factor_c.data_array[i] << " ) ^ 2 = 0" << endl;
 						}
 						goto EqualRoot_Output;
-					}				//if
+					}
 
 					cout << "( ";
 					if (factor_a.data_array[j] != 1) /////1
@@ -611,7 +610,7 @@ Select_Num_Scan:
 			goto Default_Output;
 		}
 Default_Output:
-	// 调用函数(不启用负数输出)
+		// 调用函数(不启用负数输出)
 		factor = getFactor(*numscan, disabled);
 		// 开始输出
 		for (long i = 0; i <= factor.count; i++)
@@ -619,7 +618,7 @@ Default_Output:
 			printf("[整因数 %ld ] = %ld\n", i + 1, factor.data_array[i]);
 		}
 PrimeNum_Output:
-		if (factor.count <=2)
+		if (factor.count <= 2)
 		{
 			cout << "{!}该数是质数。" << endl;
 		}
@@ -641,15 +640,17 @@ PrimeNum_Output:
 
 	case 3:		// 找最小公倍数、最大公因数
 	{
-		double* numscan1 = new double;
-		double* numscan2 = new double;
+		general_struct_1 temp;
+		temp.count = 2;
 		cout << "{!}程序开始执行。" << endl;
 	Case3_Scan:
+		temp.data_array.push_back(0);
+		temp.data_array.push_back(0);
 		cout << "{!}请输入两个正整数：" << endl << "[a]=";
-		cin >> *numscan1;
+		cin >> temp.data_array[0];
 		cout << "[b]=";
-		cin >> *numscan2;
-		if (*numscan1 * *numscan2 <= 0 or *numscan1 + *numscan2 < 0)
+		cin >> temp.data_array[1];
+		if (temp.data_array[0] * temp.data_array[1] <= 0 or temp.data_array[0] + temp.data_array[1] < 0)
 		{
 			cout << endl << "{!}a,b中任一值不可为0或负数，请重新输入。" << endl << endl;
 			goto Case3_Scan;
@@ -662,16 +663,7 @@ PrimeNum_Output:
 				break;
 			}
 		}
-		for (long j = (*numscan1 + *numscan2) / 2; j > 0; j--)	//ab相加除以2，避免做无用运算
-		{
-			if (*numscan1 / j == (long)*numscan1 / j and *numscan2 / j == (long)*numscan2 / j)
-			{
-				cout << "最大公约数为：" << j << endl;
-				break;
-			}
-		}
-		//释放内存
-		delete numscan1, numscan2;
+		cout << "最大公约数为：" << getGreatestCommonDivisor(temp) << endl;
 		goto Select_Num_Scan;
 	}						// case 3
 
