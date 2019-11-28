@@ -71,8 +71,16 @@ long getAbsoluteData(long);
 void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, short);
+long getLowestCommonMultiple(simplify_fraction_struct);
 
 
+/*----------函数定义区----------*/
+// 计算最小公倍数函数
+long getLowestCommonMultiple(general_struct_1 temp)
+{
+	long& data_amount = temp.count;				// 引用，避免误解
+	temp = getSortedData(temp, data_amount);	// 对数据进行排序
+}
 // 因数分解函数（count从零开始）
 general_struct_1 getFactor(long num_input, short minus_output_state)
 {
@@ -103,7 +111,7 @@ general_struct_1 getFactor(long num_input, short minus_output_state)
 }
 
 
-// 获取最大公约数函数
+// 计算最大公约数函数
 long getGreatestCommonDivisor(general_struct_1 temp)
 {
 	long& data_amount = temp.count;				// 引用，避免误解
@@ -176,7 +184,7 @@ void swapData(long& num1, long& num2)
 }
 
 
-// 冒泡排序函数
+// 冒泡排序函数（从小到大）
 general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 {
 	for (int k = 0; k < dataamount; k++)
@@ -186,7 +194,7 @@ general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 			if (temp.data_array[j] < temp.data_array[j - 1])
 			{
 				swapData(temp.data_array[j - 1], temp.data_array[j]);	// 交换两个元素
-				(temp.count)++;
+				temp.count++;
 			}
 		}
 	}
@@ -696,27 +704,18 @@ PrimeNum_Output:
 	Case5_Scan:
 		cout << "请输入数据的数量" << endl << "[数量]";
 		cin >> *numamount;
-		if (*numamount > 512)
-		{
-			cout << "暂不支持512个以上数据，请重新输入。" << endl;
-			goto Case5_Scan;					// 重新输入
-		}
-		cout << "请依次输入各个数据" << endl;		// 输入数据
-		for (int i = 0; i < *numamount;i++)
+		cout << "请依次输入各个数据" << endl;
+		for (int i = 0; i < *numamount; i++)	// 输入数据
 		{
 			printf("[输入数%ld] = ", i + 1);
-			// 初始化
-			input.data_array.push_back(0);
+			input.data_array.push_back(0);		// 容器内存初始化
 			cin >> input.data_array[i];
 		}
 		input = getSortedData(input, *numamount);
-
-		cout << endl							// 计算完毕，输出结果
-			<< "从小到大排序结果为：" << endl;
+		cout << endl << "从小到大排序结果为：" << endl;		// 计算完毕，输出结果
 		for (int m = 0; m < *numamount; m++)
 		{
-			printf("[输出数%ld] = ", m + 1);
-			cout << input.data_array[m] << endl;
+			printf("[输出数%ld] = %ld", m + 1, input.data_array[m]);
 		}
 		printf("共进行了%ld次交换。\n", input.count);
 		delete numamount;
