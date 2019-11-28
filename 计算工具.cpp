@@ -1,7 +1,10 @@
 // 工程名称：计算工具
 // 日期：20191126
 // 版本：v1.4.4
-// 开发平台：Windows：Microsoft Visual Studio；Android：c4droid
+// 开发平台：Windows：Microsoft Visual Studio；Android：c4droid；Web：Github
+// 同步平台：Github
+// 编写语言：C++
+// 开放源代码状态：闭源
 
 // 这个程序为解决初中阶段各种繁琐的数学运算而设计。
 // 这是我在学习之余写的程序，下面是所有源代码。
