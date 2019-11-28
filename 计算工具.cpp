@@ -1,11 +1,13 @@
 // 工程名称：计算工具
 // 日期：20191126
 // 版本：v1.4.4
-// 开发平台：Windows：Microsoft Visual Studio；Android：c4droid
+// 开发平台：Windows：Microsoft Visual Studio；Android：c4droid；Web：Github
+// 开发语言：C++
+// 应用类型：控制台应用
 
 // 这个程序为解决初中阶段各种繁琐的数学运算而设计。
 // 这是我在学习之余写的程序，下面是所有源代码。
-// 未经允许严禁私自转载！严禁私改版权！
+// 未经允许严禁私自转载。严禁私改版权。
 // 使用本程序内的算法需征得我的授权。
 // 除非这个算法是你自己独立写出来的qwq
 // 之所以我不加密就是为了方便他人借鉴学习。
@@ -103,7 +105,7 @@ general_struct_1 getFactor(long num_input, short minus_output_state)
 // 获取最大公约数函数
 long getGreatestCommonDivisor(general_struct_1 temp)
 {
-	long& data_amount = temp.count;				// 引用，避免误解
+	long data_amount = temp.count;				// 不可使用引用，避免count的值被冒泡排序函数所改变
 	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
 	{
 		// 初始化容器内存，插入新元素
