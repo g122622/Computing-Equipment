@@ -84,10 +84,22 @@ long getLowestCommonMultiple(general_struct_1 temp)
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	}
 	temp = getSortedData(temp, data_amount);	// 对数据进行排序
-	for (long i = temp.data_array[data_amount - 1])	// 选取最大值
+	for (long i = 1; i > 0; i++)
 	{
-
+		long LowestCommonMultiple = temp.data_array[data_amount - 1] * i	// 选取最大值	
+		for (long j = data_amount - 2; j--; j >= 0)	// 选取第二大的值
+		{
+			if ((double)LowestCommonMultiple / temp.data_array[j] != (long)LowestCommonMultiple / temp.data_array[j])
+			{
+				break;
+			}
+			if (j == 0)
+			{
+				return LowestCommonMultiple;
+			}
+		}	
 	}
+
 }
 // 因数分解函数（count从零开始）
 general_struct_1 getFactor(long num_input, short minus_output_state)
