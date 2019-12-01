@@ -4,6 +4,9 @@
 // 开发平台：Windows：Microsoft Visual Studio；Android：c4droid；Web：Github
 // 开发语言：C++
 // 应用类型：控制台应用
+// 同步平台：Github
+// 编写语言：C++
+// 开放源代码状态：闭源
 
 // 这个程序为解决初中阶段各种繁琐的数学运算而设计。
 // 这是我在学习之余写的程序，下面是所有源代码。
@@ -70,6 +73,37 @@ long getAbsoluteData(long);
 void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, short);
+long getLowestCommonMultiple(simplify_fraction_struct);
+
+
+/*----------函数定义区----------*/
+// 计算最小公倍数函数
+long getLowestCommonMultiple(general_struct_1 temp)
+{
+	long data_amount = temp.count;				// 非引用
+	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
+	{
+		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
+	}
+	temp = getSortedData(temp, data_amount);	// 对数据进行排序
+	long LowestCommonMultiple;
+	// 这两个临时值为缩减代码横向体积而设立，便于编辑和浏览
+	double* dm1 = new double;
+	long* lm2 = new long;
+	for (long i = 1; i > 0; i++)
+	{
+		LowestCommonMultiple = temp.data_array[data_amount - 1] * i;	// 选取最大值
+		for (long j = data_amount - 2; j--; j >= 0)	// 选取第二大的值
+		{
+			*dm1 = (double)LowestCommonMultiple / temp.data_array[j];
+			*lm2 = (long)LowestCommonMultiple / temp.data_array[j];
+			if (*dm1 != *lm2)	// 若不符合条件，直接break掉内层循环
+				break;
+			if (j == 0)			// 判断是否全部满足
+				return LowestCommonMultiple;
+		}	
+	}
+}
 
 
 // 因数分解函数（count从零开始）
@@ -102,34 +136,26 @@ general_struct_1 getFactor(long num_input, short minus_output_state)
 }
 
 
-// 获取最大公约数函数
+// 计算最大公约数函数
 long getGreatestCommonDivisor(general_struct_1 temp)
 {
 	long data_amount = temp.count;				// 不可使用引用，避免count的值被冒泡排序函数所改变
 	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
-	{
-		// 初始化容器内存，插入新元素
-		temp.data_array.push_back(0);
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
-	}
-	temp = getSortedData(temp, data_amount);// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
+	temp = getSortedData(temp, data_amount);	// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
 	for (int j = temp.data_array[0]; j > 0; j--)// 嵌套循环，j的最终结果为最大公约数
 	{
 		for (int k = data_amount - 1; k >= 0; k--)
 		{
 			// 判断是否能整除，若不能则直接break
 			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)
-			{
 				break;
-			}
-			if (k == 0)
-			{
-				// 如果一直算到k=0，都没有break，则此时j为最大公约数
+			if (k == 0)		// 如果一直算到k=0，都没有break，则此时j为最大公约数
 				return j;	// 返回这个值
-			}
 		}
 	}
 }
+
 
 // 生成随机数列的函数
 double getRandData(long min, long max)
@@ -176,7 +202,7 @@ void swapData(long& num1, long& num2)
 }
 
 
-// 冒泡排序函数
+// 冒泡排序函数（从小到大）
 general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 {
 	for (int k = 0; k < dataamount; k++)
@@ -186,7 +212,7 @@ general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 			if (temp.data_array[j] < temp.data_array[j - 1])
 			{
 				swapData(temp.data_array[j - 1], temp.data_array[j]);	// 交换两个元素
-				(temp.count)++;
+				temp.count++;
 			}
 		}
 	}
@@ -212,13 +238,9 @@ simplify_fraction_struct getSimplifiedFraction(long& numerator, long& denominato
 	temp.simplified_denominator = denominator / temp.greatest_common_divisor;
 	// 判断分数是否显示负号
 	if (temp.simplified_numerator * temp.simplified_denominator >= 0)
-	{
 		temp.minus_display_state = disabled;
-	}
 	else
-	{
 		temp.minus_display_state = enabled;
-	}
 	// 分子分母全部取绝对值
 	temp.simplified_numerator = getAbsoluteData(temp.simplified_numerator);
 	temp.simplified_denominator = getAbsoluteData(temp.simplified_denominator);
@@ -226,13 +248,9 @@ simplify_fraction_struct getSimplifiedFraction(long& numerator, long& denominato
 	temp.single_display_state = enabled;
 	// 判断是否采用整数显示：如果最大公约数等于分母的绝对值，则启用整数显示
 	if (temp.greatest_common_divisor == getAbsoluteData(denominator))
-	{
 		temp.single_display_state = enabled;
-	}
 	else
-	{
 		temp.single_display_state = disabled;
-	}
 	return temp;
 }
 
@@ -243,23 +261,14 @@ void displayFraction(simplify_fraction_struct temp)
 	if (temp.simplified_numerator != 0)			// 分子若为0，直接显示0
 	{
 		if (temp.minus_display_state == enabled)
-		{
 			cout << "-";
-		}
 		if (temp.single_display_state == disabled)
-		{
-			cout << temp.simplified_numerator << "/"
-				<< temp.simplified_denominator;
-		}
+			cout << temp.simplified_numerator << "/" << temp.simplified_denominator;
 		else
-		{
 			cout << temp.simplified_numerator;
-		}
 	}
 	else
-	{
 		cout << "0";
-	}
 }
 
 
@@ -267,9 +276,7 @@ void displayFraction(simplify_fraction_struct temp)
 long getAbsoluteData(long numscan)
 {
 	if (numscan < 0)
-	{
 		numscan = -numscan;
-	}
 	return numscan;
 }
 
@@ -354,9 +361,7 @@ Select_Num_Scan:
 			goto A_Scan;
 		}
 		else
-		{
 			goto B_Scan;
-		}
 	B_Scan:
 		printf("{!}请输入b的值。 \n");
 		printf("[b]");
@@ -378,16 +383,11 @@ Select_Num_Scan:
 
 
 		// 开始*c的因数计算循环，正负值都要计算，先讨论*c的正负性
-		if (*c > 0)
-		{
-		factor_c = getFactor(*c, disabled);
-		}					// if (*c>0)
-		else				//计算*c的负数因数
-		{
-		factor_c = getFactor(*c, enabled);
-		}					//if（first-else）
-
-							// 因数计算完成，开始for循环+if条件匹配
+		if (*c >= 0)
+			factor_c = getFactor(*c, disabled);
+		else	// 计算*c的负数因数
+			factor_c = getFactor(-*c, enabled);	// 传入c的相反数，使c始终为正
+		// 因数计算完成，开始for循环+if条件匹配
 		for (int i = 0; i <= factor_c.count; i++)
 		{
 			for (int j = 0; j <= factor_a.count; j++)
@@ -401,7 +401,7 @@ Select_Num_Scan:
 						if (factor_a.data_array[j] != 1) /////1
 						{
 							cout << factor_a.data_array[j];
-						}			//if
+						}
 						if (factor_c.data_array[i] < 0)
 						{
 							cout << "x " << factor_c.data_array[i] << " ) ^ 2 = 0" << endl;
@@ -411,7 +411,7 @@ Select_Num_Scan:
 							cout << "x + " << factor_c.data_array[i] << " ) ^ 2 = 0" << endl;
 						}
 						goto EqualRoot_Output;
-					}				//if
+					}
 
 					cout << "( ";
 					if (factor_a.data_array[j] != 1) /////1
@@ -538,7 +538,6 @@ Select_Num_Scan:
 		   }			*/
 		   //释放内存
 		delete a, b, c, Delta, mid2, mid3;
-		delete[] FZA, FZC;
 		goto Select_Num_Scan;
 	}						// case1
 
@@ -563,7 +562,7 @@ Select_Num_Scan:
 		// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
 		// FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN |
 		// FOREGROUND_BLUE);/////set白色
-	Case2_Scan:
+Case2_Scan:
 		printf("{!}请输入一个整数，十一位数及以下，按回车键继续。\n");
 		//			printf
 		("   Please enter an integer,eleven digits or less,press enter to continue.\n\n");
@@ -580,10 +579,8 @@ Select_Num_Scan:
 		cout << fixed << setprecision(0);	// 锁定浮点数显示，不使用科学计数法，小数不显示
 		if (*predicttime >= 60)
 		{
-		Select_BigTask_Scan_Default:
-			cout <<
-				"你输入的数预计运算时间大于一分钟，检测到大型任务，是否继续？"
-				<< endl;
+Select_BigTask_Scan_Default:
+			cout << "你输入的数预计运算时间大于一分钟，检测到大型任务，是否继续？" << endl;
 			cout << "请输入[0:Y/1:N]";
 			long* Select_BigTask_Scan = new long;
 			cin >> *Select_BigTask_Scan;
@@ -602,29 +599,21 @@ Select_Num_Scan:
 			}			// switch
 
 		}				// if
-	Select_BigTask_Scan_0:
+Select_BigTask_Scan_0:
 		start = clock();	// 开始计时
 		if (*numscan == 0 or *numscan == 2)	// 判断输入是否为0,2
-		{
 			goto PrimeNum_Output;
-		}
 		else
-		{
 			goto Default_Output;
-		}
 Default_Output:
-	// 调用函数(不启用负数输出)
+		// 调用函数(不启用负数输出)
 		factor = getFactor(*numscan, disabled);
 		// 开始输出
 		for (long i = 0; i <= factor.count; i++)
-		{
 			printf("[整因数 %ld ] = %ld\n", i + 1, factor.data_array[i]);
-		}
 PrimeNum_Output:
-		if (factor.count <=2)
-		{
+		if (factor.count <= 2)
 			cout << "{!}该数是质数。" << endl;
-		}
 		stop = clock();	// 停止计时
 		*duration = (float)(stop - start) / CLOCKS_PER_SEC;
 		printf("\n{!}本次计算共耗时%f秒。\n", *duration);
@@ -643,37 +632,24 @@ PrimeNum_Output:
 
 	case 3:		// 找最小公倍数、最大公因数
 	{
-		double* numscan1 = new double;
-		double* numscan2 = new double;
-		cout << "{!}程序开始执行。" << endl;
+		general_struct_1 temp;
 	Case3_Scan:
-		cout << "{!}请输入两个正整数：" << endl << "[a]=";
-		cin >> *numscan1;
-		cout << "[b]=";
-		cin >> *numscan2;
-		if (*numscan1 * *numscan2 <= 0 or *numscan1 + *numscan2 < 0)
+		cout << "[数据的数量] = " << endl;
+		cin >> temp.count;
+		for (long i = 0; i < temp.count; i++)
+		{
+		printf("[输入数据%ld] = ", temp.count + 1);
+		temp.data_array.push_back(0);
+		cin >> temp.data_array[i];
+		}
+		if (temp.data_array[0] * temp.data_array[1] <= 0 or temp.data_array[0] + temp.data_array[1] < 0)
 		{
 			cout << endl << "{!}a,b中任一值不可为0或负数，请重新输入。" << endl << endl;
 			goto Case3_Scan;
 		}
-		for (long i = 1; i < *numscan1 + *numscan2; i++)
-		{
-			if (*numscan1 * i / *numscan2 == (long)*numscan1 * i / (long)*numscan2)
-			{
-				cout << "最小公倍数为：" << *numscan1 * i << endl;
-				break;
-			}
-		}
-		for (long j = (*numscan1 + *numscan2) / 2; j > 0; j--)	//ab相加除以2，避免做无用运算
-		{
-			if (*numscan1 / j == (long)*numscan1 / j and *numscan2 / j == (long)*numscan2 / j)
-			{
-				cout << "最大公约数为：" << j << endl;
-				break;
-			}
-		}
-		//释放内存
-		delete numscan1, numscan2;
+		// 调用函数，输出
+		cout << "最小公倍数为：" << getLowestCommonMultiple(temp) << endl;
+		cout << "最大公约数为：" << getGreatestCommonDivisor(temp) << endl;
 		goto Select_Num_Scan;
 	}						// case 3
 
@@ -685,13 +661,9 @@ PrimeNum_Output:
 		cout << "{!}请输入一个正整数：" << endl << "[a]=";
 		cin >> *numscan;
 		if (sqrt(*numscan) == (long long)sqrt(*numscan))
-		{
 			cout << "该数是完全平方数。开方值为：" << sqrt(*numscan) << "." << endl;
-		}
 		else
-		{
 			cout << "该数不是完全平方数。" << endl;
-		}
 		delete numscan;
 		goto Select_Num_Scan;
 	}						// case 4
@@ -703,27 +675,18 @@ PrimeNum_Output:
 	Case5_Scan:
 		cout << "请输入数据的数量" << endl << "[数量]";
 		cin >> *numamount;
-		if (*numamount > 512)
-		{
-			cout << "暂不支持512个以上数据，请重新输入。" << endl;
-			goto Case5_Scan;					// 重新输入
-		}
-		cout << "请依次输入各个数据" << endl;		// 输入数据
-		for (int i = 0; i < *numamount;i++)
+		cout << "请依次输入各个数据" << endl;
+		for (int i = 0; i < *numamount; i++)	// 输入数据
 		{
 			printf("[输入数%ld] = ", i + 1);
-			// 初始化
-			input.data_array.push_back(0);
+			input.data_array.push_back(0);		// 容器内存初始化
 			cin >> input.data_array[i];
 		}
 		input = getSortedData(input, *numamount);
-
-		cout << endl							// 计算完毕，输出结果
-			<< "从小到大排序结果为：" << endl;
+		cout << endl << "从小到大排序结果为：" << endl;		// 计算完毕，输出结果
 		for (int m = 0; m < *numamount; m++)
 		{
-			printf("[输出数%ld] = ", m + 1);
-			cout << input.data_array[m] << endl;
+			printf("[输出数%ld] = %ld", m + 1, input.data_array[m]);
 		}
 		printf("共进行了%ld次交换。\n", input.count);
 		delete numamount;
