@@ -82,9 +82,7 @@ long getLowestCommonMultiple(general_struct_1 temp)
 {
 	long data_amount = temp.count;				// 非引用
 	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
-	{
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
-	}
 	temp = getSortedData(temp, data_amount);	// 对数据进行排序
 	long LowestCommonMultiple;
 	// 这两个临时值为缩减代码横向体积而设立，便于编辑和浏览
@@ -638,7 +636,7 @@ PrimeNum_Output:
 		cin >> temp.count;
 		for (long i = 0; i < temp.count; i++)
 		{
-		printf("[输入数据%ld] = ", temp.count + 1);
+		printf("[输入数据%ld] = ", i + 1);
 		temp.data_array.push_back(0);
 		cin >> temp.data_array[i];
 		}
