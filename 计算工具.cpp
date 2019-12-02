@@ -101,6 +101,7 @@ long getLowestCommonMultiple(general_struct_1 temp)
 				return LowestCommonMultiple;
 		}
 	}
+	return -1;// 异常值
 }
 
 
@@ -149,9 +150,10 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)
 				break;
 			if (k == 0)		// 如果一直算到k=0，都没有break，则此时j为最大公约数
-				return j;	// 返回这个值
+				return j;// 返回这个值
 		}
 	}
+	return -1;// 异常值
 }
 
 
