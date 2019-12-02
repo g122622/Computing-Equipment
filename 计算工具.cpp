@@ -30,6 +30,7 @@
 #define disabled 1
 #define FZA factor_a.data_array
 #define FZC factor_c.data_array
+#define var long
 
 // std命名空间
 using namespace std;
@@ -80,9 +81,9 @@ long getLowestCommonMultiple(simplify_fraction_struct);
 long getLowestCommonMultiple(general_struct_1 temp)
 {
 	long data_amount = temp.count;				// 非引用
-	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
+	for (long i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
-	temp = getSortedData(temp, data_amount);	// 对数据进行排序
+	temp = getSortedData(temp, data_amount);	// 对数据进行排序（注意temp.count已失效）
 	long LowestCommonMultiple;
 	// 这两个临时值为缩减代码横向体积而设立，便于编辑和浏览
 	double* dm1 = new double;
@@ -90,7 +91,7 @@ long getLowestCommonMultiple(general_struct_1 temp)
 	for (long i = 1; i > 0; i++)
 	{
 		LowestCommonMultiple = temp.data_array[data_amount - 1] * i;	// 选取最大值
-		for (long j = data_amount - 2; j--; j >= 0)	// 选取第二大的值
+		for (long j = data_amount - 2; j >= 0; j--)	// 选取第二大的值
 		{
 			*dm1 = (double)LowestCommonMultiple / temp.data_array[j];
 			*lm2 = (long)LowestCommonMultiple / temp.data_array[j];
@@ -98,7 +99,7 @@ long getLowestCommonMultiple(general_struct_1 temp)
 				break;
 			if (j == 0)			// 判断是否全部满足
 				return LowestCommonMultiple;
-		}	
+		}
 	}
 }
 
@@ -117,10 +118,10 @@ general_struct_1 getFactor(long num_input, short minus_output_state)
 			temp.count++;
 		}
 	}
-	temp.count--;// 避免循环到最后一个时count比预期值大1
+	temp.count--;	// 避免循环到最后一个时count比预期值大1
 	if (minus_output_state == enabled)
 	{
-		long count_clone = temp.count;		// 创建count的克隆，用于for循环
+		long count_clone = temp.count;	// 创建count的克隆，用于for循环
 		// 如果启用负数显示，往内存中再存负数
 		for (long i = 0; i <= count_clone; i++)
 		{
@@ -311,16 +312,16 @@ class action
 };
 
 
+/*----------全局变量/结构体/对象声明区/杂项----------*/
+long double pretime;
+short speedTestState = enabled;	// 避免多次测速
+long long SwitchNum;
 clock_t start, stop;				// 初始化计时函数
-
 
 /*----------主函数----------*/
 int main(void)
 {
 	action action;
-	long double pretime;
-	short speedTestState = enabled;	// 避免多次测速
-	long long SwitchNum;
 	// 加载总控制台
 	action.loadMasterConsole();
 Select_Num_Scan:
@@ -721,14 +722,10 @@ PrimeNum_Output:
 			<< *numscan / pow(returnNums.out_radical, 2) << endl;
 		cout << "[化简结果]" << "√" << *numscan << " = ";
 		if (returnNums.out_radical != 1)
-		{
 			cout << returnNums.out_radical;
-		}
 		if (returnNums.in_radical != 1)
-		{
 			cout << "√" << returnNums.in_radical;
-		}
-		cout << endl;
+		cout << endl;	//空一行
 		delete numscan;
 		goto Select_Num_Scan;
 	}
@@ -781,6 +778,7 @@ PrimeNum_Output:
 	}
 
 	case 14:	// 二次函数解析式计算
+	{
 		double a, b, c;
 		cout << "请分别输入抛物线一般式的a,b,c的值" << endl;
 	Case5_a_Scan:
@@ -808,13 +806,13 @@ PrimeNum_Output:
 		displayFraction(getSimplifiedFraction(y_numerator, y_denominator));
 		cout << " )" << endl;
 		goto Select_Num_Scan;
+	}
 
 
 	case 0:		// 显示控制台
 	{
 		action.loadMasterConsole();
 		goto Select_Num_Scan;
-		/*exit(0);			// 退出程序*/
 	}						// case 0
 
 	default:	// 输入错误
