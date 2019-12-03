@@ -437,6 +437,7 @@ void find(long long n, long long c)
 	find(n / p, c);
 }
 
+
 /*----------对象声明区----------*/
 class action
 {
@@ -459,6 +460,7 @@ class action
 			<< "12::计算加权平均数" << endl
 			<< "13::生成随机数" << endl
 			<< "14::二次函数解析式计算" << endl
+			<< "15::分解质因数" << endl
 			// 备份
 			/*
 			<< "11::" << endl
@@ -967,6 +969,11 @@ PrimeNum_Output:
 	}
 
 
+	case 15:
+	{
+		decomposePrimeFactor();
+		goto Select_Num_Scan;
+	}
 	case 0:		// 显示控制台
 	{
 		action.loadMasterConsole();
