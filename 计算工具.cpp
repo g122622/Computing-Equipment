@@ -26,6 +26,10 @@
 #include <ctime>
 #include <iomanip>
 #include <vector>
+#include <cstdio> 
+#include <algorithm>  
+#include <cstring>  
+#include <map>  
 #define enabled 0
 #define disabled 1
 #define FZA factor_a.data_array
@@ -35,6 +39,9 @@
 // std命名空间
 using namespace std;
 
+/*----------全局变量/结构体/对象声明区/杂项区1----------*/
+const int times = 50;
+int number = 0;
 
 /*----------结构体声明区----------*/
 // 二次根式化简结构体
@@ -74,9 +81,43 @@ void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, short);
 long getLowestCommonMultiple(simplify_fraction_struct);
-
+void decomposePrimeFactor();
+// 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
+void find(long long n, long long c);
+long long pollard_rho(long long n, long long c);
+long long gcd(long long a, long long b);
+bool miller_rabin(long long n);
+bool witness(long long a, long long n);
+long long q_pow(long long a, long long b, long long mod);
+long long q_mul(long long a, long long b, long long mod);
+long long Random(long long n);
+void decomposePrimeFactor();
 
 /*----------函数定义区----------*/
+// 分解质因数函数（by 倚剑笑紅尘）
+void decomposePrimeFactor()
+{
+	long long tar;
+	cout << "输入一个正整数（值域：long long）" << endl;
+	cin >> tar;
+	number = 0;
+	m.clear();
+	find(tar, 2137342);
+	printf("%lld = ", tar);
+	if (m.empty())
+	{
+		printf("%lld\n", tar);
+	}
+	for (map<long long, int>::iterator c = m.begin(); c != m.end();)
+	{
+		printf("%lld^%d", c->first, c->second);
+		if ((++c) != m.end())
+			printf(" * ");
+	}
+	printf("\n");
+}
+
+
 // 计算最小公倍数函数
 long getLowestCommonMultiple(general_struct_1 temp)
 {
@@ -279,6 +320,123 @@ long getAbsoluteData(long numscan)
 }
 
 
+// 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
+map<long long, int>m;
+long long Random(long long n)
+{
+	return ((double)rand() / RAND_MAX * n + 0.5);
+}
+
+long long q_mul(long long a, long long b, long long mod) // 快速乘法取模
+{
+	long long ans = 0;
+	while (b)
+	{
+		if (b & 1)
+		{
+			ans += a;
+		}
+		b /= 2;
+		a = (a + a) % mod;
+
+	}
+	return ans;
+}
+
+long long q_pow(long long a, long long b, long long mod) // 快速乘法下的快速幂，叼
+{
+	long long ans = 1;
+	while (b)
+	{
+		if (b & 1)
+		{
+			ans = q_mul(ans, a, mod);
+		}
+		b /= 2;
+		a = q_mul(a, a, mod);
+	}
+	return ans;
+}
+
+bool witness(long long a, long long n)	// miller_rabin算法的精华
+{
+	long long tem = n - 1;
+	int j = 0;
+	while (tem % 2 == 0)
+	{
+		tem /= 2;
+		j++;
+	}
+
+	long long x = q_pow(a, tem, n);		// 得到a^(n-1) mod n
+	if (x == 1 || x == n - 1) return true;
+	while (j--)
+	{
+		x = q_mul(x, x, n);
+		if (x = n - 1) return true;
+	}
+	return false;
+}
+
+bool miller_rabin(long long n)  // 检验n是否是素数
+{
+
+	if (n == 2)
+		return true;
+	if (n < 2 || n % 2 == 0)
+		return false;
+	for (int i = 1; i <= times; i++)		// 做times次随机检验
+	{
+		long long a = Random(n - 2) + 1;	// 得到随机检验算子 a
+		if (!witness(a, n))					// 用a检验n是否是素数
+			return false;
+	}
+	return true;
+}
+long long gcd(long long a, long long b)
+{
+	if (b == 0)
+		return a;
+	return gcd(b, a % b);
+}
+long long pollard_rho(long long n, long long c)// 找到n的一个因子
+{
+	long long x, y, d, i = 1, k = 2;
+	x = Random(n - 1) + 1;
+	y = x;
+	while (1)
+	{
+		i++;
+		x = (q_mul(x, x, n) + c) % n;
+		d = gcd(y - x, n);
+		if (1 < d && d < n)
+			return d;
+		if (y == x)		// 找到循环，选取失败，重新来
+			return n;
+		if (i == k)		// 似乎是一个优化，但是不是很清楚
+		{
+			y = x;
+			k <<= 1;
+		}
+	}
+}
+void find(long long n, long long c)
+{
+	if (n == 1)
+		return;
+	if (miller_rabin(n))
+	{
+		m[n]++;
+		number++;
+		return;
+	}
+	long long p = n;
+	while (p >= n)
+		p = pollard_rho(p, c--);
+	find(p, c);
+	find(n / p, c);
+}
+
 /*----------对象声明区----------*/
 class action
 {
@@ -312,7 +470,7 @@ class action
 };
 
 
-/*----------全局变量/结构体/对象声明区/杂项----------*/
+/*----------全局变量/结构体/对象声明区/杂项区2----------*/
 long double pretime;
 short speedTestState = enabled;	// 避免多次测速
 long long SwitchNum;
