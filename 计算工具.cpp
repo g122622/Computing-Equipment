@@ -33,7 +33,8 @@
 #define disabled 1
 #define FZA factor_a.data_array
 #define FZC factor_c.data_array
-#define var long
+
+typedef long var;
 
 // std命名空间
 using namespace std;
@@ -121,17 +122,17 @@ void decomposePrimeFactor()
 long getLowestCommonMultiple(general_struct_1 temp)
 {
 	long data_amount = temp.count;				// 非引用
-	for (long i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
+	for (var i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	temp = getSortedData(temp, data_amount);	// 对数据进行排序（注意temp.count已失效）
 	long LowestCommonMultiple;
 	// 这两个临时值为缩减代码横向体积而设立，便于编辑和浏览
 	double* dm1 = new double;
 	long* lm2 = new long;
-	for (long i = 1; i > 0; i++)
+	for (var i = 1; i > 0; i++)
 	{
 		LowestCommonMultiple = temp.data_array[data_amount - 1] * i;	// 选取最大值
-		for (long j = data_amount - 2; j >= 0; j--)	// 选取第二大的值
+		for (var j = data_amount - 2; j >= 0; j--)	// 选取第二大的值
 		{
 			*dm1 = (double)LowestCommonMultiple / temp.data_array[j];
 			*lm2 = (long)LowestCommonMultiple / temp.data_array[j];
@@ -195,7 +196,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 }
 
 
-// 生成随机数列的函数
+// 生成随机数列的函数（by zzy_1988）
 double getRandData(long min, long max)
 {	// 计算 0，1之间的随机小数,得到的值域近似为(0,1)
 	double m1 = (double)(rand() % 101) / 101;
