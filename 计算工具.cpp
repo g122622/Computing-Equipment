@@ -4,13 +4,13 @@
 // 开发平台：Windows：Microsoft Visual Studio；Android：c4droid；Web：Github
 // 开发语言：C++
 // 应用类型：控制台应用
-// 同步平台：Github
+// 云同步平台：Github
 // 开放源代码状态：开源
 
 // 这个程序为解决初中阶段各种繁琐的数学运算而设计。
 // 这是我在学习之余写的程序，下面是所有源代码。
 // 未经允许严禁私自转载。严禁私改版权。
-// 使用本程序内的算法需征得我的授权。
+// 使用本程序内的算法需征得我（或者原作者）的授权。
 // 除非这个算法是你自己独立写出来的qwq
 // 之所以我不加密就是为了方便他人借鉴学习。
 // 但这不意味着您可以“借鉴”走全部源代码作为自己的作品！
@@ -33,6 +33,7 @@
 #define disabled 1
 #define FZA factor_a.data_array
 #define FZC factor_c.data_array
+#define abnormality -1
 
 typedef long var;
 
@@ -91,33 +92,9 @@ bool witness(long long a, long long n);
 long long q_pow(long long a, long long b, long long mod);
 long long q_mul(long long a, long long b, long long mod);
 long long Random(long long n);
-void decomposePrimeFactor();
+
 
 /*----------函数定义区----------*/
-// 分解质因数函数（by 倚剑笑紅尘）
-void decomposePrimeFactor()
-{
-	long long tar;
-	cout << "输入一个正整数（值域：long long）" << endl;
-	cin >> tar;
-	number = 0;
-	m.clear();
-	find(tar, 2137342);
-	printf("%lld = ", tar);
-	if (m.empty())
-	{
-		printf("%lld\n", tar);
-	}
-	for (map<long long, int>::iterator c = m.begin(); c != m.end();)
-	{
-		printf("%lld^%d", c->first, c->second);
-		if ((++c) != m.end())
-			printf(" * ");
-	}
-	printf("\n");
-}
-
-
 // 计算最小公倍数函数
 long getLowestCommonMultiple(general_struct_1 temp)
 {
@@ -142,6 +119,7 @@ long getLowestCommonMultiple(general_struct_1 temp)
 				return LowestCommonMultiple;
 		}
 	}
+	return abnormality;			// 返回异常值
 }
 
 
@@ -193,6 +171,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 				return j;	// 返回这个值
 		}
 	}
+	return abnormality;
 }
 
 
@@ -969,7 +948,7 @@ PrimeNum_Output:
 	}
 
 
-	case 15:
+	case 15:		// 分解质因数（by 倚剑笑紅尘）
 	{
 		long long tar;
 		cout << "输入一个正整数（值域：long long）" << endl;
@@ -979,17 +958,14 @@ PrimeNum_Output:
 		find(tar, 2137342);
 		printf("%lld = ", tar);
 		if (m.empty())
-		{
 			printf("%lld\n", tar);
-		}
-		for (map<long long, int>::iterator c = m.begin(); c != m.end();)
+		for (map<long long, int>::iterator iter = m.begin(); iter != m.end();)
 		{
-			printf("%lld^%d", c->first, c->second);
-			if ((++c) != m.end())
+			printf("%lld^%d", iter->first, iter->second);
+			if ((++iter) != m.end())
 				printf(" * ");
 		}
 		printf("\n");
-		// decomposePrimeFactor();
 		goto Select_Num_Scan;
 	}
 	case 0:		// 显示控制台
