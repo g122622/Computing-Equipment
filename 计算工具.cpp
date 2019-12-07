@@ -21,12 +21,11 @@
 
 /*----------预处理器/预编译语句加载区----------*/
 #include <iostream>
-#include <stdio.h>
+#include <cstdio> 
 #include <cmath>
 #include <ctime>
 #include <iomanip>
 #include <vector>
-#include <cstdio> 
 #include <algorithm>  
 #include <cstring>  
 #include <map>  
