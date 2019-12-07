@@ -971,7 +971,25 @@ PrimeNum_Output:
 
 	case 15:
 	{
-		decomposePrimeFactor();
+		long long tar;
+		cout << "输入一个正整数（值域：long long）" << endl;
+		cin >> tar;
+		number = 0;
+		m.clear();
+		find(tar, 2137342);
+		printf("%lld = ", tar);
+		if (m.empty())
+		{
+			printf("%lld\n", tar);
+		}
+		for (map<long long, int>::iterator c = m.begin(); c != m.end();)
+		{
+			printf("%lld^%d", c->first, c->second);
+			if ((++c) != m.end())
+				printf(" * ");
+		}
+		printf("\n");
+		// decomposePrimeFactor();
 		goto Select_Num_Scan;
 	}
 	case 0:		// 显示控制台
