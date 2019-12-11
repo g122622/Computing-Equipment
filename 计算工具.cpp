@@ -633,10 +633,19 @@ Select_Num_Scan:
 			}
 			else	// 不是完全平方数
 			{
-				*mid2 = -*b;
-				*mid3 = 2 * *a;
-				
-				// 输出（判别式大于零,且不为完全平方）
+				/**mid2 = - *b;
+				*mid3 = 2 * *a;*/
+				simplify_quadratic_radical_struct delta_simped;
+				general_struct_1 temp;
+				delta_simped = simplify_quadratic_radical(*Delta);
+				temp.count = 3;
+				// 内存初始化
+				for (var i = 0; i < 3; i++)
+					temp.data_array.push_back(0);
+				temp.data_array[0] = - *b;
+				temp.data_array[1] = 2 * *a;
+				temp.data_array[2] = delta_simped.out_radical;
+				long gcd = getGreatestCommonDivisor(temp);
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
 				printf("∴x(1) =（%g+√%g）/ %g, x(2) =（%g-√%g）/ %g. \n", *mid2, *Delta, *mid3, *mid2, *Delta, *mid3);
 			}
@@ -848,7 +857,7 @@ PrimeNum_Output:
 		cin >> *numscan;
 		simplify_quadratic_radical_struct returnNums;
 		returnNums = simplify_quadratic_radical(*numscan);
-		cout << "[因式分解] " << *numscan << " = " << pow(returnNums.out_radical, 2) << " * "
+		cout << "[因数分解] " << *numscan << " = " << pow(returnNums.out_radical, 2) << " * "
 			<< *numscan / pow(returnNums.out_radical, 2) << endl;
 		cout << "[化简结果]" << "√" << *numscan << " = ";
 		if (returnNums.out_radical != 1)
