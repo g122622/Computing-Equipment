@@ -485,16 +485,14 @@ Select_Num_Scan:
 		// float mid7, mid8, mid9; //
 		// 用于分数除法，暂时还用不到
 
-		std::cout << "{!}程序启动，方程类型：ax^2+bx+c=0 \n" << std::endl;
+		cout << "{!}程序启动，方程类型：ax^2+bx+c=0 \n" << endl;
 	A_Scan:
 		printf("{!}请输入a的值。 \n");
 		printf("[a]");
 		cin >> *a;
 		if (*a == 0)
 		{
-			cout <<
-				"∵a=0，∴该方程不属于二元一次方程，请重新输入a的值."
-				<< endl;
+			cout << "∵a=0，∴该方程不属于二元一次方程，请重新输入a的值." << endl;
 			goto A_Scan;
 		}
 		else
@@ -511,15 +509,13 @@ Select_Num_Scan:
 		printf("%gx^2+%gx+%g=0 \n\n", *a, *b, *c);
 
 		cout << "由韦达定理，\nx(1)+x(2) = -b/a = " << -*b / *a << "." << endl
-			<< "x(1)x(2) = c/a = " << *c / *a << "." << endl << endl;
+		     << "x(1)x(2) = c/a = " << *c / *a << "." << endl << endl;
 
 		general_struct_1 factor_a, factor_c;
-		std::cout << "[解法1：因式分解法(实验性，bug可能较多)]" << std::endl;
-		// 开始a的因数计算循环，a的分解只需要正值即可
+		cout << "[解法1：因式分解法(实验性，bug可能较多)]" << endl;
+		// 开始a的因数计算，只需要正值即可
 		factor_a = getFactor(*a, disabled);
-
-
-		// 开始*c的因数计算循环，正负值都要计算，先讨论*c的正负性
+		// 开始*c的因数计算，正负值都要计算，先讨论*c的正负性
 		if (*c >= 0)
 			factor_c = getFactor(*c, disabled);
 		else	// 计算*c的负数因数
@@ -600,12 +596,12 @@ Select_Num_Scan:
 					{
 						cout << "x + " << *c / factor_c.data_array[i] << " = 0" << endl;
 					}
-					if ((float)-FZC[i] / FZA[j] == (float)(-*c / FZC[i]) / (*a / FZA[j]))	//以等根形式输出结果
+					if ((float)-FZC[i] / FZA[j] == (float)(-*c / FZC[i]) / (*a / FZA[j]))	// 以等根形式输出结果
 					{
 					EqualRoot_Output:
 						cout << "∴x(1)=x(2)=" << (float)-FZC[i] / FZA[j] << "." << endl << endl;
 					}
-					else	//以不等根形式输出结果
+					else	// 以不等根形式输出结果
 					{
 						cout << "∴x(1)=" << (float)-FZC[i] / FZA[j];
 						cout << "，x(2)=" << (float)(-*c / FZC[i]) / (*a / FZA[j]) << "." << endl;
@@ -619,7 +615,7 @@ Select_Num_Scan:
 		cout << "{!}该方程不可因式分解!" << endl << endl;
 		
 	Method_2:
-		std::cout << "[解法2：公式法]" << std::endl;
+		cout << "[解法2：公式法]" << endl;
 		// 判断&运算
 		*Delta = pow(*b, 2) - 4 * *a * *c;
 		printf("Δ=%g^2-4×%g×%g=%g. \n", *b, *a, *c, *Delta);
@@ -627,21 +623,22 @@ Select_Num_Scan:
 		{
 			if (sqrt(*Delta) == (int)sqrt(*Delta))	// 是完全平方数
 			{
-				
-				*mid2 = (-1 * *b + sqrt(*Delta)) / (2 * *a);
-				*mid3 = (-1 * *b - sqrt(*Delta)) / (2 * *a);
-				// 输出（判别式大于零,且为完全平方）
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
+				cout << "∴x(1)=" 
+					<< displayFraction(getSimplifiedFraction(-1 * *b + sqrt(*Delta), (2 * *a))) 
+					<< "∴, x(2)=" 
+					<< displayFraction(getSimplifiedFraction(-1 * *b - sqrt(*Delta), (2 * *a))) 
+					<< "." << endl;
 				printf("∴x(1)=%g，x(2)=%g. \n", *mid2, *mid3);
 			}
-			else	//不是完全平方数
+			else	// 不是完全平方数
 			{
 				*mid2 = -*b;
 				*mid3 = 2 * *a;
 				
 				// 输出（判别式大于零,且不为完全平方）
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
-				printf("∴x(1) =（%g+√%g）/ %g，x(2) =（%g-√%g）/ %g. \n", *mid2, *Delta, *mid3, *mid2, *Delta, *mid3);
+				printf("∴x(1) =（%g+√%g）/ %g, x(2) =（%g-√%g）/ %g. \n", *mid2, *Delta, *mid3, *mid2, *Delta, *mid3);
 			}
 		}
 		else	// 判别式不大于零
@@ -649,7 +646,6 @@ Select_Num_Scan:
 			if (*Delta == 0)	// 如果判别式为零，则不需要判定Δ是否为完全平方
 			{
 				*mid2 = (-1 * *b + sqrt(*Delta)) / (2 * *a);
-				// 输出（判别式等于零，且为完全平方）
 				cout << "∵Δ=0，∴方程有两个相等的实数根." << endl;
 				printf("∴x(1)=x(2)=%g. \n", *mid2);
 			}
