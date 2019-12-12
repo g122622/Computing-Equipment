@@ -633,8 +633,6 @@ Select_Num_Scan:
 			}
 			else	// 不是完全平方数
 			{
-				/**mid2 = - *b;
-				*mid3 = 2 * *a;*/
 				simplify_quadratic_radical_struct delta_simped;
 				general_struct_1 temp;
 				delta_simped = simplify_quadratic_radical(*Delta);
@@ -649,8 +647,15 @@ Select_Num_Scan:
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
 				printf("∴x(1) =（%g+√%g）/ %g, ", );
 				printf("x(2) =（%g-√%g）/ %g. \n", );
-				if (getAbsoluteData2 * *a / gcd == 1)
-					
+				if (getAbsoluteData(2 * *a / gcd) == 1)
+					cout << "-";
+				cout << -*b / gcd;	// 分子元素1
+				cout << delta_simped.out_radical / gcd;	// 分子元素2（根号外）
+				cout << "√";		// 根号
+				cout << delta_simped.in_radical;
+				cout << "/";		// 分数线
+				cout << 
+
 			}
 		}
 		else	// 判别式不大于零
