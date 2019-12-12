@@ -647,7 +647,10 @@ Select_Num_Scan:
 				temp.data_array[2] = delta_simped.out_radical;
 				long gcd = getGreatestCommonDivisor(temp);
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
-				printf("∴x(1) =（%g+√%g）/ %g, x(2) =（%g-√%g）/ %g. \n", *mid2, *Delta, *mid3, *mid2, *Delta, *mid3);
+				printf("∴x(1) =（%g+√%g）/ %g, ", );
+				printf("x(2) =（%g-√%g）/ %g. \n", );
+				if (getAbsoluteData2 * *a / gcd == 1)
+					
 			}
 		}
 		else	// 判别式不大于零
