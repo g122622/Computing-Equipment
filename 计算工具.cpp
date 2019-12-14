@@ -647,15 +647,19 @@ Select_Num_Scan:
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
 				printf("∴x(1) =（%g+√%g）/ %g, ", );
 				printf("x(2) =（%g-√%g）/ %g. \n", );
-				if (getAbsoluteData(2 * *a / gcd) == 1)
+				for (int i = 0; i < 2; i++)
+				{
+				if (2 * *a / gcd) < 0)// 式子前的负号
 					cout << "-";
 				cout << -*b / gcd;	// 分子元素1
+				if ( i == 1)
+				cout << " - ";
 				cout << delta_simped.out_radical / gcd;	// 分子元素2（根号外）
 				cout << "√";		// 根号
 				cout << delta_simped.in_radical;
 				cout << "/";		// 分数线
-				cout << 
-
+				cout << getAbsoluteData(2 * *a / gcd) << endl;
+				}
 			}
 		}
 		else	// 判别式不大于零
