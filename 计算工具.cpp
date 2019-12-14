@@ -637,9 +637,9 @@ Select_Num_Scan:
 				general_struct_1 temp;
 				delta_simped = simplify_quadratic_radical(*Delta);
 				temp.count = 3;
-				// 内存初始化
-				for (var i = 0; i < 3; i++)
+				for (int i = 0; i < 3; i++)	// 内存初始化
 					temp.data_array.push_back(0);
+				// 元素赋值
 				temp.data_array[0] = - *b;
 				temp.data_array[1] = 2 * *a;
 				temp.data_array[2] = delta_simped.out_radical;
@@ -647,18 +647,21 @@ Select_Num_Scan:
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
 				printf("∴x(1) =（%g+√%g）/ %g, ", );
 				printf("x(2) =（%g-√%g）/ %g. \n", );
-				for (int i = 0; i < 2; i++)
+				for (int i = 0; i < 2; i++)	// 循环打印
 				{
-				if (2 * *a / gcd) < 0)// 式子前的负号
-					cout << "-";
-				cout << -*b / gcd;	// 分子元素1
-				if ( i == 1)
-				cout << " - ";
-				cout << delta_simped.out_radical / gcd;	// 分子元素2（根号外）
-				cout << "√";		// 根号
-				cout << delta_simped.in_radical;
-				cout << "/";		// 分数线
-				cout << getAbsoluteData(2 * *a / gcd) << endl;
+					printf("∴x(%d) = ", i + 1);
+					if ((2 * *a / gcd) < 0)	// 判断式子前是否显示负号
+						cout << "-";
+					cout << -*b / gcd;		// 分子元素1
+					if (i == 0)				// 分子元素1与分子元素2之间的加减号
+						cout << " + ";
+					else
+						cout << " - ";
+					cout << delta_simped.out_radical / gcd;	// 分子元素2（根号外）
+					cout << "√";			// 根号
+					cout << delta_simped.in_radical;
+					cout << "/";			// 分数线
+					cout << getAbsoluteData(2 * *a / gcd) << endl;
 				}
 			}
 		}
@@ -994,6 +997,19 @@ PrimeNum_Output:
 	}						// switch
 	return 0;
 }							// main
+
+/*C语言printf数据类型格式化字符串类型（by 低调额低调额）：
+1、%d 十进制有符号整数。
+2、%u 十进制无符号整数。
+3、%ld 输出long整数 。
+4、%s 字符串。
+5、%c 单个字符。
+6、%p 指针的值。
+7、%e 指数形式的浮点数。
+8、%x, %X 无符号以十六进制表示的整数。
+9、%0 无符号以八进制表示的整数。
+10、%g 自动选择合适的表示法。
+*/
 
 /*// 要用到的函数：sqrt(num)开平方 pow(num, 2)平方
    完全平方数判断模块 int n; scanf("%d", &n); if (sqrt(n) ==
