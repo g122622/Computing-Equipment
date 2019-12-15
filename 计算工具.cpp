@@ -624,11 +624,11 @@ Select_Num_Scan:
 			if (sqrt(*Delta) == (int)sqrt(*Delta))	// 是完全平方数
 			{
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
-				cout << "∴x(1)=" 
-					<< displayFraction(getSimplifiedFraction(-1 * *b + sqrt(*Delta), (2 * *a))) 
-					<< "∴, x(2)=" 
-					<< displayFraction(getSimplifiedFraction(-1 * *b - sqrt(*Delta), (2 * *a))) 
-					<< "." << endl;
+				cout << "∴x(1)=";
+     displayFraction(getSimplifiedFraction(-1 * *b + sqrt(*Delta), (2 * *a)));
+				cout	<< "∴, x(2)=";
+				 displayFraction(getSimplifiedFraction(-1 * *b - sqrt(*Delta), (2 * *a)));
+				cout	<< "." << endl;
 				printf("∴x(1)=%g，x(2)=%g. \n", *mid2, *mid3);
 			}
 			else	// 不是完全平方数
@@ -645,8 +645,8 @@ Select_Num_Scan:
 				temp.data_array[2] = delta_simped.out_radical;
 				long gcd = getGreatestCommonDivisor(temp);
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
-				printf("∴x(1) =（%g+√%g）/ %g, ", );
-				printf("x(2) =（%g-√%g）/ %g. \n", );
+/*				printf("∴x(1) =（%g+√%g）/ %g, ", );
+				printf("x(2) =（%g-√%g）/ %g. \n", );*/
 				for (int i = 0; i < 2; i++)	// 循环打印
 				{
 					printf("∴x(%d) = ", i + 1);
