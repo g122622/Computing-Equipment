@@ -630,7 +630,7 @@ Select_Num_Scan:
 				long temp2 = -1 * *b - sqrt(*Delta);
 				long temp3 = 2 * *a;
 				displayFraction(getSimplifiedFraction(temp1, temp3));
-				cout << "∴, x(2)=";
+				cout << ",∴x(2)=";
 				displayFraction(getSimplifiedFraction(temp2, temp3));
 				cout << "." << endl;
 			}
@@ -655,15 +655,17 @@ Select_Num_Scan:
 					printf("∴x(%d) = ", i + 1);
 					if ((2 * *a / gcd) < 0)	// 判断式子前是否显示负号
 						cout << "-";
+					cout << "("; 
 					cout << -*b / gcd;		// 分子元素1
 					if (i == 0)				// 分子元素1与分子元素2之间的加减号
-						cout << " + ";
+						cout << "+";
 					else
-						cout << " - ";
+						cout << "-";
+						if (delta_simped.out_radical / gcd != 1)
 					cout << delta_simped.out_radical / gcd;	// 分子元素2（根号外）
 					cout << "√";			// 根号
 					cout << delta_simped.in_radical;
-					cout << "/";			// 分数线
+					cout << ")/";			// 分数线
 					cout << getAbsoluteData(2 * *a / gcd) << endl;
 				}
 			}
@@ -799,7 +801,7 @@ PrimeNum_Output:
 		}
 		if (temp.data_array[0] * temp.data_array[1] <= 0 or temp.data_array[0] + temp.data_array[1] < 0)
 		{
-			cout << endl << "{!}a,b中任一值不可为0或负数，请重新输入。" << endl << endl;
+			cout << endl << "{!}任一值不可为0或负数，请重新输入。" << endl << endl;
 			goto Case3_Scan;
 		}
 		// 调用函数，输出
