@@ -157,16 +157,20 @@ general_struct_1 getFactor(long num_input, short minus_output_state)
 long getGreatestCommonDivisor(general_struct_1 temp)
 {
 	long data_amount = temp.count;				// 不可使用引用，避免count的值被冒泡排序函数所改变
-	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
+	for (var i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	temp = getSortedData(temp, data_amount);	// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
 	for (vector<int>::iterator iter = temp.data_array.begin(); iter != temp.data_array.end(); ++iter)
 	{
 		if (*iter == 0)
+		{
+			iter = temp.data_array.erase(std::begin(temp.data_array) + 1);
+			data_amount--;
+		}
 	}
-	for (int j = temp.data_array[0]; j > 0; j--)// 选取最小数后进行嵌套循环，j的最终结果为最大公约数
+	for (var j = temp.data_array[0]; j > 0; j--)// 选取最小数后进行嵌套循环，j的最终结果为最大公约数
 	{
-		for (int k = data_amount - 1; k >= 0; k--)
+		for (var k = data_amount - 1; k >= 0; k--)
 		{
 			// 判断是否能整除，若不能则直接break
 			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)
