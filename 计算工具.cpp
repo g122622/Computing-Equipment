@@ -239,7 +239,7 @@ general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 
 
 // 分数约分函数
-simplify_fraction_struct getSimplifiedFraction(long& numerator, long& denominator)	// 传引用，减少内存占用 
+simplify_fraction_struct getSimplifiedFraction(const long& numerator, const long& denominator)	// 传引用
 {
 	simplify_fraction_struct temp;				// 声明要返回的专用结构体
 	general_struct_1 gcd;						// 公约数传参用此通用结构体
