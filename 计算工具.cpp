@@ -127,7 +127,7 @@ long getLowestCommonMultiple(general_struct_1 temp)
 general_struct_1 getFactor(long num_input, short minus_output_state)
 {
 	general_struct_1 temp;
-	for (long factor = 1; factor <= num_input; factor++)
+	for (var factor = 1; factor <= num_input; factor++)
 	{
 		if ((double)num_input / factor == (long)num_input / factor)
 		{
@@ -679,7 +679,7 @@ Select_Num_Scan:
 				cout << "∵Δ<0,∴方程没有实数根.\n{!}计算中止." << endl;
 			}			// else
 		}				// else
-						// =====分数模块（暂不准备开发）
+						// 分数模块（暂不准备开发）
 						/* }//来自if mid1 = 0,1,2,3,4,5,6,7,8,9 为假的判断//
 		   else { std::cout <<
 		   "输入分数请用“/”作为分数线 " << std::endl;
