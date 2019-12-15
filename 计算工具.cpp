@@ -160,7 +160,11 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 	for (int i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	temp = getSortedData(temp, data_amount);	// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
-	for (int j = temp.data_array[0]; j > 0; j--)// 嵌套循环，j的最终结果为最大公约数
+	for (vector<int>::iterator iter = temp.data_array.begin(); iter != temp.data_array.end(); ++iter)
+	{
+		if (*iter == 0)
+	}
+	for (int j = temp.data_array[0]; j > 0; j--)// 选取最小数后进行嵌套循环，j的最终结果为最大公约数
 	{
 		for (int k = data_amount - 1; k >= 0; k--)
 		{
@@ -798,11 +802,6 @@ PrimeNum_Output:
 		printf("[输入数据%ld] = ", i + 1);
 		temp.data_array.push_back(0);
 		cin >> temp.data_array[i];
-		}
-		if (temp.data_array[0] * temp.data_array[1] <= 0 or temp.data_array[0] + temp.data_array[1] < 0)
-		{
-			cout << endl << "{!}任一值不可为0或负数，请重新输入。" << endl << endl;
-			goto Case3_Scan;
 		}
 		// 调用函数，输出
 		cout << "最小公倍数为：" << getLowestCommonMultiple(temp) << endl;
