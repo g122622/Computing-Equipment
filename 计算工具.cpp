@@ -239,7 +239,7 @@ general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 
 
 // 分数约分函数
-simplify_fraction_struct getSimplifiedFraction(const long& numerator, const long& denominator)	// 传引用
+simplify_fraction_struct getSimplifiedFraction(long& numerator, long& denominator)	// 传引用，减少内存占用 
 {
 	simplify_fraction_struct temp;				// 声明要返回的专用结构体
 	general_struct_1 gcd;						// 公约数传参用此通用结构体
@@ -625,11 +625,14 @@ Select_Num_Scan:
 			{
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
 				cout << "∴x(1)=";
-     displayFraction(getSimplifiedFraction(-1 * *b + sqrt(*Delta), (2 * *a)));
-				cout	<< "∴, x(2)=";
-				 displayFraction(getSimplifiedFraction(-1 * *b - sqrt(*Delta), (2 * *a)));
-				cout	<< "." << endl;
-				printf("∴x(1)=%g，x(2)=%g. \n", *mid2, *mid3);
+				// 中间量，避免安卓Linux的G++出现蜜汁编译错误
+				long temp1 = -1 * *b + sqrt(*Delta);
+				long temp2 = -1 * *b - sqrt(*Delta);
+				long temp3 = 2 * *a;
+				displayFraction(getSimplifiedFraction(temp1, temp3));
+				cout << "∴, x(2)=";
+				displayFraction(getSimplifiedFraction(temp2, temp3));
+				cout << "." << endl;
 			}
 			else	// 不是完全平方数
 			{
@@ -645,7 +648,7 @@ Select_Num_Scan:
 				temp.data_array[2] = delta_simped.out_radical;
 				long gcd = getGreatestCommonDivisor(temp);
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
-/*				printf("∴x(1) =（%g+√%g）/ %g, ", );
+				/*printf("∴x(1) =（%g+√%g）/ %g, ", );
 				printf("x(2) =（%g-√%g）/ %g. \n", );*/
 				for (int i = 0; i < 2; i++)	// 循环打印
 				{
