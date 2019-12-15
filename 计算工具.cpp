@@ -625,7 +625,7 @@ Select_Num_Scan:
 			{
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
 				cout << "∴x(1)=";
-				// 中间量，避免安卓Linux的G++出现蜜汁编译错误
+				// 中间量，避免安卓端Linux的G++出现蜜汁编译错误
 				long temp1 = -1 * *b + sqrt(*Delta);
 				long temp2 = -1 * *b - sqrt(*Delta);
 				long temp3 = 2 * *a;
@@ -650,7 +650,7 @@ Select_Num_Scan:
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
 				/*printf("∴x(1) =（%g+√%g）/ %g, ", );
 				printf("x(2) =（%g-√%g）/ %g. \n", );*/
-				for (int i = 0; i < 2; i++)	// 循环打印
+				for (int i = 0; i < 2; i++)	// 循环输出
 				{
 					printf("∴x(%d) = ", i + 1);
 					if ((2 * *a / gcd) < 0)	// 判断式子前是否显示负号
