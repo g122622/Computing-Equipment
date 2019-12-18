@@ -26,9 +26,9 @@
 #include <ctime>
 #include <iomanip>
 #include <vector>
-#include <algorithm>  
-#include <cstring>  
-#include <map>  
+#include <algorithm>
+#include <cstring>
+#include <map>
 #define enabled 0
 #define disabled 1
 #define FZA factor_a.data_array
