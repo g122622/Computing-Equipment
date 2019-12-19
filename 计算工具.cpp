@@ -113,8 +113,7 @@ long getLowestCommonMultiple(general_struct_1 temp)
 		{
 			*dm1 = (double)LowestCommonMultiple / temp.data_array[j];
 			*lm2 = (long)LowestCommonMultiple / temp.data_array[j];
-			if (*dm1 != *lm2)	// 若不符合条件，直接break掉内层循环
-				break;
+			if (*dm1 != *lm2) break;	// 若不符合条件，直接break掉内层循环
 			if (j == 0)			// 判断是否全部满足
 				return LowestCommonMultiple;
 		}
@@ -157,16 +156,21 @@ general_struct_1 getFactor(long num_input, short minus_output_state)
 long getGreatestCommonDivisor(general_struct_1 temp)
 {
 	long data_amount = temp.count;				// 不可使用引用，避免count的值被冒泡排序函数所改变
-	for (var i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
+	// 数据预处理1：输入数全部取绝对值，同时赋值给temp
+	for (var i = 0; i < data_amount; i++)
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
-	temp = getSortedData(temp, data_amount);	// 函数返回的是结构体，所以可以temp一用到底，从而控制内存占用
-	for (vector<int>::iterator iter = temp.data_array.begin(); iter != temp.data_array.end(); ++iter)
+	// 数据预处理2：冒泡排序，选出最小值(函数返回值类型为结构体，可以函数全局使用temp，但count已失效）
+	temp = getSortedData(temp, data_amount);
+	// 数据预处理3：删除值为零的元素，容器大小相应缩减
+	for (vector<var>::iterator iter = temp.data_array.begin(); iter != temp.data_array.end(); ++iter)
 	{
 		if (*iter == 0)
 		{
-			iter = temp.data_array.erase(std::begin(temp.data_array) + 1);
+			iter = temp.data_array.erase(iter);
 			data_amount--;
 		}
+		else break;
+		if(iter == temp.data_array.end()) break;	// 额外的判断，避免越界
 	}
 	for (var j = temp.data_array[0]; j > 0; j--)// 选取最小数后进行嵌套循环，j的最终结果为最大公约数
 	{
@@ -485,8 +489,6 @@ Select_Num_Scan:
 		float* b = new float;
 		float* c = new float;
 		float* Delta = new float;
-		float* mid2 = new float;	// 方程两根
-		float* mid3 = new float;
 
 		// int m1, d1, m2, d2, m3, d3, mid4, mid5, mid6, d = 0; //
 		// 分数运算需要用到的在这里定义，暂时还用不到
@@ -656,20 +658,17 @@ Select_Num_Scan:
 				temp.data_array[2] = delta_simped.out_radical;
 				long gcd = getGreatestCommonDivisor(temp);
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
-				/*printf("∴x(1) =（%g+√%g）/ %g, ", );
-				printf("x(2) =（%g-√%g）/ %g. \n", );*/
 				for (int i = 0; i < 2; i++)	// 循环输出
 				{
 					printf("∴x(%d) = ", i + 1);
 					if ((2 * *a / gcd) < 0)	// 判断式子前是否显示负号
 						cout << "-";
-					cout << "("; 
-					cout << -*b / gcd;		// 分子元素1
+					cout << "(" << -*b / gcd;		// 分子元素1
 					if (i == 0)				// 分子元素1与分子元素2之间的加减号
 						cout << "+";
 					else
 						cout << "-";
-						if (delta_simped.out_radical / gcd != 1)
+					if (delta_simped.out_radical / gcd != 1)
 					cout << delta_simped.out_radical / gcd;	// 分子元素2（根号外）
 					cout << "√";			// 根号
 					cout << delta_simped.in_radical;
@@ -682,13 +681,11 @@ Select_Num_Scan:
 		{
 			if (*Delta == 0)	// 如果判别式为零，则不需要判定Δ是否为完全平方
 			{
-				*mid2 = (-1 * *b + sqrt(*Delta)) / (2 * *a);
 				cout << "∵Δ=0，∴方程有两个相等的实数根." << endl;
-				printf("∴x(1)=x(2)=%g. \n", *mid2);
+				printf("∴x(1)=x(2)=%g. \n", (-1 * *b + sqrt(*Delta)) / (2 * *a));
 			}
 			else		// 判别式为负，无实数根
 			{
-				// 输出（判别式小于零）
 				cout << "∵Δ<0,∴方程没有实数根.\n{!}计算中止." << endl;
 			}			// else
 		}				// else
@@ -702,7 +699,7 @@ Select_Num_Scan:
 		   "请输入c的值 " << std::endl; scanf("%d/%d", &m3, &d3);
 		   }			*/
 		   //释放内存
-		delete a, b, c, Delta, mid2, mid3;
+		delete a, b, c, Delta;
 		goto Select_Num_Scan;
 	}						// case1
 
