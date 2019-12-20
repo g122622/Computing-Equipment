@@ -164,6 +164,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 	// 数据预处理3：删除值为零的元素，容器大小相应缩减
 	for (vector<var>::iterator iter = temp.data_array.begin(); iter != temp.data_array.end(); ++iter)
 	{
+		cout 
 		if (*iter == 0)
 		{
 			iter = temp.data_array.erase(iter);
@@ -172,6 +173,10 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 		else break;
 		if(iter == temp.data_array.end()) break;	// 额外的判断，避免越界
 	}
+	for (var i = 0; i < data_amount; i++)
+	 cout << temp.data_array[i] << endl;
+	cout << "测试信息结束" << endl;
+	// <数据预处理结束>
 	for (var j = temp.data_array[0]; j > 0; j--)// 选取最小数后进行嵌套循环，j的最终结果为最大公约数
 	{
 		for (var k = data_amount - 1; k >= 0; k--)
@@ -805,7 +810,7 @@ PrimeNum_Output:
 		cin >> temp.data_array[i];
 		}
 		// 调用函数，输出
-		cout << "最小公倍数为：" << getLowestCommonMultiple(temp) << endl;
+//		cout << "最小公倍数为：" << getLowestCommonMultiple(temp) << endl;
 		cout << "最大公约数为：" << getGreatestCommonDivisor(temp) << endl;
 		goto Select_Num_Scan;
 	}						// case 3
@@ -892,7 +897,7 @@ PrimeNum_Output:
 	case 8:		// 直线到直线距离计算
 	{
 		cout << "已知两条平行直线y=kx+b，请依次输入k、b1、b2的值." << endl;
-		cin >> k >> b1 >> b2;
+		// cin >> k >> b1 >> b2;
 		
 		
 		
