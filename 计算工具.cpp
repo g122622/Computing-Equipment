@@ -164,20 +164,17 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 	// 数据预处理3：删除值为零的元素，容器大小相应缩减
 	for (vector<var>::iterator iter = temp.data_array.begin(); iter != temp.data_array.end(); ++iter)
 	{
-		cout 
 		if (*iter == 0)
 		{
 			iter = temp.data_array.erase(iter);
 			data_amount--;
+			--iter;			// 由于删除了一个元素，将迭代器指针前移
 		}
 		else break;
 		if(iter == temp.data_array.end()) break;	// 额外的判断，避免越界
 	}
-	for (var i = 0; i < data_amount; i++)
-	 cout << temp.data_array[i] << endl;
-	cout << "测试信息结束" << endl;
-	// <数据预处理结束>
-	for (var j = temp.data_array[0]; j > 0; j--)// 选取最小数后进行嵌套循环，j的最终结果为最大公约数
+	//<---数据预处理结束--->
+	for (var j = temp.data_array[0]; j > 0; j--)	// 选取最小数进行嵌套循环，j的最终结果为最大公约数
 	{
 		for (var k = data_amount - 1; k >= 0; k--)
 		{
@@ -185,7 +182,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)
 				break;
 			if (k == 0)		// 如果一直算到k=0，都没有break，则此时j为最大公约数
-				return j;	// 返回这个值
+				return j;
 		}
 	}
 	return abnormality;
@@ -494,6 +491,7 @@ Select_Num_Scan:
 		float* b = new float;
 		float* c = new float;
 		float* Delta = new float;
+		general_struct_1 factor_a, factor_c;
 
 		// int m1, d1, m2, d2, m3, d3, mid4, mid5, mid6, d = 0; //
 		// 分数运算需要用到的在这里定义，暂时还用不到
@@ -522,11 +520,8 @@ Select_Num_Scan:
 		// 输入结束
 		cout << endl;	// 输出空行
 		printf("%gx^2+%gx+%g=0 \n\n", *a, *b, *c);
-
 		cout << "由韦达定理，\nx(1)+x(2) = -b/a = " << -*b / *a << "." << endl
 		     << "x(1)x(2) = c/a = " << *c / *a << "." << endl << endl;
-
-		general_struct_1 factor_a, factor_c;
 		cout << "[解法1：因式分解法(实验性，bug可能较多)]" << endl;
 		// 开始a的因数计算，只需要正值即可
 		factor_a = getFactor(*a, disabled);
@@ -547,80 +542,55 @@ Select_Num_Scan:
 					{
 						cout << "( ";
 						if (factor_a.data_array[j] != 1) /////1
-						{
 							cout << factor_a.data_array[j];
-						}
 						if (factor_c.data_array[i] < 0)
-						{
 							cout << "x " << factor_c.data_array[i] << " ) ^ 2 = 0" << endl;
-						}
 						else
-						{
 							cout << "x + " << factor_c.data_array[i] << " ) ^ 2 = 0" << endl;
-						}
 						goto EqualRoot_Output;
 					}
 
 					cout << "( ";
 					if (factor_a.data_array[j] != 1) /////1
-					{
 						cout << factor_a.data_array[j];
-					}
 					if (factor_c.data_array[i] < 0)
-					{
 						cout << "x " << factor_c.data_array[i] << " ) " << "( ";
-					}
 					else
-					{
 						cout << "x + " << factor_c.data_array[i] << " ) " << "( ";
-					}
 					if (*a / factor_a.data_array[j] != 1) /////2
-					{
 						cout << *a / factor_a.data_array[j];
-					}
 					if (*c / factor_c.data_array[i] < 0)
-					{
 						cout << "x " << *c / factor_c.data_array[i] << " ) = 0" << endl;
-					}
 					else
-					{
 						cout << "x + " << *c / factor_c.data_array[i] << " ) = 0" << endl;
-					}
 					//line 2 output
 					if (factor_a.data_array[j] != 1) /////1
-					{
 						cout << factor_a.data_array[j];
-					}
 					if (factor_c.data_array[i] < 0)
-					{
 						cout << "x " << factor_c.data_array[i] << " = 0，或 ";
-					}
 					else
-					{
 						cout << "x + " << factor_c.data_array[i] << " = 0，或 ";
-					}
 					if (*a / factor_a.data_array[j] != 1) /////2
-					{
 						cout << *a / factor_a.data_array[j];
-					}
 					if (*c / factor_c.data_array[i] < 0)
-					{
 						cout << "x " << *c / factor_c.data_array[i] << " = 0" << endl;
-					}
 					else
-					{
 						cout << "x + " << *c / factor_c.data_array[i] << " = 0" << endl;
-					}
+					// <---输出最终结果--->
 					if ((float)-FZC[i] / FZA[j] == (float)(-*c / FZC[i]) / (*a / FZA[j]))	// 以等根形式输出结果
 					{
 					EqualRoot_Output:
-						cout << "∴x(1)=x(2)=" << (float)-FZC[i] / FZA[j] << "." << endl << endl;
+						cout << "∴x(1)=x(2)=";
+						displayFraction(getSimplifiedFraction(FZC[i], FZA[j]));
+						cout << "." << endl << endl;
 					}
 					else	// 以不等根形式输出结果
 					{
-						cout << "∴x(1)=" << (float)-FZC[i] / FZA[j];
-						cout << "，x(2)=" << (float)(-*c / FZC[i]) / (*a / FZA[j]) << "." << endl;
-						cout << endl;	// 空一行
+						cout << "∴x(1)=";
+						displayFraction(getSimplifiedFraction(FZC[i], FZA[j]));
+						cout << "，x(2)=";
+						displayFraction(getSimplifiedFraction(-*c / FZC[i], *a / FZA[j]));
+						cout << "." << endl << endl;
 					}
 					goto Method_2;	// 跳出两层for循环
 				}		// if
@@ -631,7 +601,7 @@ Select_Num_Scan:
 		
 	Method_2:
 		cout << "[解法2：公式法]" << endl;
-		// 判断&运算
+		// <---判断&运算--->
 		*Delta = pow(*b, 2) - 4 * *a * *c;
 		printf("Δ=%g^2-4×%g×%g=%g. \n", *b, *a, *c, *Delta);
 		if (*Delta > 0)	// 如果判别式大于零
@@ -674,7 +644,7 @@ Select_Num_Scan:
 					else
 						cout << "-";
 					if (delta_simped.out_radical / gcd != 1)
-					cout << delta_simped.out_radical / gcd;	// 分子元素2（根号外）
+						cout << delta_simped.out_radical / gcd;	// 分子元素2（根号外）
 					cout << "√";			// 根号
 					cout << delta_simped.in_radical;
 					cout << ")/";			// 分数线
@@ -894,15 +864,21 @@ PrimeNum_Output:
 		goto Select_Num_Scan;
 	}
 
+
 	case 8:		// 直线到直线距离计算
 	{
+		long k, b1, b2;
 		cout << "已知两条平行直线y=kx+b，请依次输入k、b1、b2的值." << endl;
-		// cin >> k >> b1 >> b2;
-		
-		
-		
+		cin >> k >> b1 >> b2;
+		cout << "两直线距离为：";
+		simplify_quadratic_radical_struct returnNums = simplify_quadratic_radical(pow(k, 2) + 1);
+		displayFraction(getSimplifiedFraction(getAbsoluteData(b1 - b2) / sqrt(pow(k, 2) + 1)));
+		cout << endl;	// 空一行
+		goto Select_Num_Scan;
 	}
-			
+	
+
+	case
 	case 13:	// 生成随机数
 	{
 		// 申请内存
@@ -949,6 +925,7 @@ PrimeNum_Output:
 		delete max, min, randnum, randnumamount;
 		goto Select_Num_Scan;
 	}
+
 
 	case 14:	// 二次函数解析式计算
 	{
