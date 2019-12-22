@@ -171,7 +171,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 			--iter;			// 由于删除了一个元素，将迭代器指针前移
 		}
 		else break;
-		if(iter == temp.data_array.end()) break;	// 额外的判断，避免越界
+		if (iter == temp.data_array.end()) break;	// 额外的判断，避免越界
 	}
 	//<---数据预处理结束--->
 	for (var j = temp.data_array[0]; j > 0; j--)	// 选取最小数进行嵌套循环，j的最终结果为最大公约数
@@ -660,9 +660,7 @@ Select_Num_Scan:
 				printf("∴x(1)=x(2)=%g. \n", (-1 * *b + sqrt(*Delta)) / (2 * *a));
 			}
 			else		// 判别式为负，无实数根
-			{
 				cout << "∵Δ<0,∴方程没有实数根.\n{!}计算中止." << endl;
-			}			// else
 		}				// else
 						// 分数模块（暂不准备开发）
 						/* }//来自if mid1 = 0,1,2,3,4,5,6,7,8,9 为假的判断//
@@ -677,6 +675,7 @@ Select_Num_Scan:
 		delete a, b, c, Delta;
 		goto Select_Num_Scan;
 	}						// case1
+
 
 	case 2:		// 因数分解
 	{
@@ -767,6 +766,7 @@ PrimeNum_Output:
 		goto Select_Num_Scan;
 	}						// case 2
 
+
 	case 3:		// 找最小公倍数、最大公因数
 	{
 		general_struct_1 temp;
@@ -785,6 +785,7 @@ PrimeNum_Output:
 		goto Select_Num_Scan;
 	}						// case 3
 
+
 	case 4:		// 判断完全平方数
 	{
 		double* numscan = new double;
@@ -799,6 +800,7 @@ PrimeNum_Output:
 		delete numscan;
 		goto Select_Num_Scan;
 	}						// case 4
+
 
 	case 5:		// 数据排序
 	{
@@ -825,6 +827,7 @@ PrimeNum_Output:
 		goto Select_Num_Scan;
 	}
 
+
 	case 6:		// 分数约分
 	{
 		long* numscan1 = new long;
@@ -844,6 +847,7 @@ PrimeNum_Output:
 		delete numscan1, numscan2;
 		goto Select_Num_Scan;
 	}
+
 
 	case 7:		// 二次根式化简
 	{
@@ -900,19 +904,11 @@ PrimeNum_Output:
 		{
 			(*min)++;
 			for (int i = 0;i < 3;i++)
-			{
 				(*max)++;
-			}
 		}
-		//else
-		{
 			(*min)++;
-
 			for (int i = 0;i < 3;i++)
-			{
 				(*max)++;
-			}
-		}
 		// 开始调用，生成随机数
 		for (long i = 0;i < *randnumamount;i++)
 		{
@@ -979,11 +975,14 @@ PrimeNum_Output:
 		printf("\n");
 		goto Select_Num_Scan;
 	}
+	
+	
 	case 0:		// 显示控制台
 	{
 		action.loadMasterConsole();
 		goto Select_Num_Scan;
 	}						// case 0
+
 
 	default:	// 输入错误
 	{
