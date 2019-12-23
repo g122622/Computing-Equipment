@@ -65,8 +65,8 @@ struct simplify_fraction_struct
 	long simplified_numerator;		// 分子
 	long simplified_denominator;	// 分母
 	long greatest_common_divisor;	// 最大公约数
-	short single_display_state;
-	short minus_display_state;
+	bool single_display_state;
+	bool minus_display_state;
 };
 
 
@@ -80,7 +80,7 @@ simplify_fraction_struct getSimplifiedFraction(long&, long&);
 long getAbsoluteData(long);
 void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
-general_struct_1 getFactor(long, short);
+general_struct_1 getFactor(long, bool);
 long getLowestCommonMultiple(simplify_fraction_struct);
 void decomposePrimeFactor();
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
@@ -123,7 +123,7 @@ long getLowestCommonMultiple(general_struct_1 temp)
 
 
 // 因数分解函数（count从零开始）
-general_struct_1 getFactor(long num_input, short minus_output_state)
+general_struct_1 getFactor(long num_input, bool minus_output_state)
 {
 	general_struct_1 temp;
 	for (var factor = 1; factor <= num_input; factor++)
@@ -467,9 +467,9 @@ class action
 
 /*----------全局变量/结构体/对象声明区/杂项区2----------*/
 long double pretime;
-short speedTestState = enabled;	// 避免多次测速
+bool speedTestState = enabled;		// 避免多次测速
 long long SwitchNum;
-clock_t start, stop;				// 初始化计时函数
+clock_t start, stop;			// 初始化计时函数
 
 /*----------主函数----------*/
 int main(void)
@@ -527,7 +527,7 @@ Select_Num_Scan:
 		factor_a = getFactor(*a, disabled);
 		// 开始*c的因数计算，正负值都要计算，先讨论*c的正负性
 		if (*c >= 0)
-			factor_c = getFactor(*c, disabled);
+			factor_c = getFactor(*c, enabled);
 		else	// 计算*c的负数因数
 			factor_c = getFactor(-*c, enabled);	// 传入c的相反数，使c始终为正
 		// 因数计算完成，开始for循环+if条件匹配
