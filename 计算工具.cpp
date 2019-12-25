@@ -1,5 +1,5 @@
 // 工程名称：计算工具
-// 日期：20191210
+// 日期：20191225
 // 版本：v1.4.4
 // 开发平台：Windows：Microsoft Visual Studio；Android：c4droid；Web：Github
 // 开发语言：C++
@@ -77,7 +77,7 @@ void swapData(long&, long&);
 general_struct_1 getSortedData(general_struct_1, long&);
 long long loadMasterConsole(long long);
 simplify_fraction_struct getSimplifiedFraction(long&, long&);
-long getAbsoluteData(long);
+auto getAbsoluteData(auto);
 void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, bool);
@@ -305,7 +305,7 @@ void displayFraction(simplify_fraction_struct temp)
 
 
 // 取绝对值函数
-long getAbsoluteData(long numscan)
+auto getAbsoluteData(auto numscan)
 {
 	if (numscan < 0)
 		numscan = -numscan;
@@ -482,7 +482,6 @@ Select_Num_Scan:
 	cout << "[输入]";
 	cin >> SwitchNum;
 	cout << "====================" << endl << endl;
-
 	switch (SwitchNum)
 	{
 	case 1:		// 解/分析二元一次方程
@@ -513,6 +512,7 @@ Select_Num_Scan:
 	B_Scan:
 		printf("{!}请输入b的值。 \n");
 		printf("[b]");
+
 		cin >> *b;
 		printf("{!}请输入c的值。 \n");
 		printf("[c]");
@@ -520,8 +520,13 @@ Select_Num_Scan:
 		// 输入结束
 		cout << endl;	// 输出空行
 		printf("%gx^2+%gx+%g=0 \n\n", *a, *b, *c);
-		cout << "由韦达定理，\nx(1)+x(2) = -b/a = " << -*b / *a << "." << endl
-		     << "x(1)x(2) = c/a = " << *c / *a << "." << endl << endl;
+		*Delta = pow(*b, 2) - 4 * *a * *c;
+		if (*Delta >= 0)
+		{
+			cout << "由韦达定理，\nx(1)+x(2) = -b/a = " << -*b / *a << "." << endl
+				 << "x(1)x(2) = c/a = " << *c / *a << "." << endl
+				 << "|x(1)-x(2)| = " << getAbsoluteData(sqrt(*Delta)) / pow(*a, 2) << endl << endl;
+		}
 		cout << "[解法1：因式分解法(实验性，bug可能较多)]" << endl;
 		// 开始a的因数计算，只需要正值即可
 		factor_a = getFactor(*a, disabled);
@@ -601,8 +606,6 @@ Select_Num_Scan:
 		
 	Method_2:
 		cout << "[解法2：公式法]" << endl;
-		// <---判断&运算--->
-		*Delta = pow(*b, 2) - 4 * *a * *c;
 		printf("Δ=%g^2-4×%g×%g=%g. \n", *b, *a, *c, *Delta);
 		if (*Delta > 0)	// 如果判别式大于零
 		{
