@@ -92,6 +92,9 @@ bool witness(long long a, long long n);
 long long q_pow(long long a, long long b, long long mod);
 long long q_mul(long long a, long long b, long long mod);
 long long Random(long long n);
+// 以下都是身份证验证码计算所需要的函数（by boshuzhang）
+int checkIDinput(char[]);
+void checkID(int[], char[]);
 
 
 /*----------函数定义区----------*/
@@ -320,6 +323,7 @@ long long Random(long long n)
 	return ((double)rand() / RAND_MAX * n + 0.5);
 }
 
+
 long long q_mul(long long a, long long b, long long mod) // 快速乘法取模
 {
 	long long ans = 0;
@@ -336,6 +340,7 @@ long long q_mul(long long a, long long b, long long mod) // 快速乘法取模
 	return ans;
 }
 
+
 long long q_pow(long long a, long long b, long long mod) // 快速乘法下的快速幂，叼
 {
 	long long ans = 1;
@@ -350,6 +355,7 @@ long long q_pow(long long a, long long b, long long mod) // 快速乘法下的�
 	}
 	return ans;
 }
+
 
 bool witness(long long a, long long n)	// miller_rabin算法的精华
 {
@@ -371,6 +377,7 @@ bool witness(long long a, long long n)	// miller_rabin算法的精华
 	return false;
 }
 
+
 bool miller_rabin(long long n)  // 检验n是否是素数
 {
 
@@ -386,12 +393,16 @@ bool miller_rabin(long long n)  // 检验n是否是素数
 	}
 	return true;
 }
+
+
 long long gcd(long long a, long long b)
 {
 	if (b == 0)
 		return a;
 	return gcd(b, a % b);
 }
+
+
 long long pollard_rho(long long n, long long c)// 找到n的一个因子
 {
 	long long x, y, d, i = 1, k = 2;
@@ -413,6 +424,8 @@ long long pollard_rho(long long n, long long c)// 找到n的一个因子
 		}
 	}
 }
+
+
 void find(long long n, long long c)
 {
 	if (n == 1)
@@ -428,6 +441,27 @@ void find(long long n, long long c)
 		p = pollard_rho(p, c--);
 	find(p, c);
 	find(n / p, c);
+}
+
+
+// 以下都是身份证验证码计算所需要的函数（by boshuzhang）
+int checkIDinput( char ID[] )		// 检验身份证是否为18位 
+{ 
+	if ( strlen( ID ) == 18 )	// 字符串最后一位/0 
+		return 1;
+	else return 0;
+}
+
+
+void checkID( int IDNumber[], char ID[] )
+{
+	int i = 0;	// i为计数
+	int checksum = 0;
+	for ( ; i < 17; i ++ )
+		checksum += IDNumber[ i ] * factor[ i ];
+	if ( IDNumber[ 17 ] == checktable[ checksum % 11 ] || ( ID[ 17 ] == 'x' && checktable[ checksum % 11 ] == 2 ))
+		cout << "正确身份证号码/n";
+	else cout << "错误身份证号码/n"; 
 }
 
 
@@ -454,11 +488,12 @@ class action
 			<< "13::生成随机数" << endl
 			<< "14::二次函数解析式计算" << endl
 			<< "15::分解质因数" << endl
+			<< "16::身份证验证码计算" << endl
 			// 备份
 			/*
-			<< "11::" << endl
-			<< "11::" << endl
-			<< "11::" << endl
+			<< "17::" << endl
+			<< "17::" << endl
+			<< "17::" << endl
 			*/
 			<< "0::显示总控制台" << endl;
 	}
@@ -823,7 +858,7 @@ PrimeNum_Output:
 		cout << endl << "从小到大排序结果为：" << endl;		// 计算完毕，输出结果
 		for (int m = 0; m < *numamount; m++)
 		{
-			printf("[输出数%ld] = %ld", m + 1, input.data_array[m]);
+			printf("[输出数%ld] = %ld\n", m + 1, input.data_array[m]);
 		}
 		printf("共进行了%ld次交换。\n", input.count);
 		delete numamount;
@@ -978,8 +1013,29 @@ PrimeNum_Output:
 		printf("\n");
 		goto Select_Num_Scan;
 	}
-	
-	
+
+
+	case 16:	// 身份证验证码计算（by boshuzhang）
+	{
+		const int factor[] = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };// 加权因子
+		const int checktable[] = { 1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2 };// 校验值对应表
+		char ID[ 19 ];
+		int IDNumber[ 19 ];
+		cout << "输入身份证号码:";
+		cin  >> ID;    
+		while( !checkIDinput( ID ) )  // 防止输入过程中位数输入错误   
+		{
+			cout << "错误ID,重新输入:"; 
+			cout << "输入身份证号码:";
+			cin  >> ID;   
+		} 
+		for ( int i = 0; i < 18; i ++ )// 相当于类型转换
+			IDNumber[ i ] = ID[ i ] - 48; 
+		checkID( IDNumber, ID );
+		goto Select_Num_Scan;
+	}
+
+
 	case 0:		// 显示控制台
 	{
 		action.loadMasterConsole();
