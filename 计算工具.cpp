@@ -445,7 +445,7 @@ void find(long long n, long long c)
 
 
 // 以下都是身份证验证码计算所需要的函数（by boshuzhang）
-int checkIDinput( char ID[] )		// 检验身份证是否为18位 
+int _checkIDinput( char ID[] )		// 检验身份证是否为18位 
 { 
 	if ( strlen( ID ) == 18 )	// 字符串最后一位/0 
 		return 1;
@@ -453,7 +453,7 @@ int checkIDinput( char ID[] )		// 检验身份证是否为18位
 }
 
 
-void checkID( int IDNumber[], char ID[] )
+void _checkID( int IDNumber[], char ID[] )
 {
 	int i = 0;	// i为计数
 	int checksum = 0;
