@@ -93,8 +93,8 @@ long long q_pow(long long a, long long b, long long mod);
 long long q_mul(long long a, long long b, long long mod);
 long long Random(long long n);
 // 以下都是身份证验证码计算所需要的函数（by boshuzhang）
-int checkIDinput(char[]);
-void checkID(int[], char[]);
+int _checkIDinput(char[]);
+void _checkID(int[], char[]);
 
 
 /*----------函数定义区----------*/
@@ -1017,21 +1017,21 @@ PrimeNum_Output:
 
 	case 16:	// 身份证验证码计算（by boshuzhang）
 	{
-		const int factor[] = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };// 加权因子
-		const int checktable[] = { 1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2 };// 校验值对应表
-		char ID[ 19 ];
-		int IDNumber[ 19 ];
+		const int factor[] = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};// 加权因子
+		const int checktable[] = {1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2};// 校验值对应表
+		char ID[19];
+		int IDNumber[19];
 		cout << "输入身份证号码:";
-		cin  >> ID;    
-		while( !checkIDinput( ID ) )  // 防止输入过程中位数输入错误   
+		cin >> ID;    
+		while(!_checkIDinput(ID))  // 防止输入过程中位数输入错误   
 		{
 			cout << "错误ID,重新输入:"; 
 			cout << "输入身份证号码:";
-			cin  >> ID;   
+			cin >> ID;   
 		} 
-		for ( int i = 0; i < 18; i ++ )// 相当于类型转换
-			IDNumber[ i ] = ID[ i ] - 48; 
-		checkID( IDNumber, ID );
+		for (int i = 0; i < 18; i++)// 相当于类型转换
+			IDNumber[i] = ID[i] - 48; 
+		_checkID(IDNumber, ID);
 		goto Select_Num_Scan;
 	}
 
