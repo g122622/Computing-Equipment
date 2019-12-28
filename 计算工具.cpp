@@ -459,7 +459,7 @@ void _checkID( int IDNumber[], char ID[] )
 	int checksum = 0;
 	for ( ; i < 17; i ++ )
 		checksum += IDNumber[ i ] * factor[ i ];
-	if ( IDNumber[ 17 ] == checktable[ checksum % 11 ] || ( ID[ 17 ] == 'x' && checktable[ checksum % 11 ] == 2 ))
+	if ( IDNumber[ 17 ] == checktable[ checksum % 11 ] or ( ID[ 17 ] == 'x' && checktable[ checksum % 11 ] == 2 ))
 		cout << "正确身份证号码/n";
 	else cout << "错误身份证号码/n"; 
 }
