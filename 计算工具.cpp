@@ -129,7 +129,7 @@ long getLowestCommonMultiple(general_struct_1 temp)
 general_struct_1 getFactor(long num_input, bool minus_output_state)
 {
 	general_struct_1 temp;
-	for (var factor = 1; factor <= num_input; factor++)
+	for (var factor = 1; factor <= (num_input / 2); factor++)
 	{
 		if ((double)num_input / factor == (long)num_input / factor)
 		{
@@ -139,17 +139,17 @@ general_struct_1 getFactor(long num_input, bool minus_output_state)
 			temp.count++;
 		}
 	}
-	temp.count--;	// 避免循环到最后一个时count比预期值大1
+	temp.data_array.push_back(0);
+	temp.data_array[temp.count] = num_input;// 这里的count计数器不可再累加，巧妙避免其比预期值大1
 	if (minus_output_state == enabled)
 	{
-		long count_clone = temp.count;	// 创建count的克隆，用于for循环
 		// 如果启用负数显示，往内存中再存负数
-		for (long i = 0; i <= count_clone; i++)
+		for (long i = 0; i <= temp.count; i++)
 		{
 			temp.data_array.push_back(0);
-			temp.data_array[temp.count+1] = -temp.data_array[i];
-			temp.count++;
+			temp.data_array[temp.count+1] = - temp.data_array[i];
 		}
+		temp.count = temp.count * 2;
 	}
 	return temp;
 }
