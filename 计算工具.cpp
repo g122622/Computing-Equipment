@@ -118,9 +118,11 @@ long getLowestCommonMultiple(general_struct_1 temp)
 			*lm2 = (long)LowestCommonMultiple / temp.data_array[j];
 			if (*dm1 != *lm2) break;	// 若不符合条件，直接break掉内层循环
 			if (j == 0)			// 判断是否全部满足
+				delete dm1, lm2;
 				return LowestCommonMultiple;
 		}
 	}
+	delete dm1, lm2;
 	return abnormality;			// 返回异常值
 }
 
@@ -445,21 +447,21 @@ void find(long long n, long long c)
 
 
 // 以下都是身份证验证码计算所需要的函数（by boshuzhang）
-int _checkIDinput( char ID[] )		// 检验身份证是否为18位 
+int _checkIDinput(char ID[])		// 检验身份证是否为18位 
 { 
-	if ( strlen( ID ) == 18 )	// 字符串最后一位/0 
+	if (strlen(ID) == 18)	// 字符串最后一位/0 
 		return 1;
 	else return 0;
 }
 
 
-void _checkID( int IDNumber[], char ID[] )
+void _checkID(int IDNumber[], char ID[])
 {
-	int i = 0;	// i为计数
+	int i = 0;	// i为计数器
 	int checksum = 0;
-	for ( ; i < 17; i ++ )
-		checksum += IDNumber[ i ] * factor[ i ];
-	if ( IDNumber[ 17 ] == checktable[ checksum % 11 ] or ( ID[ 17 ] == 'x' && checktable[ checksum % 11 ] == 2 ))
+	for ( ; i < 17; i ++)
+		checksum += IDNumber[i] * factor[i];
+	if ( IDNumber[17] == check_table[checksum % 11] or (ID[17] == 'x' and check_table[checksum % 11] == 2))
 		cout << "正确身份证号码/n";
 	else cout << "错误身份证号码/n"; 
 }
@@ -1018,15 +1020,15 @@ PrimeNum_Output:
 	case 16:	// 身份证验证码计算（by boshuzhang）
 	{
 		const int factor[] = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};// 加权因子
-		const int checktable[] = {1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2};// 校验值对应表
+		const int check_table[] = {1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2};// 校验值对应表
 		char ID[19];
 		int IDNumber[19];
-		cout << "输入身份证号码:";
+		cout << "[输入身份证号码]";
 		cin >> ID;    
 		while(!_checkIDinput(ID))  // 防止输入过程中位数输入错误   
 		{
-			cout << "错误ID,重新输入:"; 
-			cout << "输入身份证号码:";
+			cout << "错误ID，请重新输入" << endl; 
+			cout << "[输入身份证号码]";
 			cin >> ID;   
 		} 
 		for (int i = 0; i < 18; i++)// 相当于类型转换
