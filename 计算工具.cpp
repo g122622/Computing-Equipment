@@ -1,7 +1,7 @@
 // 工程名称：计算工具
 // 日期：20200102
 // 版本：v1.4.4
-// 开发平台：Windows：Microsoft Visual Studio；Android：c4droid；Web：Github
+// 开发平台：Windows：Microsoft Visual Studio；Notepad++；Android：c4droid；Web：Github
 // 开发语言：C++
 // 应用类型：控制台应用
 // 云同步平台：Github
@@ -472,7 +472,7 @@ class action
 {
 	public:
 	// 加载总控制台函数
-	void loadMasterConsole()
+	void showMasterConsole()
 	{
 		cout << "===============[总控制台]===============" << endl
 			<< "1::解/分析二元一次方程" << endl
@@ -499,6 +499,11 @@ class action
 			*/
 			<< "0::显示总控制台" << endl;
 	}
+	// 显示错误信息函数
+	void showInputError()
+	{
+		cout << "系统消息：请输入正确的数。\n" << endl;
+	}
 };
 
 
@@ -513,7 +518,7 @@ int main(void)
 {
 	action action;
 	// 加载总控制台
-	action.loadMasterConsole();
+	action.showMasterConsole();
 Select_Num_Scan:
 	cout << endl;
 	cout << "[输入]";
@@ -1040,14 +1045,14 @@ PrimeNum_Output:
 
 	case 0:		// 显示控制台
 	{
-		action.loadMasterConsole();
+		action.showMasterConsole();
 		goto Select_Num_Scan;
 	}						// case 0
 
 
 	default:	// 输入错误
 	{
-		cout << "系统消息:请输入正确的数。\n" << endl;
+		action.showInputError();
 		goto Select_Num_Scan;
 	}						// default
 	}						// switch
