@@ -82,7 +82,7 @@ void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, bool);
 long getLowestCommonMultiple(simplify_fraction_struct);
-void decomposePrimeFactor();
+long getSumData(general_struct_1);
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
 void find(long long n, long long c);
 long long pollard_rho(long long n, long long c);
@@ -318,6 +318,22 @@ auto getAbsoluteData(auto numscan)
 }
 
 
+// 求和函数
+long getSumData(general_struct_1 temp);
+{
+	if (temp.count == 0)
+	{
+		temp.count = temp.data_array.size();
+	}
+	long sum = 0;
+	for(int i = 0; i < temp.count; i++)
+	{
+		sum = sum + temp.data_array[i];
+	}
+	return sum;
+}
+
+
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
 map<long long, int>m;
 long long Random(long long n)
@@ -459,7 +475,7 @@ void _checkID(int IDNumber[], char ID[])
 {
 	int i = 0;	// i为计数器
 	int checksum = 0;
-	for ( ; i < 17; i ++)
+	for ( ; i < 17; i++)
 		checksum += IDNumber[i] * factor[i];
 	if ( IDNumber[17] == check_table[checksum % 11] or (ID[17] == 'x' and check_table[checksum % 11] == 2))
 		cout << "正确身份证号码/n";
@@ -500,10 +516,84 @@ class action
 			<< "0::显示总控制台" << endl;
 	}
 	// 显示错误信息函数
-	void showInputError()
+	void showInputErrorMsg()
 	{
 		cout << "系统消息：请输入正确的数。\n" << endl;
 	}
+};
+
+
+class display_mult
+{
+	private:
+	// 存储mult
+	vector<long> numerator_constant_array;
+	vector<long> numerator_radical_array;
+	vector<long> denominator_constant_array;
+	vector<long> denominator_radical_array;
+	
+	void mergeMuit()
+	{
+		if(!numerator_constant_array.empty())	// 先判断容器是否为空，再进行操作
+		{
+			if(numerator_constant_array.size() > 1)
+			{
+				general_struct_1 temp;
+				temp.data_array = numerator_constant_array;
+				numerator_constant_array[0] = getSumData(temp);
+			}
+		}
+		
+		if(!denominator_constant_array.empty())	// 先判断容器是否为空，再进行操作
+		{
+			if(denominator_constant_array.size() > 1)
+			{
+				general_struct_1 temp;
+				temp.data_array = denominator_constant_array;
+				denominator_constant_array[0] = getSumData(temp);
+			}
+		}
+		
+/* 		for (var j = 0; j < 2; j++)	// j控制分子/分母的遍历
+		{
+			for (var i = 0; i < mult.size(); i++)
+			{
+				if(mult.size() >= 2)
+				{
+					for (var k = 0; k <  / sizeof(long)
+					//mult[j][0][0] = 
+				}
+			}
+		} */
+	}
+	
+	public:
+	void setNumerator_constant(long nci)
+	{
+		
+		numerator_constant_array.push_back(nci);
+	}
+	
+	void setNumerator_radical(long nri)
+	{
+		numerator_radical_array.push_back(nri);
+	}
+	
+	void setDenominator_constant(long dci)
+	{
+		denominator_constant_array.push_back(dci);
+	}
+	
+	void setDenominator_radical(long dri)
+	{
+		denominator_radical_array.push_back(dri);
+	}
+	
+	void displayMuit()
+	{
+		
+	}
+	~display_mult();  // 析构函数
 };
 
 
@@ -1052,7 +1142,7 @@ PrimeNum_Output:
 
 	default:	// 输入错误
 	{
-		action.showInputError();
+		action.showInputErrorMsg();
 		goto Select_Num_Scan;
 	}						// default
 	}						// switch
