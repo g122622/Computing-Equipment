@@ -532,6 +532,20 @@ class display_mult
 	vector<long> denominator_constant_array;
 	vector<long> denominator_radical_array;
 	
+/* 	3维数组数字次序：
+	[x][y][z]
+	x：分子为0，分母为1
+	y：常数为0，根号为1
+	z：相应数据 */
+	void create3DArray
+	{
+		long mult[][][];
+		for(var i = 0; i < numerator_constant_array.size(); i++)
+		{
+			
+		}
+	}
+	
 	void mergeMuit()
 	{
 		if(!numerator_constant_array.empty())	// 先判断容器是否为空，再进行操作
