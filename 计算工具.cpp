@@ -526,20 +526,42 @@ class action
 class display_mult
 {
 	private:
-	// 存储mult
+	// 转储mult
 	vector<long> numerator_constant_array;
 	vector<long> numerator_radical_array;
 	vector<long> denominator_constant_array;
 	vector<long> denominator_radical_array;
-	
+	long max_size = 0;
 /* 	3维数组数字次序：
 	[x][y][z]
 	x：分子为0，分母为1
 	y：常数为0，根号为1
 	z：相应数据 */
-	void create3DArray
+	
+	// 获取容器中最大元素数量，用于创建三维数组
+	void getMaxSize()
 	{
-		long mult[][][];
+		general_struct_1 temp;
+	 if(!numerator_constant_array.empty())
+	  temp.data_array.push_back(numerator_constant_array.size());
+	 if(!numerator_radical_array.empty())
+	  temp.data_array.push_back(numerator_radical_array.size());
+	 if(!denominator_constant_array.empty())
+	  temp.data_array.push_back(denominator_constant_array.size());
+	 if(!denominator_radical_array.empty())
+	  temp.data_array.push_back(denominator_radical_array.size());
+	  // 排序
+	  temp.count = temp.data_array.size();
+	 temp = getSortedData(temp);
+	 vector<long>::iterator iter;
+ 	iter = temp.data_array.end();
+ 	iter--;
+	 max_size = *iter;
+	}
+	
+	void create3DArray()
+	{
+		long mult[2][2][];
 		for(var i = 0; i < numerator_constant_array.size(); i++)
 		{
 			
