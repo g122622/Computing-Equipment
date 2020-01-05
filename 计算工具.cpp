@@ -327,9 +327,7 @@ long getSumData(general_struct_1 temp);
 	 return 0;
 	long sum = 0;
 	for (var i = 0; i < temp.count; i++)
-	{
 		sum = sum + temp.data_array[i];
-	}
 	return sum;
 }
 
