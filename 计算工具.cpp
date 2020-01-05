@@ -353,7 +353,6 @@ long long q_mul(long long a, long long b, long long mod) // 快速乘法取模
 		}
 		b /= 2;
 		a = (a + a) % mod;
-
 	}
 	return ans;
 }
@@ -553,23 +552,18 @@ class display_mult
 	  // 排序
 	  temp.count = temp.data_array.size();
 	 temp = getSortedData(temp);
+	 // 迭代选取最大值
 	 vector<long>::iterator iter;
  	iter = temp.data_array.end();
  	iter--;
 	 max_size = *iter;
 	}
 	
-	void create3DArray()
+	void mergeMult()
 	{
-		long mult[2][2][];
+		long temp_size = getMaxSize();
+		long mult[2][2][temp_size];
 		for(var i = 0; i < numerator_constant_array.size(); i++)
-		{
-			
-		}
-	}
-	
-	void mergeMuit()
-	{
 		if(!numerator_constant_array.empty())	// 先判断容器是否为空，再进行操作
 		{
 			if(numerator_constant_array.size() > 1)
