@@ -322,11 +322,11 @@ auto getAbsoluteData(auto numscan)
 long getSumData(general_struct_1 temp);
 {
 	if (temp.count == 0)
-	{
 		temp.count = temp.data_array.size();
-	}
+	if (temp.data_array.empty())
+	 return 0;
 	long sum = 0;
-	for(int i = 0; i < temp.count; i++)
+	for (var i = 0; i < temp.count; i++)
 	{
 		sum = sum + temp.data_array[i];
 	}
@@ -541,16 +541,16 @@ class display_mult
 	void getMaxSize()
 	{
 		general_struct_1 temp;
-	 if(!numerator_constant_array.empty())
+	 if (!numerator_constant_array.empty())
 	  temp.data_array.push_back(numerator_constant_array.size());
-	 if(!numerator_radical_array.empty())
+	 if (!numerator_radical_array.empty())
 	  temp.data_array.push_back(numerator_radical_array.size());
-	 if(!denominator_constant_array.empty())
+	 if (!denominator_constant_array.empty())
 	  temp.data_array.push_back(denominator_constant_array.size());
-	 if(!denominator_radical_array.empty())
+	 if (!denominator_radical_array.empty())
 	  temp.data_array.push_back(denominator_radical_array.size());
 	  // 排序
-	  temp.count = temp.data_array.size();
+	 temp.count = temp.data_array.size();
 	 temp = getSortedData(temp);
 	 // 迭代选取最大值
 	 vector<long>::iterator iter;
@@ -563,10 +563,10 @@ class display_mult
 	{
 		long temp_size = getMaxSize();
 		long mult[2][2][temp_size];
-		for(var i = 0; i < numerator_constant_array.size(); i++)
-		if(!numerator_constant_array.empty())	// 先判断容器是否为空，再进行操作
+		for (var i = 0; i < numerator_constant_array.size(); i++)
+		if (!numerator_constant_array.empty())	// 先判断容器是否为空，再进行操作
 		{
-			if(numerator_constant_array.size() > 1)
+			if (numerator_constant_array.size() > 1)
 			{
 				general_struct_1 temp;
 				temp.data_array = numerator_constant_array;
@@ -574,9 +574,9 @@ class display_mult
 			}
 		}
 		
-		if(!denominator_constant_array.empty())	// 先判断容器是否为空，再进行操作
+		if (!denominator_constant_array.empty())	// 先判断容器是否为空，再进行操作
 		{
-			if(denominator_constant_array.size() > 1)
+			if (denominator_constant_array.size() > 1)
 			{
 				general_struct_1 temp;
 				temp.data_array = denominator_constant_array;
