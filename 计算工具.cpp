@@ -535,33 +535,31 @@ class display_mult
 	y：常数为0，根号为1
 	z：相应数据 */
 	
-	// 获取容器中最大元素数量，用于创建三维数组
-	void getMaxSize()
+	// 获取容器中最大元素数量，用于创建三维数组（已弃用）
+/* 	void getMaxSize()
 	{
 		general_struct_1 temp;
-	 if (!numerator_constant_array.empty())
-	  temp.data_array.push_back(numerator_constant_array.size());
-	 if (!numerator_radical_array.empty())
-	  temp.data_array.push_back(numerator_radical_array.size());
-	 if (!denominator_constant_array.empty())
-	  temp.data_array.push_back(denominator_constant_array.size());
-	 if (!denominator_radical_array.empty())
-	  temp.data_array.push_back(denominator_radical_array.size());
-	  // 排序
-	 temp.count = temp.data_array.size();
-	 temp = getSortedData(temp);
-	 // 迭代选取最大值
-	 vector<long>::iterator iter;
- 	iter = temp.data_array.end();
- 	iter--;
-	 max_size = *iter;
-	}
+		if (!numerator_constant_array.empty())
+			temp.data_array.push_back(numerator_constant_array.size());
+		if (!numerator_radical_array.empty())
+			temp.data_array.push_back(numerator_radical_array.size());
+		if (!denominator_constant_array.empty())
+			temp.data_array.push_back(denominator_constant_array.size());
+		if (!denominator_radical_array.empty())
+			temp.data_array.push_back(denominator_radical_array.size());
+	// 排序
+	temp.count = temp.data_array.size();
+	temp = getSortedData(temp);
+	// 迭代选取最大值
+	vector<long>::iterator iter = temp.data_array.end();
+	max_size = *(iter - 1);
+	} */
 	
 	void mergeMult()
 	{
-		long temp_size = getMaxSize();
-		long mult[2][2][temp_size];
-		for (var i = 0; i < numerator_constant_array.size(); i++)
+/* 		long temp_size = getMaxSize();
+		long mult[2][2][temp_size]; */
+		// 合并常数项
 		if (!numerator_constant_array.empty())	// 先判断容器是否为空，再进行操作
 		{
 			if (numerator_constant_array.size() > 1)
@@ -582,6 +580,8 @@ class display_mult
 			}
 		}
 		
+		// 合并根号
+		
 /* 		for (var j = 0; j < 2; j++)	// j控制分子/分母的遍历
 		{
 			for (var i = 0; i < mult.size(); i++)
@@ -598,7 +598,6 @@ class display_mult
 	public:
 	void setNumerator_constant(long nci)
 	{
-		
 		numerator_constant_array.push_back(nci);
 	}
 	
@@ -617,8 +616,9 @@ class display_mult
 		denominator_radical_array.push_back(dri);
 	}
 	
-	void displayMuit()
+	void displayMult()
 	{
+		mergeMult();
 		
 	}
 	~display_mult();  // 析构函数
