@@ -210,7 +210,7 @@ double getRandData(long min, long max)
 
 
 // 二次根式化简函数
-simplify_quadratic_radical_struct simplify_quadratic_radical(long numscan)
+simplify_quadratic_radical_struct simplifyQuadraticRadical(long numscan)
 {
 	// 使用结构体传参
 	simplify_quadratic_radical_struct temp;	// 定义temp结构体
@@ -581,6 +581,19 @@ class display_mult
 		}
 		
 		// 合并根号
+		// 判断容器是否有数据
+		vector<long> temp = numerator_radical_array + denominator_radical_array;
+		simplify_quadratic_radical_struct sqr;
+		vector<long>::iterator iter_end_const = temp.end();	// 缓冲常量，避免temp.end()内存地址随元素的插入而改变
+		for (vector<long>::iterator iter = temp.begin(); iter < iter_end_const; iter++)
+		{
+			sqr = simplifyQuadraticRadical(*iter);
+			temp.insert(temp.end(), sqr.out_radical);
+			temp.insert(temp.end(), sqr.in_radical);
+			if (iter = iter_end_const - 1)
+				temp.erase(temp.begin(), iter_end_const - 1);
+		}
+		
 		
 /* 		for (var j = 0; j < 2; j++)	// j控制分子/分母的遍历
 		{
@@ -786,7 +799,7 @@ Select_Num_Scan:
 			{
 				simplify_quadratic_radical_struct delta_simped;
 				general_struct_1 temp;
-				delta_simped = simplify_quadratic_radical(*Delta);
+				delta_simped = simplifyQuadraticRadical(*Delta);
 				temp.count = 3;
 				for (int i = 0; i < 3; i++)	// 内存初始化
 					temp.data_array.push_back(0);
@@ -1018,7 +1031,7 @@ PrimeNum_Output:
 		cout << "请输入要化简的二次根式：" << endl << "√";
 		cin >> *numscan;
 		simplify_quadratic_radical_struct returnNums;
-		returnNums = simplify_quadratic_radical(*numscan);
+		returnNums = simplifyQuadraticRadical(*numscan);
 		cout << "[因数分解] " << *numscan << " = " << pow(returnNums.out_radical, 2) << " * "
 			<< *numscan / pow(returnNums.out_radical, 2) << endl;
 		cout << "[化简结果]" << "√" << *numscan << " = ";
@@ -1038,7 +1051,7 @@ PrimeNum_Output:
 		cout << "已知两条平行直线y=kx+b，请依次输入k、b1、b2的值." << endl;
 		cin >> k >> b1 >> b2;
 		cout << "两直线距离为：";
-		simplify_quadratic_radical_struct returnNums = simplify_quadratic_radical(pow(k, 2) + 1);
+		simplify_quadratic_radical_struct returnNums = simplifyQuadraticRadical(pow(k, 2) + 1);
 		displayFraction(getSimplifiedFraction(getAbsoluteData(b1 - b2) / sqrt(pow(k, 2) + 1)));
 		cout << endl;	// 空一行
 		goto Select_Num_Scan;
