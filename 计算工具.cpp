@@ -581,8 +581,15 @@ class display_mult
 		}
 		
 		// 合并根号
-		// 判断容器是否有数据
-		vector<long> temp = numerator_radical_array + denominator_radical_array;
+		// 判断容器是否有数据，若为空，则存入0，避免数据过少，可能造成错误
+		if (numerator_radical_array.empty())
+			numerator_radical_array.push_back(0);
+		if (denominator_radical_array.empty())
+			denominator_radical_array.push_back(0);
+		vector<long> temp;	// 暂存容器
+		// 将两个容器的数据存入temp容器
+		temp.insert(temp.begin(), numerator_radical_array.begin(), numerator_radical_array.end());
+		temp.insert(temp.end(), denominator_radical_array.begin(), denominator_radical_array.end());
 		simplify_quadratic_radical_struct sqr;
 		vector<long>::iterator iter_end_const = temp.end();	// 缓冲常量，避免temp.end()内存地址随元素的插入而改变
 		for (vector<long>::iterator iter = temp.begin(); iter < iter_end_const; iter++)
@@ -590,10 +597,15 @@ class display_mult
 			sqr = simplifyQuadraticRadical(*iter);
 			temp.insert(temp.end(), sqr.out_radical);
 			temp.insert(temp.end(), sqr.in_radical);
-			if (iter = iter_end_const - 1)
+			if (iter = iter_end_const - 1)	// 迭代到最后一个有效数据时清除原数据区间
 				temp.erase(temp.begin(), iter_end_const - 1);
 		}
-		
+		vector<long>::iterator iter_nra_end = numerator_radical_array.end();
+		numerator_radical_array.clear();
+		denominator_radical_array.clear();
+		// 以新的数据结构存入容器
+		numerator_radical_array.insert(numerator_radical_array.begin(), temp.begin(), iter_nra_end);
+		denominator_radical_array.insert(denominator_radical_array.begin(), iter_nra_end + 1, temp.end());
 		
 /* 		for (var j = 0; j < 2; j++)	// j控制分子/分母的遍历
 		{
