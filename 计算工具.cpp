@@ -1,7 +1,7 @@
 // 工程名称：计算工具
-// 日期：20191225
+// 日期：20200102
 // 版本：v1.4.4
-// 开发平台：Windows：Microsoft Visual Studio；Android：c4droid；Web：Github
+// 开发平台：Windows：Microsoft Visual Studio；Notepad++；Android：c4droid；Web：Github
 // 开发语言：C++
 // 应用类型：控制台应用
 // 云同步平台：Github
@@ -10,7 +10,7 @@
 // 这个程序为解决初中阶段各种繁琐的数学运算而设计。
 // 这是我在学习之余写的程序，下面是所有源代码。
 // 未经允许严禁私自转载。严禁私改版权。
-// 使用本程序内的算法需征得我（或者原作者）的授权。
+// 使用本程序内的算法需征得我（以及原作者）的授权。
 // 除非这个算法是你自己独立写出来的qwq
 // 之所以我不加密就是为了方便他人借鉴学习。
 // 但这不意味着您可以“借鉴”走全部源代码作为自己的作品！
@@ -82,7 +82,7 @@ void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, bool);
 long getLowestCommonMultiple(simplify_fraction_struct);
-void decomposePrimeFactor();
+long getSumData(general_struct_1);
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
 void find(long long n, long long c);
 long long pollard_rho(long long n, long long c);
@@ -92,6 +92,9 @@ bool witness(long long a, long long n);
 long long q_pow(long long a, long long b, long long mod);
 long long q_mul(long long a, long long b, long long mod);
 long long Random(long long n);
+// 以下都是身份证验证码计算所需要的函数（by boshuzhang）
+int _checkIDinput(char[]);
+void _checkID(int[], char[]);
 
 
 /*----------函数定义区----------*/
@@ -115,9 +118,11 @@ long getLowestCommonMultiple(general_struct_1 temp)
 			*lm2 = (long)LowestCommonMultiple / temp.data_array[j];
 			if (*dm1 != *lm2) break;	// 若不符合条件，直接break掉内层循环
 			if (j == 0)			// 判断是否全部满足
+				delete dm1, lm2;
 				return LowestCommonMultiple;
 		}
 	}
+	delete dm1, lm2;
 	return abnormality;			// 返回异常值
 }
 
@@ -126,7 +131,7 @@ long getLowestCommonMultiple(general_struct_1 temp)
 general_struct_1 getFactor(long num_input, bool minus_output_state)
 {
 	general_struct_1 temp;
-	for (var factor = 1; factor <= num_input; factor++)
+	for (var factor = 1; factor <= (num_input / 2); factor++)
 	{
 		if ((double)num_input / factor == (long)num_input / factor)
 		{
@@ -136,17 +141,17 @@ general_struct_1 getFactor(long num_input, bool minus_output_state)
 			temp.count++;
 		}
 	}
-	temp.count--;	// 避免循环到最后一个时count比预期值大1
+	temp.data_array.push_back(0);
+	temp.data_array[temp.count] = num_input;// 这里的count计数器不可再累加，巧妙避免其比预期值大1
 	if (minus_output_state == enabled)
 	{
-		long count_clone = temp.count;	// 创建count的克隆，用于for循环
 		// 如果启用负数显示，往内存中再存负数
-		for (long i = 0; i <= count_clone; i++)
+		for (long i = 0; i <= temp.count; i++)
 		{
 			temp.data_array.push_back(0);
-			temp.data_array[temp.count+1] = -temp.data_array[i];
-			temp.count++;
+			temp.data_array[temp.count+1] = - temp.data_array[i];
 		}
+		temp.count = temp.count * 2;
 	}
 	return temp;
 }
@@ -205,7 +210,7 @@ double getRandData(long min, long max)
 
 
 // 二次根式化简函数
-simplify_quadratic_radical_struct simplify_quadratic_radical(long numscan)
+simplify_quadratic_radical_struct simplifyQuadraticRadical(long numscan)
 {
 	// 使用结构体传参
 	simplify_quadratic_radical_struct temp;	// 定义temp结构体
@@ -313,12 +318,27 @@ auto getAbsoluteData(auto numscan)
 }
 
 
+// 求和函数
+long getSumData(general_struct_1 temp);
+{
+	if (temp.count == 0)
+		temp.count = temp.data_array.size();
+	if (temp.data_array.empty())
+	 return 0;
+	long sum = 0;
+	for (var i = 0; i < temp.count; i++)
+		sum = sum + temp.data_array[i];
+	return sum;
+}
+
+
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
 map<long long, int>m;
 long long Random(long long n)
 {
 	return ((double)rand() / RAND_MAX * n + 0.5);
 }
+
 
 long long q_mul(long long a, long long b, long long mod) // 快速乘法取模
 {
@@ -331,10 +351,10 @@ long long q_mul(long long a, long long b, long long mod) // 快速乘法取模
 		}
 		b /= 2;
 		a = (a + a) % mod;
-
 	}
 	return ans;
 }
+
 
 long long q_pow(long long a, long long b, long long mod) // 快速乘法下的快速幂，叼
 {
@@ -350,6 +370,7 @@ long long q_pow(long long a, long long b, long long mod) // 快速乘法下的�
 	}
 	return ans;
 }
+
 
 bool witness(long long a, long long n)	// miller_rabin算法的精华
 {
@@ -371,6 +392,7 @@ bool witness(long long a, long long n)	// miller_rabin算法的精华
 	return false;
 }
 
+
 bool miller_rabin(long long n)  // 检验n是否是素数
 {
 
@@ -386,12 +408,16 @@ bool miller_rabin(long long n)  // 检验n是否是素数
 	}
 	return true;
 }
+
+
 long long gcd(long long a, long long b)
 {
 	if (b == 0)
 		return a;
 	return gcd(b, a % b);
 }
+
+
 long long pollard_rho(long long n, long long c)// 找到n的一个因子
 {
 	long long x, y, d, i = 1, k = 2;
@@ -413,6 +439,8 @@ long long pollard_rho(long long n, long long c)// 找到n的一个因子
 		}
 	}
 }
+
+
 void find(long long n, long long c)
 {
 	if (n == 1)
@@ -431,12 +459,33 @@ void find(long long n, long long c)
 }
 
 
+// 以下都是身份证验证码计算所需要的函数（by boshuzhang）
+int _checkIDinput(char ID[])		// 检验身份证是否为18位 
+{ 
+	if (strlen(ID) == 18)	// 字符串最后一位/0 
+		return 1;
+	else return 0;
+}
+
+
+void _checkID(int IDNumber[], char ID[])
+{
+	int i = 0;	// i为计数器
+	int checksum = 0;
+	for ( ; i < 17; i++)
+		checksum += IDNumber[i] * factor[i];
+	if ( IDNumber[17] == check_table[checksum % 11] or (ID[17] == 'x' and check_table[checksum % 11] == 2))
+		cout << "正确身份证号码/n";
+	else cout << "错误身份证号码/n"; 
+}
+
+
 /*----------对象声明区----------*/
 class action
 {
 	public:
 	// 加载总控制台函数
-	void loadMasterConsole()
+	void showMasterConsole()
 	{
 		cout << "===============[总控制台]===============" << endl
 			<< "1::解/分析二元一次方程" << endl
@@ -454,14 +503,150 @@ class action
 			<< "13::生成随机数" << endl
 			<< "14::二次函数解析式计算" << endl
 			<< "15::分解质因数" << endl
+			<< "16::身份证验证码计算" << endl
 			// 备份
 			/*
-			<< "11::" << endl
-			<< "11::" << endl
-			<< "11::" << endl
+			<< "17::" << endl
+			<< "17::" << endl
+			<< "17::" << endl
 			*/
 			<< "0::显示总控制台" << endl;
 	}
+	// 显示错误信息函数
+	void showInputErrorMsg()
+	{
+		cout << "系统消息：请输入正确的数。\n" << endl;
+	}
+};
+
+
+class display_mult
+{
+	private:
+	// 转储mult
+	vector<long> numerator_constant_array;
+	vector<long> numerator_radical_array;
+	vector<long> denominator_constant_array;
+	vector<long> denominator_radical_array;
+	long max_size = 0;
+/* 	3维数组数字次序：
+	[x][y][z]
+	x：分子为0，分母为1
+	y：常数为0，根号为1
+	z：相应数据 */
+	
+	// 获取容器中最大元素数量，用于创建三维数组（已弃用）
+/* 	void getMaxSize()
+	{
+		general_struct_1 temp;
+		if (!numerator_constant_array.empty())
+			temp.data_array.push_back(numerator_constant_array.size());
+		if (!numerator_radical_array.empty())
+			temp.data_array.push_back(numerator_radical_array.size());
+		if (!denominator_constant_array.empty())
+			temp.data_array.push_back(denominator_constant_array.size());
+		if (!denominator_radical_array.empty())
+			temp.data_array.push_back(denominator_radical_array.size());
+	// 排序
+	temp.count = temp.data_array.size();
+	temp = getSortedData(temp);
+	// 迭代选取最大值
+	vector<long>::iterator iter = temp.data_array.end();
+	max_size = *(iter - 1);
+	} */
+	
+	void mergeMult()
+	{
+/* 		long temp_size = getMaxSize();
+		long mult[2][2][temp_size]; */
+		// 合并常数项
+		if (!numerator_constant_array.empty())	// 先判断容器是否为空，再进行操作
+		{
+			if (numerator_constant_array.size() > 1)
+			{
+				general_struct_1 temp;
+				temp.data_array = numerator_constant_array;
+				numerator_constant_array[0] = getSumData(temp);
+			}
+		}
+		
+		if (!denominator_constant_array.empty())	// 先判断容器是否为空，再进行操作
+		{
+			if (denominator_constant_array.size() > 1)
+			{
+				general_struct_1 temp;
+				temp.data_array = denominator_constant_array;
+				denominator_constant_array[0] = getSumData(temp);
+			}
+		}
+		
+		// 合并根号
+		// 判断容器是否有数据，若为空，则存入0，避免数据过少，可能造成错误
+		if (numerator_radical_array.empty())
+			numerator_radical_array.push_back(0);
+		if (denominator_radical_array.empty())
+			denominator_radical_array.push_back(0);
+		vector<long> temp;	// 暂存容器
+		// 将两个容器的数据存入temp容器
+		temp.insert(temp.begin(), numerator_radical_array.begin(), numerator_radical_array.end());
+		temp.insert(temp.end(), denominator_radical_array.begin(), denominator_radical_array.end());
+		simplify_quadratic_radical_struct sqr;
+		vector<long>::iterator iter_end_const = temp.end();	// 缓冲常量，避免temp.end()内存地址随元素的插入而改变
+		for (vector<long>::iterator iter = temp.begin(); iter < iter_end_const; iter++)
+		{
+			sqr = simplifyQuadraticRadical(*iter);
+			temp.insert(temp.end(), sqr.out_radical);
+			temp.insert(temp.end(), sqr.in_radical);
+			if (iter = iter_end_const - 1)	// 迭代到最后一个有效数据时清除原数据区间
+				temp.erase(temp.begin(), iter_end_const - 1);
+		}
+		vector<long>::iterator iter_nra_end = numerator_radical_array.end();
+		numerator_radical_array.clear();
+		denominator_radical_array.clear();
+		// 以新的数据结构存入容器
+		numerator_radical_array.insert(numerator_radical_array.begin(), temp.begin(), iter_nra_end);
+		denominator_radical_array.insert(denominator_radical_array.begin(), iter_nra_end + 1, temp.end());
+		
+/* 		for (var j = 0; j < 2; j++)	// j控制分子/分母的遍历
+		{
+			for (var i = 0; i < mult.size(); i++)
+			{
+				if(mult.size() >= 2)
+				{
+					for (var k = 0; k <  / sizeof(long)
+					//mult[j][0][0] = 
+				}
+			}
+		} */
+	}
+	
+	public:
+	void setNumerator_constant(long nci)
+	{
+		numerator_constant_array.push_back(nci);
+	}
+	
+	void setNumerator_radical(long nri)
+	{
+		numerator_radical_array.push_back(nri);
+	}
+	
+	void setDenominator_constant(long dci)
+	{
+		denominator_constant_array.push_back(dci);
+	}
+	
+	void setDenominator_radical(long dri)
+	{
+		denominator_radical_array.push_back(dri);
+	}
+	
+	void displayMult()
+	{
+		mergeMult();
+		
+	}
+	~display_mult();  // 析构函数
 };
 
 
@@ -476,7 +661,7 @@ int main(void)
 {
 	action action;
 	// 加载总控制台
-	action.loadMasterConsole();
+	action.showMasterConsole();
 Select_Num_Scan:
 	cout << endl;
 	cout << "[输入]";
@@ -626,7 +811,7 @@ Select_Num_Scan:
 			{
 				simplify_quadratic_radical_struct delta_simped;
 				general_struct_1 temp;
-				delta_simped = simplify_quadratic_radical(*Delta);
+				delta_simped = simplifyQuadraticRadical(*Delta);
 				temp.count = 3;
 				for (int i = 0; i < 3; i++)	// 内存初始化
 					temp.data_array.push_back(0);
@@ -823,7 +1008,7 @@ PrimeNum_Output:
 		cout << endl << "从小到大排序结果为：" << endl;		// 计算完毕，输出结果
 		for (int m = 0; m < *numamount; m++)
 		{
-			printf("[输出数%ld] = %ld", m + 1, input.data_array[m]);
+			printf("[输出数%ld] = %ld\n", m + 1, input.data_array[m]);
 		}
 		printf("共进行了%ld次交换。\n", input.count);
 		delete numamount;
@@ -858,7 +1043,7 @@ PrimeNum_Output:
 		cout << "请输入要化简的二次根式：" << endl << "√";
 		cin >> *numscan;
 		simplify_quadratic_radical_struct returnNums;
-		returnNums = simplify_quadratic_radical(*numscan);
+		returnNums = simplifyQuadraticRadical(*numscan);
 		cout << "[因数分解] " << *numscan << " = " << pow(returnNums.out_radical, 2) << " * "
 			<< *numscan / pow(returnNums.out_radical, 2) << endl;
 		cout << "[化简结果]" << "√" << *numscan << " = ";
@@ -878,7 +1063,7 @@ PrimeNum_Output:
 		cout << "已知两条平行直线y=kx+b，请依次输入k、b1、b2的值." << endl;
 		cin >> k >> b1 >> b2;
 		cout << "两直线距离为：";
-		simplify_quadratic_radical_struct returnNums = simplify_quadratic_radical(pow(k, 2) + 1);
+		simplify_quadratic_radical_struct returnNums = simplifyQuadraticRadical(pow(k, 2) + 1);
 		displayFraction(getSimplifiedFraction(getAbsoluteData(b1 - b2) / sqrt(pow(k, 2) + 1)));
 		cout << endl;	// 空一行
 		goto Select_Num_Scan;
@@ -978,18 +1163,39 @@ PrimeNum_Output:
 		printf("\n");
 		goto Select_Num_Scan;
 	}
-	
-	
+
+
+	case 16:	// 身份证验证码计算（by boshuzhang）
+	{
+		const int factor[] = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};// 加权因子
+		const int check_table[] = {1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2};// 校验值对应表
+		char ID[19];
+		int IDNumber[19];
+		cout << "[输入身份证号码]";
+		cin >> ID;    
+		while(!_checkIDinput(ID))  // 防止输入过程中位数输入错误   
+		{
+			cout << "错误ID，请重新输入" << endl; 
+			cout << "[输入身份证号码]";
+			cin >> ID;   
+		} 
+		for (int i = 0; i < 18; i++)// 相当于类型转换
+			IDNumber[i] = ID[i] - 48; 
+		_checkID(IDNumber, ID);
+		goto Select_Num_Scan;
+	}
+
+
 	case 0:		// 显示控制台
 	{
-		action.loadMasterConsole();
+		action.showMasterConsole();
 		goto Select_Num_Scan;
 	}						// case 0
 
 
 	default:	// 输入错误
 	{
-		cout << "系统消息:请输入正确的数。\n" << endl;
+		action.showInputErrorMsg();
 		goto Select_Num_Scan;
 	}						// default
 	}						// switch
