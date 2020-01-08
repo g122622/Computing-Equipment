@@ -35,14 +35,14 @@
 #define FZC factor_c.data_array
 #define abnormality -1
 
-typedef long var;
-
-// std命名空间
-using namespace std;
 
 /*----------全局变量/结构体/对象声明区/杂项区1----------*/
+typedef long var;
+using namespace std;
 const int times = 50;
 int number = 0;
+
+
 
 /*----------结构体声明区----------*/
 // 二次根式化简结构体
@@ -77,7 +77,8 @@ void swapData(long&, long&);
 general_struct_1 getSortedData(general_struct_1, long&);
 long long loadMasterConsole(long long);
 simplify_fraction_struct getSimplifiedFraction(long&, long&);
-auto getAbsoluteData(auto);
+template <typename T1>
+T1 getAbsoluteData(T1);
 void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, bool);
@@ -310,7 +311,8 @@ void displayFraction(simplify_fraction_struct temp)
 
 
 // 取绝对值函数
-auto getAbsoluteData(auto numscan)
+template <typename T1>
+T1 getAbsoluteData(T1 numscan)
 {
 	if (numscan < 0)
 		numscan = -numscan;
@@ -554,11 +556,24 @@ class display_mult
 	vector<long>::iterator iter = temp.data_array.end();
 	max_size = *(iter - 1);
 	} */
-	
-	void mergeMult()
+	void mergeConstant(vector<long> temp)
+	{
+		if (!temp.empty())	// 先判断容器是否为空，再进行操作
+		{
+			if (temp.size() > 1)
+			{
+				general_struct_1 tmp;
+				tmp.data_array = temp;
+				temp[0] = getSumData(tmp);
+			}
+		}
+	}
+
+	void mergeRadical()
 	{
 /* 		long temp_size = getMaxSize();
 		long mult[2][2][temp_size]; */
+		/*
 		// 合并常数项
 		if (!numerator_constant_array.empty())	// 先判断容器是否为空，再进行操作
 		{
@@ -579,7 +594,7 @@ class display_mult
 				denominator_constant_array[0] = getSumData(temp);
 			}
 		}
-		
+		*/
 		// 合并根号
 		// 判断容器是否有数据，若为空，则存入0，避免数据过少，可能造成错误
 		if (numerator_radical_array.empty())
@@ -592,20 +607,24 @@ class display_mult
 		temp.insert(temp.end(), denominator_radical_array.begin(), denominator_radical_array.end());
 		simplify_quadratic_radical_struct sqr;
 		vector<long>::iterator iter_end_const = temp.end();	// 缓冲常量，避免temp.end()内存地址随元素的插入而改变
+		// 计算+暂存
 		for (vector<long>::iterator iter = temp.begin(); iter < iter_end_const; ++iter)
 		{
 			sqr = simplifyQuadraticRadical(*iter);
 			temp.insert(temp.end(), sqr.out_radical);
 			temp.insert(temp.end(), sqr.in_radical);
-			if (iter = iter_end_const - 1)	// 迭代到最后一个有效数据时清除原数据区间
-				temp.erase(temp.begin(), iter_end_const - 1);
+			if (iter = iter_end_const - 1)	// 迭代到最后一个有效数据时，清除原数据
+				temp.erase(temp.begin(), iter_end_const);
 		}
-		vector<long>::iterator iter_nra_end = numerator_radical_array.end();// bug反馈：区间范围应扩大一倍
+		// 获取数量，用于后续对temp进行分离操作
+		long n_size = numerator_radical_array.size();
+		long d_size = denominator_radical_array.size();
 		numerator_radical_array.clear();
 		denominator_radical_array.clear();
 		// 以新的数据结构存入容器
-		numerator_radical_array.insert(numerator_radical_array.begin(), temp.begin(), iter_nra_end);
-		denominator_radical_array.insert(denominator_radical_array.begin(), iter_nra_end + 1, temp.end());
+		numerator_radical_array.insert(numerator_radical_array.begin(), temp.begin(), temp.begin() + 2 * n_size);
+		denominator_radical_array.insert(denominator_radical_array.begin(), temp.begin() + 2 * n_size, temp.end());
+		// 提取根号内的数据
 		vector<long> n_in, d_in;
 		for (var i = 0; i < numerator_radical_array.size(); i++)
 		{
@@ -642,7 +661,9 @@ class display_mult
 	
 	void displayMult()
 	{
-		mergeMult();
+		mergeConstant(numerator_constant_array);
+		mergeConstant(denominator_constant_array);
+		mergeRadical();
 		
 	}
 	~display_mult();  // 析构函数
