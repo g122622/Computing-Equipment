@@ -321,15 +321,12 @@ T1 getAbsoluteData(T1 numscan)
 
 
 // 求和函数
-long getSumData(general_struct_1 temp)
+long getSumData(vector<long> temp)
 {
-	if (temp.count == 0)
-		temp.count = temp.data_array.size();
-	if (temp.data_array.empty())
-	 return 0;
+	long count = temp.size();
 	long sum = 0;
-	for (var i = 0; i < temp.count; i++)
-		sum = sum + temp.data_array[i];
+	for (var i = 0; i < count; i++)
+		sum = sum + temp[i];
 	return sum;
 }
 
@@ -530,141 +527,109 @@ class display_mult
 	vector<long> numerator_radical_array;
 	vector<long> denominator_constant_array;
 	vector<long> denominator_radical_array;
-	long max_size = 0;
-/* 	3维数组数字次序：
-	[x][y][z]
-	x：分子为0，分母为1
-	y：常数为0，根号为1
-	z：相应数据 */
-	
-	// 获取容器中最大元素数量，用于创建三维数组（已弃用）
-/* 	void getMaxSize()
-	{
-		general_struct_1 temp;
-		if (!numerator_constant_array.empty())
-			temp.data_array.push_back(numerator_constant_array.size());
-		if (!numerator_radical_array.empty())
-			temp.data_array.push_back(numerator_radical_array.size());
-		if (!denominator_constant_array.empty())
-			temp.data_array.push_back(denominator_constant_array.size());
-		if (!denominator_radical_array.empty())
-			temp.data_array.push_back(denominator_radical_array.size());
-	// 排序
-	temp.count = temp.data_array.size();
-	temp = getSortedData(temp);
-	// 迭代选取最大值
-	vector<long>::iterator iter = temp.data_array.end();
-	max_size = *(iter - 1);
-	} */
-	void mergeConstant(vector<long> temp)
-	{
-		if (!temp.empty())	// 先判断容器是否为空，再进行操作
-		{
-			if (temp.size() > 1)
-			{
-				general_struct_1 tmp;
-				tmp.data_array = temp;
-				temp[0] = getSumData(tmp);
-			}
-		}
-	}
+	general_struct_1 gcd_tmp;
+	long n_constant_merged = 0, d_constant_merged = 0;
+	long gcd = 1;
 
-	void mergeRadical()
+	// 合并根式函数
+	void mergeRadical(vector<long>& temp, long& cst)
 	{
-/* 		long temp_size = getMaxSize();
-		long mult[2][2][temp_size]; */
-		/*
-		// 合并常数项
-		if (!numerator_constant_array.empty())	// 先判断容器是否为空，再进行操作
-		{
-			if (numerator_constant_array.size() > 1)
-			{
-				general_struct_1 temp;
-				temp.data_array = numerator_constant_array;
-				numerator_constant_array[0] = getSumData(temp);
-			}
-		}
-		
-		if (!denominator_constant_array.empty())	// 先判断容器是否为空，再进行操作
-		{
-			if (denominator_constant_array.size() > 1)
-			{
-				general_struct_1 temp;
-				temp.data_array = denominator_constant_array;
-				denominator_constant_array[0] = getSumData(temp);
-			}
-		}
-		*/
-		// 合并根号
-		// 判断容器是否有数据，若为空，则存入0，避免数据过少，可能造成错误
-		if (numerator_radical_array.empty())
-			numerator_radical_array.push_back(0);
-		if (denominator_radical_array.empty())
-			denominator_radical_array.push_back(0);
-		vector<long> temp;	// 暂存容器
-		// 将两个容器的数据存入temp容器
-		temp.insert(temp.begin(), numerator_radical_array.begin(), numerator_radical_array.end());
-		temp.insert(temp.end(), denominator_radical_array.begin(), denominator_radical_array.end());
+		// 检查容器是否有数据
+		if (temp.empty()) return;
 		simplify_quadratic_radical_struct sqr;
 		vector<long>::iterator iter_end_const = temp.end();	// 缓冲常量，避免temp.end()内存地址随元素的插入而改变
 		// 计算+暂存
 		for (vector<long>::iterator iter = temp.begin(); iter < iter_end_const; ++iter)
 		{
 			sqr = simplifyQuadraticRadical(*iter);
-			temp.insert(temp.end(), sqr.out_radical);
-			temp.insert(temp.end(), sqr.in_radical);
 			if (iter = iter_end_const - 1)	// 迭代到最后一个有效数据时，清除原数据
 				temp.erase(temp.begin(), iter_end_const);
+			if (sqr.in_radical == 1)		// 若可以开完全平方，则加入常数项
+			{
+				cst = cst + sqr.out_radical;
+				continue;
+			}
+			temp.insert(temp.end(), sqr.out_radical);
+			temp.insert(temp.end(), sqr.in_radical);
+
 		}
-		// 获取数量，用于后续对temp进行分离操作
-		long n_size = numerator_radical_array.size();
-		long d_size = denominator_radical_array.size();
-		numerator_radical_array.clear();
-		denominator_radical_array.clear();
-		// 以新的数据结构存入容器
-		numerator_radical_array.insert(numerator_radical_array.begin(), temp.begin(), temp.begin() + 2 * n_size);
-		denominator_radical_array.insert(denominator_radical_array.begin(), temp.begin() + 2 * n_size, temp.end());
-		// 提取根号内的数据
-		vector<long> n_in, d_in;
-		for (var i = 0; i < numerator_radical_array.size(); i++)
+		for (var j = 1; j < temp.size(); j = j + 2)
 		{
-			if (i % 2)	// 取模，检查是否为奇数
-				n_in.push_back(numerator_radical_array[i]);
-		}
-		for (var i = 0; i < denominator_radical_array.size(); i++)
-		{
-			if (i % 2)	// 取模，检查是否为奇数
-				d_in.push_back(denominator_radical_array[i]);
+			for (var i = 1; i < temp.size(); i = i + 2)
+			{
+				if (j = i) continue;	// 避免错误计算
+				if (temp[j] == temp[i])
+				{
+					temp[j - 1] = temp[j - 1] + temp[i - 1];
+					temp.erase(temp.begin() + i - 1, temp.begin() + i + 1);	// 删除已被合并的数据
+					// 计数器缩回
+					i = i - 2;
+					if (j > i)
+						j = j - 2;	// j在i右边，j的指向随删除而改变
+				}
+			}
 		}
 	}
 	
+	void selectCoefficient(vector<long> temp)
+	{
+		for (var i = 0; i < temp.size(); i = i + 2)
+			gcd_tmp.data_array.push_back(temp[i]);
+	}
+
+	void displayLine(long cst, vector<long> vectmp, long gcd)
+	{
+			if (cst / gcd != 0)
+				cout << cst / gcd << " ";
+			for (var j = 0; j < vectmp.size(); j = j + 2)
+			{
+				// 前部分（系数）
+				if (vectmp[j] == 0 || vectmp[j + 1] == 0) continue;
+				if (vectmp[j] / gcd < 0)
+					cout << "- ";
+				else if (cst / gcd != 0)
+					cout << "+ ";
+				cout << getAbsoluteData(vectmp[j] / gcd);
+				// 后部分（根号）(不用考虑根号内为1的情况）
+				cout << "√" << vectmp[j + 1]
+			}
+	}
+
 	public:
 	void setNumerator_constant(long nci)
 	{
 		numerator_constant_array.push_back(nci);
 	}
-	
 	void setNumerator_radical(long nri)
 	{
-		numerator_radical_array.push_back(nri);
+		if (nri < 0)
+			cout << "error! minus-nums is not expected!" << endl;
+		numerator_radical_array.push_back(getAbsoluteData(nri));
 	}
-	
 	void setDenominator_constant(long dci)
 	{
 		denominator_constant_array.push_back(dci);
 	}
-	
 	void setDenominator_radical(long dri)
 	{
-		denominator_radical_array.push_back(dri);
+		if (dri < 0)
+			cout << "error! minus-nums is not expected!" << endl;
+		denominator_radical_array.push_back(getAbsoluteData(dri));
 	}
-	
 	void displayMult()
 	{
-		mergeConstant(numerator_constant_array);
-		mergeConstant(denominator_constant_array);
-		mergeRadical();
-		
+		n_constant_merged = getSumData(numerator_constant_array);
+		d_constant_merged = getSumData(denominator_constant_array);
+		mergeRadical(numerator_radical_array, numerator_constant_array);
+		mergeRadical(denominator_radical_array, denominator_constant_array);
+		gcd_tmp.data_array.push_back(n_constant_merged);
+		gcd_tmp.data_array.push_back(d_constant_merged);
+		selectCoefficient(numerator_radical_array);
+		selectCoefficient(denominator_radical_array);
+		gcd_tmp.count = gcd_tmp.data_array.size();
+		gcd = getGreatestCommonDivisor(gcd_tmp);
+		// start to output
+		displayLine
 	}
 	~display_mult();  // 析构函数
 };
