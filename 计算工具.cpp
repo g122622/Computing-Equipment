@@ -527,13 +527,22 @@ class display_mult
 	vector<long> numerator_radical_array;
 	vector<long> denominator_constant_array;
 	vector<long> denominator_radical_array;
-	general_struct_1 gcd_tmp;
+	general_struct_1 gcd_tmp;	// 用于计算公约数
 	long n_constant_merged = 0, d_constant_merged = 0;
 	long gcd = 1;
 
 	// 合并根式函数
 	void mergeRadical(vector<long>& temp, long& cst)
 	{
+		// 数据预处理：删除为0的元素
+		for (var i = 0; i < temp.size(); i++)
+		{
+			if (temp[i] == 0)
+			{
+				temp.erase(temp.begin() + i);
+				i--;
+			}
+		}
 		// 检查容器是否有数据
 		if (temp.empty()) return;
 		simplify_quadratic_radical_struct sqr;
@@ -551,7 +560,6 @@ class display_mult
 			}
 			temp.insert(temp.end(), sqr.out_radical);
 			temp.insert(temp.end(), sqr.in_radical);
-
 		}
 		for (var j = 1; j < temp.size(); j = j + 2)
 		{
@@ -579,7 +587,7 @@ class display_mult
 
 	void displayLine(long cst, vector<long> vectmp, long gcd)
 	{
-			if (cst / gcd != 0)
+			if (cst != 0)
 				cout << cst / gcd << " ";
 			for (var j = 0; j < vectmp.size(); j = j + 2)
 			{
@@ -587,11 +595,11 @@ class display_mult
 				if (vectmp[j] == 0 || vectmp[j + 1] == 0) continue;
 				if (vectmp[j] / gcd < 0)
 					cout << "- ";
-				else if (cst / gcd != 0)
+				else if (cst != 0)
 					cout << "+ ";
 				cout << getAbsoluteData(vectmp[j] / gcd);
 				// 后部分（根号）(不用考虑根号内为1的情况）
-				cout << "√" << vectmp[j + 1]
+				cout << "√" << vectmp[j + 1];
 			}
 	}
 
@@ -620,16 +628,28 @@ class display_mult
 	{
 		n_constant_merged = getSumData(numerator_constant_array);
 		d_constant_merged = getSumData(denominator_constant_array);
-		mergeRadical(numerator_radical_array, numerator_constant_array);
-		mergeRadical(denominator_radical_array, denominator_constant_array);
+		mergeRadical(numerator_radical_array, n_constant_merged);
+		mergeRadical(denominator_radical_array, d_constant_merged);
 		gcd_tmp.data_array.push_back(n_constant_merged);
 		gcd_tmp.data_array.push_back(d_constant_merged);
 		selectCoefficient(numerator_radical_array);
 		selectCoefficient(denominator_radical_array);
 		gcd_tmp.count = gcd_tmp.data_array.size();
 		gcd = getGreatestCommonDivisor(gcd_tmp);
-		// start to output
-		displayLine
+		// 开始输出
+		if (numerator_radical_array.empty() && n_constant_merged == 0)	// 检测分子
+		{
+			cout << "0";
+			return;
+		}
+		if (d_constant_merged / gcd == 1 && denominator_constant_array.empty())
+		{
+			displayLine(n_constant_merged, numerator_radical_array, gcd);
+			return;
+		}
+		displayLine(n_constant_merged, numerator_radical_array, gcd);
+		cout << " / ";
+		displayLine(d_constant_merged, denominator_radical_array, gcd);
 	}
 	~display_mult();  // 析构函数
 };
