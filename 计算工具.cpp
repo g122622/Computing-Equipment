@@ -579,6 +579,15 @@ class display_mult
 				}
 			}
 		}
+		// 检查系数，删除系数为零的项
+		for (var i = 0; i < temp.size(); i = i + 2)
+		{
+			if (temp[i] == 0)
+			{
+				temp.erase(temp.begin() + i, temp.begin() + i + 2);
+				i = i - 2;
+			}
+		}
 	}
 	
 	void selectCoefficient(vector<long> temp)
@@ -599,7 +608,8 @@ class display_mult
 					cout << "- ";
 				else if (cst != 0)
 					cout << "+ ";
-				cout << getAbsoluteData(vectmp[j] / gcd);
+				if (getAbsoluteData(vectmp[j] / gcd) != 1)
+					cout << getAbsoluteData(vectmp[j] / gcd);
 				// 后部分（根号）(不用考虑根号内为1的情况）
 				cout << "√" << vectmp[j + 1];
 			}
@@ -644,7 +654,7 @@ class display_mult
 			cout << "0";
 			return;
 		}
-		if (d_constant_merged / gcd == 1 && denominator_constant_array.empty())
+		if (d_constant_merged / gcd == 1 && denominator_radical_array.empty())
 		{
 			displayLine(n_constant_merged, numerator_radical_array, gcd);
 			return;
