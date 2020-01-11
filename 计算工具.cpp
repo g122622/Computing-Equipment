@@ -653,7 +653,7 @@ class display_mult
 		cout << " / ";
 		displayLine(d_constant_merged, denominator_radical_array, gcd);
 	}
-	~display_mult();  // 析构函数
+	//~display_mult();  // 析构函数
 };
 
 
@@ -1072,8 +1072,13 @@ PrimeNum_Output:
 		cout << "已知两条平行直线y=kx+b，请依次输入k、b1、b2的值." << endl;
 		cin >> k >> b1 >> b2;
 		cout << "两直线距离为：";
-		simplify_quadratic_radical_struct returnNums = simplifyQuadraticRadical(pow(k, 2) + 1);
-		displayFraction(getSimplifiedFraction(getAbsoluteData(b1 - b2) / sqrt(pow(k, 2) + 1)));
+		display_mult display;
+		display.setNumerator_constant(k);
+		display.setNumerator_radical(b1);
+		display.setDenominator_constant(b2);
+		display.displayMult();
+		/*simplify_quadratic_radical_struct returnNums = simplifyQuadraticRadical(pow(k, 2) + 1);
+		displayFraction(getSimplifiedFraction(getAbsoluteData(b1 - b2) / sqrt(pow(k, 2) + 1)));*/
 		cout << endl;	// 空一行
 		goto Select_Num_Scan;
 	}
