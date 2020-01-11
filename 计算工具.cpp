@@ -41,6 +41,8 @@ typedef long var;
 using namespace std;
 const int times = 50;
 int number = 0;
+const int factor[] = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};// 加权因子
+const int check_table[] = {1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2};// 校验值对应表
 
 
 
@@ -551,7 +553,7 @@ class display_mult
 		for (vector<long>::iterator iter = temp.begin(); iter < iter_end_const; ++iter)
 		{
 			sqr = simplifyQuadraticRadical(*iter);
-			if (iter = iter_end_const - 1)	// 迭代到最后一个有效数据时，清除原数据
+			if (iter == iter_end_const - 1)	// 迭代到最后一个有效数据时，清除原数据
 				temp.erase(temp.begin(), iter_end_const);
 			if (sqr.in_radical == 1)		// 若可以开完全平方，则加入常数项
 			{
@@ -784,7 +786,9 @@ Select_Num_Scan:
 						cout << "∴x(1)=";
 						displayFraction(getSimplifiedFraction(FZC[i], FZA[j]));
 						cout << "，x(2)=";
-						displayFraction(getSimplifiedFraction(-*c / FZC[i], *a / FZA[j]));
+						// 暂存，防止G++抽风
+					 long tmp1 = -*c / FZC[i];
+					 long tmp2 = *a / FZA[j];	displayFraction(getSimplifiedFraction(tmp1, tmp2));
 						cout << "." << endl << endl;
 					}
 					goto Method_2;	// 跳出两层for循环
@@ -1073,9 +1077,8 @@ PrimeNum_Output:
 		cout << endl;	// 空一行
 		goto Select_Num_Scan;
 	}
-	
 
-	case
+
 	case 13:	// 生成随机数
 	{
 		// 申请内存
@@ -1172,8 +1175,6 @@ PrimeNum_Output:
 
 	case 16:	// 身份证验证码计算（by boshuzhang）
 	{
-		const int factor[] = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};// 加权因子
-		const int check_table[] = {1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2};// 校验值对应表
 		char ID[19];
 		int IDNumber[19];
 		cout << "[输入身份证号码]";
