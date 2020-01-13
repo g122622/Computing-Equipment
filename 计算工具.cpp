@@ -830,7 +830,7 @@ Select_Num_Scan:
 			{
 				display_mult displayx1, displayx2;
 				displayx1.setNumerator_constant(- *b);
-				displayx1.setNumerator_radical(*Delta, plus);
+				displayx1.setNumerator_radical(*Delta);
 				displayx1.setDenominator_constant(2 * *a);
 				displayx1.displayMult();
 				/*simplify_quadratic_radical_struct delta_simped;
@@ -861,8 +861,7 @@ Select_Num_Scan:
 					cout << delta_simped.in_radical;
 					cout << ")/";			// 分数线
 					cout << getAbsoluteData(2 * *a / gcd) << endl;*/
-				}
-			}
+	 	}
 		}
 		else	// 判别式不大于零
 		{
