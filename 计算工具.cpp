@@ -797,8 +797,9 @@ Select_Num_Scan:
 						displayFraction(getSimplifiedFraction(FZC[i], FZA[j]));
 						cout << "，x(2)=";
 						// 暂存，防止G++抽风
-					 long tmp1 = -*c / FZC[i];
-					 long tmp2 = *a / FZA[j];	displayFraction(getSimplifiedFraction(tmp1, tmp2));
+						long tmp1 = -*c / FZC[i];
+						long tmp2 = *a / FZA[j];
+						displayFraction(getSimplifiedFraction(tmp1, tmp2));
 						cout << "." << endl << endl;
 					}
 					goto Method_2;	// 跳出两层for循环
