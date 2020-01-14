@@ -828,7 +828,12 @@ Select_Num_Scan:
 			}
 			else	// 不是完全平方数
 			{
-				simplify_quadratic_radical_struct delta_simped;
+				display_mult displayx1, displayx2;
+				displayx1.setNumerator_constant(- *b);
+				displayx1.setNumerator_radical(*Delta);
+				displayx1.setDenominator_constant(2 * *a);
+				displayx1.displayMult();
+				/*simplify_quadratic_radical_struct delta_simped;
 				general_struct_1 temp;
 				delta_simped = simplifyQuadraticRadical(*Delta);
 				temp.count = 3;
@@ -855,9 +860,8 @@ Select_Num_Scan:
 					cout << "√";			// 根号
 					cout << delta_simped.in_radical;
 					cout << ")/";			// 分数线
-					cout << getAbsoluteData(2 * *a / gcd) << endl;
-				}
-			}
+					cout << getAbsoluteData(2 * *a / gcd) << endl;*/
+	 	}
 		}
 		else	// 判别式不大于零
 		{
