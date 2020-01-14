@@ -1207,6 +1207,67 @@ PrimeNum_Output:
 	}
 
 
+	case 1024:	// 开发者测试
+	{
+		cout << "[开发者测试]" << endl;
+		cout << "1.根式化简\n0.退出\n";
+		long tmp;
+		cin >> tmp;
+		for (; ; )
+		{
+			switch (tmp)
+			{
+			case 1:
+			{
+				display_mult display;
+				long nca, nra, dca, dra, nc, nr, dc, dr;
+				cout << "分子->常数\n"
+					<< "分子->根号\n"
+					<< "分母->常数\n"
+					<< "分母->根号\n";
+				cin >> nca >> nra >> dca >> dra;
+				cout << "分子->常数 --- begin" << endl;
+				for (var i = 0; i < nca; i++)
+				{
+					cin >> nc;
+					display.setNumerator_constant(nc);
+				}
+				cout << "=== end" << endl;
+				cout << "分子->根号 --- begin" << endl;
+				for (var i = 0; i < nra; i++)
+				{
+					cin >> nr;
+					display.setNumerator_radical(nr);
+				}
+				cout << "=== end" << endl;
+				// ----------
+				cout << "分母->常数 --- begin" << endl;
+				for (var i = 0; i < dca; i++)
+				{
+					cin >> dc;
+					display.setDenominator_constant(dc);
+				}
+				cout << "=== end" << endl;
+				cout << "分母->根号 --- begin" << endl;
+				for (var i = 0; i < dra; i++)
+				{
+					cin >> dr;
+					display.setDenominator_radical(dr);
+				}
+				cout << "=== end" << endl;
+				display.displayMult();
+				cout << endl;
+			}
+
+			case 0:
+			{
+				goto Select_Num_Scan;
+			}
+			}
+		}
+	}
+
+
 	case 0:		// 显示控制台
 	{
 		action.showMasterConsole();
