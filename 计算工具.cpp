@@ -357,7 +357,7 @@ long long q_mul(long long a, long long b, long long mod) // 快速乘法取模
 }
 
 
-long long q_pow(long long a, long long b, long long mod) // 快速乘法下的快速幂，叼
+long long q_pow(long long a, long long b, long long mod) // 快速乘法下的快速幂
 {
 	long long ans = 1;
 	while (b)
@@ -1267,6 +1267,12 @@ PrimeNum_Output:
 			case 0:
 			{
 				goto Select_Num_Scan;
+			}
+			
+			default:
+			{
+			action.showInputErrorMsg();
+			goto Select_Num_Scan;
 			}
 			}
 		}
