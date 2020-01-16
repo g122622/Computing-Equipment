@@ -34,6 +34,10 @@
 #define FZA factor_a.data_array
 #define FZC factor_c.data_array
 #define abnormality -1
+#define add			0
+#define subtract	1
+#define multiply	2
+#define divide		3
 
 
 /*----------全局变量/结构体/对象声明区/杂项区1----------*/
@@ -104,9 +108,24 @@ void _checkID(int[], char[]);
 long getLowestCommonMultiple(general_struct_1 temp)
 {
 	long data_amount = temp.count;				// 非引用
-	for (var i = 0; i < data_amount; i++)		// 输入数全部取绝对值，同时赋值给temp
+	// 数据预处理1：输入数全部取绝对值，同时赋值给temp
+	for (var i = 0; i < data_amount; i++)
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
-	temp = getSortedData(temp, data_amount);	// 对数据进行排序（注意temp.count已失效）
+	// 数据预处理2：冒泡排序，选出最小值(函数返回值类型为结构体，可以函数全局使用temp，但count已失效）
+	temp = getSortedData(temp, data_amount);
+	// 数据预处理3：删除值为零的元素，容器大小相应缩减
+	for (vector<var>::iterator iter = temp.data_array.begin(); iter != temp.data_array.end(); ++iter)
+	{
+		if (*iter == 0)
+		{
+			iter = temp.data_array.erase(iter);
+			data_amount--;
+			--iter;			// 由于删除了一个元素，将迭代器指针前移
+		}
+		else break;
+		if (iter == temp.data_array.end()) break;	// 额外的判断，避免越界
+	}
+	//<---数据预处理结束--->
 	long LowestCommonMultiple;
 	// 这两个临时值为缩减代码横向体积而设立，便于编辑和浏览
 	double* dm1 = new double;
@@ -643,7 +662,7 @@ class display_mult
 			cout << "error! minus-nums is not expected!" << endl;
 		denominator_radical_array.push_back(getAbsoluteData(dri));
 	}
-	void displayMult()
+	void displayMult() throw (runtime_error, bad_alloc)
 	{
 		n_constant_merged = getSumData(numerator_constant_array);
 		d_constant_merged = getSumData(denominator_constant_array);
@@ -658,13 +677,24 @@ class display_mult
 		gcd_tmp.count = gcd_tmp.data_array.size();
 		gcd = getGreatestCommonDivisor(gcd_tmp);
 		// 开始输出
+		// 另：分母为零（异常处理）
+		// 另：分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 /2）
+		if (
+		if (numerator_constant_array == denominator_constant_array && numerator_radical_array == denominator_radical_array)
+		{
+			// 上下完全一致
+			cout << "1";
+			return;
+		}
 		if (numerator_radical_array.empty() && n_constant_merged == 0)	// 检测分子
 		{
+			// 分子为零
 			cout << "0";
 			return;
 		}
 		if (d_constant_merged / gcd == 1 && denominator_radical_array.empty())
 		{
+			// 分母为1
 			displayLine(n_constant_merged, numerator_radical_array, gcd);
 			return;
 		}
@@ -1304,7 +1334,7 @@ PrimeNum_Output:
 	return 0;
 }							// main
 
-/*C语言printf数据类型格式化字符串类型（by 低调额低调额）：
+/*C语言printf格式化字符串类型（by 低调额低调额）：
 1、%d 十进制有符号整数。
 2、%u 十进制无符号整数。
 3、%ld 输出long整数 。
