@@ -557,8 +557,8 @@ class display_mult
 				cst = cst + sqr.out_radical;
 				continue;
 			}
-			temp.insert(temp.end(), sqr.out_radical);
-			temp.insert(temp.end(), sqr.in_radical);
+			temp.push_back(sqr.out_radical);
+			temp.push_back(sqr.in_radical);
 		}
 		temp.erase(temp.begin(), iter_end_const);	// 清除原数据
 		for (int i = 0; i < temp.size(); i++)
