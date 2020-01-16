@@ -566,7 +566,7 @@ class display_mult
 		{
 			for (var i = 1; i < temp.size(); i = i + 2)
 			{
-				if (j = i) continue;	// 避免错误计算
+				if (j == i) continue;	// 避免错误计算
 				if (temp[j] == temp[i])
 				{
 					temp[j - 1] = temp[j - 1] + temp[i - 1];
