@@ -77,7 +77,6 @@ double getRandData(long, long);
 simplify_quadratic_radical_struct getSimplifiedQuadraticRadical(long);
 void swapData(long&, long&);
 general_struct_1 getSortedData(general_struct_1, long&);
-long long loadMasterConsole(long long);
 simplify_fraction_struct getSimplifiedFraction(long&, long&);
 template <typename T1>
 T1 getAbsoluteData(T1);
