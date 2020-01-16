@@ -547,11 +547,11 @@ class display_mult
 		// 检查容器是否有数据
 		if (temp.empty()) return;
 		simplify_quadratic_radical_struct sqr;
-		vector<long>::iterator iter_end_const = temp.end();	// 缓冲常量，避免temp.end()内存地址随元素的插入而改变
+		long end_const = temp.size();	// 缓冲常量，避免temp.end()内存地址随元素的插入而改变
 		// 计算+暂存
-		for (vector<long>::iterator iter = temp.begin(); iter < iter_end_const; ++iter)
+		for (var i = 0; i < end_const; i++)
 		{
-			sqr = simplifyQuadraticRadical(*iter);
+			sqr = simplifyQuadraticRadical(temp[i]);
 			if (sqr.in_radical == 1)		// 若可以开完全平方，则加入常数项
 			{
 				cst = cst + sqr.out_radical;
@@ -560,7 +560,7 @@ class display_mult
 			temp.push_back(sqr.out_radical);
 			temp.push_back(sqr.in_radical);
 		}
-		temp.erase(temp.begin(), iter_end_const);	// 清除原数据
+		temp.erase(temp.begin(), temp.begin() + end_const);	// 清除原数据
 		for (int i = 0; i < temp.size(); i++)
 			cout << temp[i] << endl;
 	}
