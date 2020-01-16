@@ -562,6 +562,8 @@ class display_mult
 			temp.insert(temp.end(), sqr.out_radical);
 			temp.insert(temp.end(), sqr.in_radical);
 		}
+		for (int i = 0; i < temp.size(); i++)
+		cout << temp[i] << endl;
 		for (var j = 1; j < temp.size(); j = j + 2)
 		{
 			for (var i = 1; i < temp.size(); i = i + 2)
