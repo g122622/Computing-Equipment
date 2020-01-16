@@ -532,8 +532,8 @@ class display_mult
 	long n_constant_merged = 0, d_constant_merged = 0;
 	long gcd = 1;
 
-	// 合并根式函数
-	void mergeRadical(vector<long>& temp, long& cst)
+	// 化简根式函数
+	void simplifyRadical(vector<long>& temp, long& cst)
 	{
 		// 数据预处理：删除为0的元素
 		for (var i = 0; i < temp.size(); i++)
@@ -552,8 +552,6 @@ class display_mult
 		for (vector<long>::iterator iter = temp.begin(); iter < iter_end_const; ++iter)
 		{
 			sqr = simplifyQuadraticRadical(*iter);
-			if (iter == iter_end_const - 1)	// 迭代到最后一个有效数据时，清除原数据
-				temp.erase(temp.begin(), iter_end_const);
 			if (sqr.in_radical == 1)		// 若可以开完全平方，则加入常数项
 			{
 				cst = cst + sqr.out_radical;
@@ -562,8 +560,16 @@ class display_mult
 			temp.insert(temp.end(), sqr.out_radical);
 			temp.insert(temp.end(), sqr.in_radical);
 		}
+		temp.erase(temp.begin(), iter_end_const);	// 清除原数据
 		for (int i = 0; i < temp.size(); i++)
-		cout << temp[i] << endl;
+			cout << temp[i] << endl;
+	}
+	
+	// 合并根式函数
+	void mergeRadical(vector<long>& temp)
+	{
+		// 检查容器是否有数据
+		if (temp.empty()) return;
 		for (var j = 1; j < temp.size(); j = j + 2)
 		{
 			for (var i = 1; i < temp.size(); i = i + 2)
@@ -641,8 +647,10 @@ class display_mult
 	{
 		n_constant_merged = getSumData(numerator_constant_array);
 		d_constant_merged = getSumData(denominator_constant_array);
-		mergeRadical(numerator_radical_array, n_constant_merged);
-		mergeRadical(denominator_radical_array, d_constant_merged);
+		simplifyRadical(numerator_radical_array, n_constant_merged);
+		simplifyRadical(denominator_radical_array, d_constant_merged);
+		mergeRadical(numerator_radical_array);
+		mergeRadical(denominator_radical_array);
 		gcd_tmp.data_array.push_back(n_constant_merged);
 		gcd_tmp.data_array.push_back(d_constant_merged);
 		selectCoefficient(numerator_radical_array);
