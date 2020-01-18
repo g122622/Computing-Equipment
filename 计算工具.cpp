@@ -678,7 +678,7 @@ class display_mult
 		gcd = getGreatestCommonDivisor(gcd_tmp);
 		// 开始输出
 		// 另：分母为零（异常处理）
-		// 另：分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 /2）
+		// 另：分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 / 2）
 		if (
 		if (numerator_constant_array == denominator_constant_array && numerator_radical_array == denominator_radical_array)
 		{
