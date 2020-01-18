@@ -504,7 +504,7 @@ class action
 {
 	public:
 	// 加载总控制台函数
-	void showMasterConsole()
+	inline void showMasterConsole()
 	{
 		cout << "===============[总控制台]===============" << endl
 			<< "1::解/分析二元一次方程" << endl
@@ -532,7 +532,7 @@ class action
 			<< "0::显示总控制台" << endl;
 	}
 	// 显示错误信息函数
-	void showInputErrorMsg()
+	inline void showInputErrorMsg()
 	{
 		cout << "系统消息：请输入正确的数。\n" << endl;
 	}
