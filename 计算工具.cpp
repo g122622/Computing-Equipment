@@ -1,27 +1,33 @@
 // 工程名称：计算工具
-// 日期：20200102
-// 版本：v1.4.4
+// 日期：20200120
+// 版本：v0.0.0（还没有release过）
 // 开发平台：Windows：Microsoft Visual Studio；Notepad++；Android：c4droid；Web：Github
 // 开发语言：C++
 // 应用类型：控制台应用
 // 云同步平台：Github
 // 开放源代码状态：开源
 
-// 这个程序为解决初中阶段各种繁琐的数学运算而设计。
-// 这是我在学习之余写的程序，下面是所有源代码。
-// 未经允许严禁私自转载。严禁私改版权。
-// 使用本程序内的算法需征得我（以及原作者）的授权。
-// 除非这个算法是你自己独立写出来的qwq
-// 之所以我不加密就是为了方便他人借鉴学习。
-// 但这不意味着您可以“借鉴”走全部源代码作为自己的作品！
-// 我很反感那种拿别人劳动成果盈利的人。
-// 这里的盈利指利用别人的作品得到的各种好处。
-// 如果你不这么觉得，→_→我只能鄙视你。
+/*
+这个程序为解决初中阶段各种繁琐的数学运算而设计。
+由于我暂时找不到相关类型的计算程序，于是在学习之余做了这个项目，下面是所有源代码。
+目前所有代码都集中在这一个文件中，在规模做得足够大时将会采取多文件开发的方式。
+未经允许严禁私自转载。严禁私改版权。
+使用本程序内的算法需征得我（以及原作者）的授权。
+除非这个算法是你自己独立写出来的qwq
+但我的算法并不是完美的，总会存在一些bug和性能可以提升的空间。
+之所以我不加密就是为了方便他人借鉴学习。
+但这不意味着您可以“借鉴”走全部源代码作为自己的作品！
+我很反感那种拿别人劳动成果盈利的人。
+这里的盈利指利用别人的作品得到的各种好处。
+如果你不这么觉得，→_→我只能鄙视你。
+
+*/
 
 /*
 命名规范：
 函数（function）：abcDefgh
-标签（label）：Abc_defgh
+字符串/对象/结构体：abc_defgh
+标签（label）：Abc_Defgh
 
 */
 
@@ -39,11 +45,11 @@
 #define disabled 1
 #define FZA factor_a.data_array
 #define FZC factor_c.data_array
-#define abnormality -1
-#define add			0
-#define subtract	1
-#define multiply	2
-#define divide		3
+#define abnormality 	-1
+#define add				0
+#define subtract		1
+#define multiply		2
+#define divide			3
 
 
 /*----------全局变量/结构体/对象声明区/杂项区1----------*/
@@ -508,6 +514,12 @@ void _checkID(int IDNumber[], char ID[])
 /*----------对象声明区----------*/
 class action
 {
+	private:
+	inline void showGeneralErrorMsg(long error_value)
+	{
+		cerr << "抱歉，程序运行出现异常，你可以选择把异常信息反馈给开发者"  << endl;
+	}
+	
 	public:
 	// 加载总控制台函数
 	inline void showMasterConsole()
@@ -541,6 +553,14 @@ class action
 	inline void showInputErrorMsg()
 	{
 		cout << "系统消息：请输入正确的数。\n" << endl;
+	}
+	
+	inline void showRadicalMinusErrorMsg(long& error_value)
+	{
+		showGeneralErrorMsg();
+		cerr << "异常消息：在进行平方根运算时根号内的值为负（001）" << endl;
+		cerr << "异常值：" << error_value << endl;
+		cerr << "异常值地址：" << &error_value << endl;
 	}
 };
 
@@ -655,8 +675,9 @@ class display_mult
 	void setNumerator_radical(long nri)
 	{
 		if (nri < 0)
-			cout << "error! minus-nums is not expected!" << endl;
-		numerator_radical_array.push_back(getAbsoluteData(nri));
+			throw nri;
+/* 			cout << "error! minus-nums is not expected!" << endl;
+		numerator_radical_array.push_back(getAbsoluteData(nri)); */
 	}
 	void setDenominator_constant(long dci)
 	{
@@ -665,8 +686,9 @@ class display_mult
 	void setDenominator_radical(long dri)
 	{
 		if (dri < 0)
-			cout << "error! minus-nums is not expected!" << endl;
-		denominator_radical_array.push_back(getAbsoluteData(dri));
+			throw dri;
+/* 			cout << "error! minus-nums is not expected!" << endl;
+		denominator_radical_array.push_back(getAbsoluteData(dri)); */
 	}
 	void displayMult() throw (runtime_error, bad_alloc)
 	{
@@ -1277,32 +1299,39 @@ PrimeNum_Output:
 					<< "分母->根号\n";
 				cin >> nca >> nra >> dca >> dra;
 				cout << "分子->常数 --- begin" << endl;
-				for (var i = 0; i < nca; i++)
+				try
 				{
-					cin >> nc;
-					display.setNumerator_constant(nc);
+					for (var i = 0; i < nca; i++)
+					{
+						cin >> nc;
+						display.setNumerator_constant(nc);
+					}
+					cout << "=== end" << endl;
+					cout << "分子->根号 --- begin" << endl;
+					for (var i = 0; i < nra; i++)
+					{
+						cin >> nr;
+						display.setNumerator_radical(nr);
+					}
+					cout << "=== end" << endl;
+					// ----------
+					cout << "分母->常数 --- begin" << endl;
+					for (var i = 0; i < dca; i++)
+					{
+						cin >> dc;
+						display.setDenominator_constant(dc);
+					}
+					cout << "=== end" << endl;
+					cout << "分母->根号 --- begin" << endl;
+					for (var i = 0; i < dra; i++)
+					{
+						cin >> dr;
+						display.setDenominator_radical(dr);
+					}
 				}
-				cout << "=== end" << endl;
-				cout << "分子->根号 --- begin" << endl;
-				for (var i = 0; i < nra; i++)
+				catch (long err_tmp)
 				{
-					cin >> nr;
-					display.setNumerator_radical(nr);
-				}
-				cout << "=== end" << endl;
-				// ----------
-				cout << "分母->常数 --- begin" << endl;
-				for (var i = 0; i < dca; i++)
-				{
-					cin >> dc;
-					display.setDenominator_constant(dc);
-				}
-				cout << "=== end" << endl;
-				cout << "分母->根号 --- begin" << endl;
-				for (var i = 0; i < dra; i++)
-				{
-					cin >> dr;
-					display.setDenominator_radical(dr);
+					action.showRadicalMinusErrorMsg(err_tmp);
 				}
 				cout << "=== end" << endl;
 				display.displayMult();
