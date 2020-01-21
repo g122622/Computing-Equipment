@@ -515,7 +515,7 @@ void _checkID(int IDNumber[], char ID[])
 class action
 {
 	private:
-	inline void showGeneralErrorMsg(long error_value)
+	inline void showGeneralErrorMsg()
 	{
 		cerr << "抱歉，程序运行出现异常，你可以选择把异常信息反馈给开发者"  << endl;
 	}
@@ -690,7 +690,7 @@ class display_mult
 /* 			cout << "error! minus-nums is not expected!" << endl;
 		denominator_radical_array.push_back(getAbsoluteData(dri)); */
 	}
-	void displayMult() throw (runtime_error, bad_alloc)
+	void displayMult()
 	{
 		n_constant_merged = getSumData(numerator_constant_array);
 		d_constant_merged = getSumData(denominator_constant_array);
@@ -707,7 +707,6 @@ class display_mult
 		// 开始输出
 		// 另：分母为零（异常处理）
 		// 另：分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 / 2）
-		if (
 		if (numerator_constant_array == denominator_constant_array && numerator_radical_array == denominator_radical_array)
 		{
 			// 上下完全一致
