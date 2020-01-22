@@ -1,5 +1,5 @@
 // 工程名称：计算工具
-// 日期：20200120
+// 日期：20200122
 // 版本：v0.0.0（还没有release过）
 // 开发平台：Windows：Microsoft Visual Studio；Notepad++；Android：c4droid；Web：Github
 // 开发语言：C++
@@ -85,6 +85,15 @@ struct simplify_fraction_struct
 	long greatest_common_divisor;	// 最大公约数
 	bool single_display_state;
 	bool minus_display_state;
+};
+
+// 分母为零错误结构体
+struct den_zero_err_str
+{
+	vector<long> numerator_constant_array;
+	vector<long> numerator_radical_array;
+	vector<long> denominator_constant_array;
+	vector<long> denominator_radical_array;
 };
 
 
@@ -549,10 +558,10 @@ class action
 			*/
 			<< "0::显示总控制台" << endl;
 	}
-	// 显示错误信息函数
+	// 显示输入错误信息函数
 	inline void showInputErrorMsg()
 	{
-		cout << "系统消息：请输入正确的数。\n" << endl;
+		cout << "系统消息：请输入正确的数。" << endl << endl;
 	}
 	
 	inline void showRadicalMinusErrorMsg(long& error_value)
@@ -561,6 +570,12 @@ class action
 		cerr << "异常消息：在进行平方根运算时根号内的值为负（001）" << endl;
 		cerr << "异常值：" << error_value << endl;
 		cerr << "异常值地址：" << &error_value << endl;
+	}
+
+	inline void showDenZeroErrorMsg(den_zero_err_str error_str)
+	{
+		showGeneralErrorMsg();
+		cerr << "异常消息：多项式运算中（002）" << endl;
 	}
 };
 
@@ -708,7 +723,11 @@ class display_mult
 		// 另：分母为零（异常处理）
 		// 另：分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 / 2）
 		// bug反馈：异常显示时内存地址始终不变
-		if (numerator_constant_array == denominator_constant_array && numerator_radical_array == denominator_radical_array)
+		if (denominator_radical_array.empty() && d_constant_merged == 0)
+		{
+			throw 0.0;
+		}
+		if (n_constant_merged == d_constant_merged && numerator_radical_array == denominator_radical_array)
 		{
 			// 上下完全一致
 			cout << "1";
@@ -1332,6 +1351,10 @@ PrimeNum_Output:
 				catch (long err_tmp)
 				{
 					action.showRadicalMinusErrorMsg(err_tmp);
+				}
+				catch (float)
+				{
+					action
 				}
 				cout << "=== end" << endl;
 				display.displayMult();
