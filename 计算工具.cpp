@@ -254,11 +254,19 @@ double getRandData(long min, long max)
 // 二次根式化简函数
 simplify_quadratic_radical_struct simplifyQuadraticRadical(long numscan)
 {
+	if (numscan < 0)
+		throw;
 	// 使用结构体传参
 	simplify_quadratic_radical_struct temp;	// 定义temp结构体
+	if (numscan == 0)
+	{
+		temp.in_radical = 0;
+		temp.out_radical = 0;
+		return temp;
+	}
 	for (long i = numscan; i > 0; i--)
 	{
-		if ((double)numscan / i == (long)numscan / i and (double)sqrt(i) == (long)sqrt(i))
+		if ((double)numscan / i == (long)numscan / i && (double)sqrt(i) == (long)sqrt(i))
 			// 第一个条件：确保i为numscan的整因数；第二个条件：确保i是最大的完全平方因数
 		{
 			temp.in_radical = numscan / i;	// 输出根号内剩余的数
@@ -611,18 +619,24 @@ class display_mult
 		// 计算+暂存
 		for (var i = 0; i < end_const; i++)
 		{
-			sqr = simplifyQuadraticRadical(temp[i]);
+			if (temp[i] >= 0)			// 判断是否为减
+				sqr = simplifyQuadraticRadical(temp[i]);
+			else
+				sqr = simplifyQuadraticRadical(getAbsoluteData(temp[i]));
 			if (sqr.in_radical == 1)		// 若可以开完全平方，则加入常数项
 			{
 				cst = cst + sqr.out_radical;
 				continue;
 			}
-			temp.push_back(sqr.out_radical);
+			if (temp[i] >= 0)
+				temp.push_back(sqr.out_radical);
+			else
+				temp.push_back( - sqr.out_radical);
 			temp.push_back(sqr.in_radical);
 		}
 		temp.erase(temp.begin(), temp.begin() + end_const);	// 清除原数据
-		for (int i = 0; i < temp.size(); i++)
-			cout << temp[i] << endl;
+/*		for (int i = 0; i < temp.size(); i++)
+			cout << temp[i] << endl;*/
 	}
 	
 	// 合并根式函数
@@ -687,23 +701,26 @@ class display_mult
 	{
 		numerator_constant_array.push_back(nci);
 	}
-	void setNumerator_radical(long nri)
+	void setNumerator_radical(long nri, bool state = add)
 	{
 		if (nri < 0)
 			throw nri;
-/* 			cout << "error! minus-nums is not expected!" << endl;
-		numerator_radical_array.push_back(getAbsoluteData(nri)); */
+/* 			cout << "error! minus-nums is not expected!" << endl;*/
+		if (state == add)
+			numerator_radical_array.push_back(nri);
+		if (state == subtract)
+			numerator_radical_array.push_back( - nri);
 	}
 	void setDenominator_constant(long dci)
 	{
 		denominator_constant_array.push_back(dci);
 	}
-	void setDenominator_radical(long dri)
+	void setDenominator_radical(long dri, bool state = add)
 	{
 		if (dri < 0)
 			throw dri;
-/* 			cout << "error! minus-nums is not expected!" << endl;
-		denominator_radical_array.push_back(getAbsoluteData(dri)); */
+/* 			cout << "error! minus-nums is not expected!" << endl;*/
+		denominator_radical_array.push_back(dri);
 	}
 	void displayMult()
 	{
@@ -900,10 +917,10 @@ Select_Num_Scan:
 		printf("Δ=%g^2-4×%g×%g=%g. \n", *b, *a, *c, *Delta);
 		if (*Delta > 0)	// 如果判别式大于零
 		{
-			if (sqrt(*Delta) == (int)sqrt(*Delta))	// 是完全平方数
+			cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
+			cout << "∴x(1)=";
+			if (sqrt(*Delta) == (long)sqrt(*Delta))	// 是完全平方数
 			{
-				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
-				cout << "∴x(1)=";
 				// 中间量，避免安卓端Linux的G++出现蜜汁编译错误
 				long temp1 = -1 * *b + sqrt(*Delta);
 				long temp2 = -1 * *b - sqrt(*Delta);
@@ -920,6 +937,12 @@ Select_Num_Scan:
 				displayx1.setNumerator_radical(*Delta);
 				displayx1.setDenominator_constant(2 * *a);
 				displayx1.displayMult();
+				cout << ",∴x(2)=";
+				displayx2.setNumerator_constant(-*b);
+				displayx2.setNumerator_radical(*Delta, subtract);
+				displayx2.setDenominator_constant(2 * *a);
+				displayx2.displayMult();
+				cout << "." << endl;
 				/*simplify_quadratic_radical_struct delta_simped;
 				general_struct_1 temp;
 				delta_simped = simplifyQuadraticRadical(*Delta);
@@ -948,7 +971,7 @@ Select_Num_Scan:
 					cout << delta_simped.in_radical;
 					cout << ")/";			// 分数线
 					cout << getAbsoluteData(2 * *a / gcd) << endl;*/
-	 	}
+	 		}
 		}
 		else	// 判别式不大于零
 		{
