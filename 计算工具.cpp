@@ -255,7 +255,7 @@ double getRandData(long min, long max)
 simplify_quadratic_radical_struct simplifyQuadraticRadical(long numscan)
 {
 	if (numscan < 0)
-		throw;
+		throw numscan;
 	// 使用结构体传参
 	simplify_quadratic_radical_struct temp;	// 定义temp结构体
 	if (numscan == 0)
@@ -600,8 +600,8 @@ class display_mult
 	long n_constant_merged = 0, d_constant_merged = 0;
 	long gcd = 1;
 
-	// 化简根式函数
-	void simplifyRadical(vector<long>& temp, long& cst)
+	// 预处理函数
+	vector<long> preProcess(vector<long>& temp)
 	{
 		// 数据预处理：删除为0的元素
 		for (var i = 0; i < temp.size(); i++)
@@ -609,9 +609,14 @@ class display_mult
 			if (temp[i] == 0)
 			{
 				temp.erase(temp.begin() + i);
-				i--;
+				i--;	// 经过多次检验，这里出错的概率较小
 			}
 		}
+	}
+
+	// 化简根式函数
+	void simplifyRadical(vector<long>& temp, long& cst)
+	{
 		// 检查容器是否有数据
 		if (temp.empty()) return;
 		simplify_quadratic_radical_struct sqr;
@@ -677,7 +682,7 @@ class display_mult
 			gcd_tmp.data_array.push_back(temp[i]);
 	}
 
-	void displayLine(long cst, vector<long> vectmp, long gcd)
+	void displayLine(long cst, vector<long> vectmp, long gcd = 1)
 	{
 			if (cst != 0)
 				cout << cst / gcd << " ";
@@ -708,8 +713,8 @@ class display_mult
 /* 			cout << "error! minus-nums is not expected!" << endl;*/
 		if (state == add)
 			numerator_radical_array.push_back(nri);
-		if (state == subtract)
-			numerator_radical_array.push_back( - nri);
+		if (state == subtract)	// 允许负数的存在
+			numerator_radical_array.push_back(-nri);
 	}
 	void setDenominator_constant(long dci)
 	{
@@ -720,10 +725,22 @@ class display_mult
 		if (dri < 0)
 			throw dri;
 /* 			cout << "error! minus-nums is not expected!" << endl;*/
-		denominator_radical_array.push_back(dri);
+		if (state == add)
+			denominator_radical_array.push_back(dri);
+		if (state == subtract)	// 允许负数的存在
+			denominator_radical_array.push_back(-dri);
 	}
 	void displayMult()
 	{
+		// 检查两个分母容器状态，若均为空则判定为分母无效，单独显示分子
+		if (denominator_constant_array.empty() && denominator_radical_array.empty())
+		{
+			n_constant_merged = getSumData(numerator_constant_array);
+			simplifyRadical(numerator_radical_array, n_constant_merged);
+			mergeRadical(numerator_radical_array);
+			displayLine(n_constant_merged, numerator_radical_array);
+			return;
+		}
 		n_constant_merged = getSumData(numerator_constant_array);
 		d_constant_merged = getSumData(denominator_constant_array);
 		simplifyRadical(numerator_radical_array, n_constant_merged);
