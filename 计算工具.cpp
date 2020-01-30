@@ -583,7 +583,7 @@ class action
 	inline void showDenZeroErrorMsg(den_zero_err_str error_str)
 	{
 		showGeneralErrorMsg();
-		cerr << "异常消息：多项式运算中（002）" << endl;
+		cerr << "异常消息：多项式运算中分母为零（002）" << endl;
 	}
 };
 
@@ -601,7 +601,7 @@ class display_mult
 	long gcd = 1;
 
 	// 预处理函数
-	vector<long> preProcess(vector<long>& temp)
+	void preProcess(vector<long>& temp)
 	{
 		// 数据预处理：删除为0的元素
 		for (var i = 0; i < temp.size(); i++)
@@ -676,12 +676,22 @@ class display_mult
 		}
 	}
 	
+	// 选择系数函数
 	void selectCoefficient(vector<long> temp)
 	{
 		for (var i = 0; i < temp.size(); i = i + 2)
 			gcd_tmp.data_array.push_back(temp[i]);
 	}
 
+	// 判断整体约分函数
+	bool checkEntirety()
+	{
+		// 由于时序靠后，不需要检查容器状态
+		general_struct_1 tmp1, tmp2;
+		
+	}
+	
+	// 输出单行函数
 	void displayLine(long cst, vector<long> vectmp, long gcd = 1)
 	{
 			if (cst != 0)
@@ -706,6 +716,7 @@ class display_mult
 	{
 		numerator_constant_array.push_back(nci);
 	}
+	
 	void setNumerator_radical(long nri, bool state = add)
 	{
 		if (nri < 0)
@@ -716,10 +727,12 @@ class display_mult
 		if (state == subtract)	// 允许负数的存在
 			numerator_radical_array.push_back(-nri);
 	}
+	
 	void setDenominator_constant(long dci)
 	{
 		denominator_constant_array.push_back(dci);
 	}
+	
 	void setDenominator_radical(long dri, bool state = add)
 	{
 		if (dri < 0)
@@ -730,17 +743,21 @@ class display_mult
 		if (state == subtract)	// 允许负数的存在
 			denominator_radical_array.push_back(-dri);
 	}
+	
 	void displayMult()
 	{
 		// 检查两个分母容器状态，若均为空则判定为分母无效，单独显示分子
 		if (denominator_constant_array.empty() && denominator_radical_array.empty())
 		{
+			preProcess(numerator_radical_array);
 			n_constant_merged = getSumData(numerator_constant_array);
 			simplifyRadical(numerator_radical_array, n_constant_merged);
 			mergeRadical(numerator_radical_array);
 			displayLine(n_constant_merged, numerator_radical_array);
 			return;
 		}
+		preProcess(numerator_radical_array);
+		preProcess(denominator_radical_array);
 		n_constant_merged = getSumData(numerator_constant_array);
 		d_constant_merged = getSumData(denominator_constant_array);
 		simplifyRadical(numerator_radical_array, n_constant_merged);
@@ -754,12 +771,12 @@ class display_mult
 		gcd_tmp.count = gcd_tmp.data_array.size();
 		gcd = getGreatestCommonDivisor(gcd_tmp);
 		// 开始输出
-		// 另：分母为零（异常处理）
 		// 另：分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 / 2）
 		// bug反馈：异常显示时内存地址始终不变
 		if (denominator_radical_array.empty() && d_constant_merged == 0)
 		{
-			throw 0.0;
+			// 分母为0（暂时先抛出这个，以后会引入异常类，程序崩溃了就先不管）
+			throw d_constant_merged;
 		}
 		if (n_constant_merged == d_constant_merged && numerator_radical_array == denominator_radical_array)
 		{
@@ -767,9 +784,9 @@ class display_mult
 			cout << "1";
 			return;
 		}
-		if (numerator_radical_array.empty() && n_constant_merged == 0)	// 检测分子
+		if (numerator_radical_array.empty() && n_constant_merged == 0)
 		{
-			// 分子为零
+			// 分子为0
 			cout << "0";
 			return;
 		}
@@ -779,6 +796,7 @@ class display_mult
 			displayLine(n_constant_merged, numerator_radical_array, gcd);
 			return;
 		}
+		checkEntirety();
 		displayLine(n_constant_merged, numerator_radical_array, gcd);
 		cout << " / ";
 		displayLine(d_constant_merged, denominator_radical_array, gcd);
