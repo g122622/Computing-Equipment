@@ -110,6 +110,7 @@ long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, bool);
 long getLowestCommonMultiple(simplify_fraction_struct);
 long getSumData(general_struct_1);
+bool checkEqualArray(vector<long>, vector<long>)
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
 void find(long long n, long long c);
 long long pollard_rho(long long n, long long c);
@@ -377,6 +378,20 @@ long getSumData(vector<long> temp)
 	for (var i = 0; i < count; i++)
 		sum = sum + temp[i];
 	return sum;
+}
+
+
+// 判断相等vec容器函数
+bool checkEqualArray(vector<long> vec1, vector<long> vec2)
+{
+	if (vec1.size() != vec2.size())
+		return false;
+	for (var i = 0; i < vec1.size(); i++)
+	{
+		if (vec1[i] != vec2[i])
+			return false;
+	}
+	return true;
 }
 
 
@@ -687,8 +702,19 @@ class display_mult
 	bool checkEntirety()
 	{
 		// 由于时序靠后，不需要检查容器状态
+		if (n_constant_merged == 0 && d_constant_merged != 0)
+			return false;
+		if (d_constant_merged == 0 && n_constant_merged != 0)
+			return false;
 		general_struct_1 tmp1, tmp2;
-		
+		for (var i = 1; i < numerator_radical_array.size(); i = i + 2)
+			tmp1.data_array.push_back(numerator_radical_array[i]);
+		for (var i = 1; i < denominator_radical_array.size(); i = i + 2)
+			tmp2.data_array.push_back(denominator_radical_array[i]);
+		tmp1 = getSortedData(tmp1, tmp1.data_array.size());
+		tmp2 = getSortedData(tmp2, tmp2.data_array.size());
+		if (!checkEqualArray(tmp1.data_array, tmp2.data_array))
+			return false;
 	}
 	
 	// 输出单行函数
@@ -714,7 +740,8 @@ class display_mult
 	public:
 	void setNumerator_constant(long nci)
 	{
-		numerator_constant_array.push_back(nci);
+		if (nci != 0)
+			numerator_constant_array.push_back(nci);
 	}
 	
 	void setNumerator_radical(long nri, bool state = add)
@@ -730,7 +757,8 @@ class display_mult
 	
 	void setDenominator_constant(long dci)
 	{
-		denominator_constant_array.push_back(dci);
+		if (nci != 0)
+			denominator_constant_array.push_back(nci);
 	}
 	
 	void setDenominator_radical(long dri, bool state = add)
@@ -772,6 +800,7 @@ class display_mult
 		gcd = getGreatestCommonDivisor(gcd_tmp);
 		// 开始输出
 		// 另：分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 / 2）
+		// 另：上下互为相反数，可整体约
 		// bug反馈：异常显示时内存地址始终不变
 		if (denominator_radical_array.empty() && d_constant_merged == 0)
 		{
