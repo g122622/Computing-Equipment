@@ -701,7 +701,8 @@ class display_mult
 	// 判断整体约分函数
 	bool checkEntirety()
 	{
-		if
+		if (numerator_radical_array.empty() || denominator_radical_array.empty())
+			return false;
 		if (n_constant_merged == 0 && d_constant_merged != 0)
 			return false;
 		if (d_constant_merged == 0 && n_constant_merged != 0)
@@ -770,8 +771,7 @@ class display_mult
 	public:
 	void setNumerator_constant(long nci)
 	{
-		if (nci != 0)
-			numerator_constant_array.push_back(nci);
+		numerator_constant_array.push_back(nci);
 	}
 	
 	void setNumerator_radical(long nri, bool state = add)
@@ -787,8 +787,7 @@ class display_mult
 	
 	void setDenominator_constant(long dci)
 	{
-		if (nci != 0)
-			denominator_constant_array.push_back(nci);
+		denominator_constant_array.push_back(nci);
 	}
 	
 	void setDenominator_radical(long dri, bool state = add)
