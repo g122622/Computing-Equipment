@@ -293,9 +293,9 @@ void swapData(long& num1, long& num2)
 // 冒泡排序函数（从小到大）
 general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 {
-	for (int k = 0; k < dataamount; k++)
+	for (var k = 0; k < dataamount; k++)
 	{
-		for (int j = dataamount - 1; j > 0;j--)
+		for (var j = dataamount - 1; j > 0; j--)
 		{
 			if (temp.data_array[j] < temp.data_array[j - 1])
 			{
@@ -701,7 +701,7 @@ class display_mult
 	// 判断整体约分函数
 	bool checkEntirety()
 	{
-		// 由于时序靠后，不需要检查容器状态
+		if
 		if (n_constant_merged == 0 && d_constant_merged != 0)
 			return false;
 		if (d_constant_merged == 0 && n_constant_merged != 0)
@@ -715,6 +715,36 @@ class display_mult
 		tmp2 = getSortedData(tmp2, tmp2.data_array.size());
 		if (!checkEqualArray(tmp1.data_array, tmp2.data_array))
 			return false;
+		return true;
+	}
+	
+	// 根式排序函数
+	vector<long> sortRadical(vector<long> temp)
+	{
+		// 系数由小至大
+		for (var k = 0; k < temp.size(); k++)
+		{
+			for (var j = temp.size() - 2; j > 0; j = j - 2)
+			{
+				if (temp.data_array[j] < temp.data_array[j - 2])
+				{
+					swapData(temp[j - 2], temp[j]);
+					swapData(temp[j - 1], temp[j + 1]);
+				}
+			}
+		}
+		// 在前面的基础上根号内由小至大
+		for (var k = 0; k < temp.size(); k++)
+		{
+			for (var j = 1; j < temp.size() - 1; j++)
+			{
+				if (temp[j - 1] == temp[j + 1])
+				{
+					if (temp[j] > temp[j + 2])
+						swapData(temp[j], temp[j + 2]);
+				}
+			}
+		}			
 	}
 	
 	// 输出单行函数
@@ -801,13 +831,19 @@ class display_mult
 		// 开始输出
 		// 另：分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 / 2）
 		// 另：上下互为相反数，可整体约
+		// 另：负号提出来显示在最前端
 		// bug反馈：异常显示时内存地址始终不变
+		vector<long> tmp1, tmp2;
+		tmp1 = sortRadical(numerator_radical_array);
+		tmp2 = sortRadical(denominator_radical_array);
+		tmp1.push_back(n_constant_merged);
+		tmp2.push_back(d_constant_merged);
 		if (denominator_radical_array.empty() && d_constant_merged == 0)
 		{
 			// 分母为0（暂时先抛出这个，以后会引入异常类，程序崩溃了就先不管）
 			throw d_constant_merged;
 		}
-		if (n_constant_merged == d_constant_merged && numerator_radical_array == denominator_radical_array)
+		if (checkEqualArray(tmp1, tmp2))
 		{
 			// 上下完全一致
 			cout << "1";
@@ -825,7 +861,20 @@ class display_mult
 			displayLine(n_constant_merged, numerator_radical_array, gcd);
 			return;
 		}
-		checkEntirety();
+		if (checkEntirety())
+		{
+			// 若比值始终不变，则启用分数显示（注意tmp1.size()为单数）
+			for (var i = 2; i < tmp1.size(); i = i + 2)
+			{
+				if ((double)(tmp1[i] / tmp2[i]) != (double)(tmp1[0] / tmp2[0]))
+					goto Default_Display;
+			}
+			displayFraction(getSimplifiedFraction(tmp1[0], tmp2[0]));
+			/* 1 3 2 5
+			    2 3 4 5 */
+			return;
+		}
+		Default_Display:
 		displayLine(n_constant_merged, numerator_radical_array, gcd);
 		cout << " / ";
 		displayLine(d_constant_merged, denominator_radical_array, gcd);
@@ -905,9 +954,9 @@ Select_Num_Scan:
 		else	// 计算*c的负数因数
 			factor_c = getFactor(-*c, enabled);	// 传入c的相反数，使c始终为正
 		// 因数计算完成，开始for循环+if条件匹配
-		for (int i = 0; i <= factor_c.count; i++)
+		for (var i = 0; i <= factor_c.count; i++)
 		{
-			for (int j = 0; j <= factor_a.count; j++)
+			for (var j = 0; j <= factor_a.count; j++)
 			{
 				if (factor_a.data_array[j] * (*c / factor_c.data_array[i]) + factor_c.data_array[i] * (*a / factor_a.data_array[j]) == *b)//触发输出的条件
 				{
@@ -1011,7 +1060,7 @@ Select_Num_Scan:
 				general_struct_1 temp;
 				delta_simped = simplifyQuadraticRadical(*Delta);
 				temp.count = 3;
-				for (int i = 0; i < 3; i++)	// 内存初始化
+				for (var i = 0; i < 3; i++)	// 内存初始化
 					temp.data_array.push_back(0);
 				// 元素赋值
 				temp.data_array[0] = - *b;
@@ -1019,7 +1068,7 @@ Select_Num_Scan:
 				temp.data_array[2] = delta_simped.out_radical;
 				long gcd = getGreatestCommonDivisor(temp);
 				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
-				for (int i = 0; i < 2; i++)	// 循环输出
+				for (var i = 0; i < 2; i++)	// 循环输出
 				{
 					printf("∴x(%d) = ", i + 1);
 					if ((2 * *a / gcd) < 0)	// 判断式子前是否显示负号
@@ -1195,7 +1244,7 @@ PrimeNum_Output:
 		cout << "请输入数据的数量" << endl << "[数量]";
 		cin >> *numamount;
 		cout << "请依次输入各个数据" << endl;
-		for (int i = 0; i < *numamount; i++)	// 输入数据
+		for (var i = 0; i < *numamount; i++)	// 输入数据
 		{
 			printf("[输入数%ld] = ", i + 1);
 			input.data_array.push_back(0);		// 容器内存初始化
@@ -1203,7 +1252,7 @@ PrimeNum_Output:
 		}
 		input = getSortedData(input, *numamount);
 		cout << endl << "从小到大排序结果为：" << endl;		// 计算完毕，输出结果
-		for (int m = 0; m < *numamount; m++)
+		for (var m = 0; m < *numamount; m++)
 		{
 			printf("[输出数%ld] = %ld\n", m + 1, input.data_array[m]);
 		}
@@ -1292,11 +1341,11 @@ PrimeNum_Output:
 		if (*min >= 0)	 // min累加/减一次，避免值域出问题的bug
 		{
 			(*min)++;
-			for (int i = 0;i < 3;i++)
+			for (var i = 0;i < 3;i++)
 				(*max)++;
 		}
 			(*min)++;
-			for (int i = 0;i < 3;i++)
+			for (var i = 0;i < 3;i++)
 				(*max)++;
 		// 开始调用，生成随机数
 		for (long i = 0;i < *randnumamount;i++)
