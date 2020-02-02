@@ -1046,7 +1046,7 @@ Select_Num_Scan:
 			{
 				display_mult displayx1, displayx2;
 				displayx1.setNumerator_constant(- *b);
-				displayx1.setNumerator_radical(*Delta);
+				displayx1.setNumerator_radical(*Delta, subtract);
 				displayx1.setDenominator_constant(2 * *a);
 				displayx1.displayMult();
 				cout << ",∴x(2)=";
@@ -1090,7 +1090,9 @@ Select_Num_Scan:
 			if (*Delta == 0)	// 如果判别式为零，则不需要判定Δ是否为完全平方
 			{
 				cout << "∵Δ=0，∴方程有两个相等的实数根." << endl;
-				printf("∴x(1)=x(2)=%g. \n", (-1 * *b + sqrt(*Delta)) / (2 * *a));
+				printf("∴x(1)=x(2)=");
+				displayFraction(getSimplifiedFraction(-*b, 2 * *a));
+				cout << endl;
 			}
 			else		// 判别式为负，无实数根
 				cout << "∵Δ<0,∴方程没有实数根.\n{!}计算中止." << endl;
@@ -1309,12 +1311,40 @@ PrimeNum_Output:
 		cin >> k >> b1 >> b2;
 		cout << "两直线距离为：";
 		display_mult display;
-		display.setNumerator_constant(k);
-		display.setNumerator_radical(b1);
-		display.setDenominator_constant(b2);
+		display.setNumerator_constant(getAbsoluteData(b1 - b2));
+		display.setDenominator_constant(k * k + 1);
 		display.displayMult();
 		/*simplify_quadratic_radical_struct returnNums = simplifyQuadraticRadical(pow(k, 2) + 1);
 		displayFraction(getSimplifiedFraction(getAbsoluteData(b1 - b2) / sqrt(pow(k, 2) + 1)));*/
+		cout << endl;	// 空一行
+		goto Select_Num_Scan;
+	}
+
+
+	case 9:		// 点到直线距离计算
+	{
+		long m, n, k, b;
+		cout << "已知A（m，n），直线l：y = kx + b，请依次输入m、n、k、b的值." << endl;
+		cin >> m >> n >> k >> b;
+		cout << "点A到直线l的距离为：";
+		display_mult display;
+		display.setNumerator_constant(getAbsoluteData(k * m - n + b));
+		display.setDenominator_radical(k * k + 1);
+		display.displayMult();
+		cout << endl;	// 空一行
+		goto Select_Num_Scan;
+	}
+
+
+	case 10:	// 点到点距离计算
+	{
+		long x1, y1, x2, y2;
+		cout << "已知两个点的坐标A（x1，y1）、B（x2，y2），请依次输入x1、y1、x2、y2的值." << endl;
+		cin >> x1 >> y1 >> x2 >> y2;
+		cout >> "两点之间的距离为：";
+		display_mult display;
+		display.setNumerator_radical(pow((x1 - x2), 2) + pow((y1 - y2), 2));
+		display.displayMult();
 		cout << endl;	// 空一行
 		goto Select_Num_Scan;
 	}
