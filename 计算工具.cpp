@@ -1394,13 +1394,13 @@ PrimeNum_Output:
 	{
 		double a, b, c;
 		cout << "请分别输入抛物线一般式的a,b,c的值" << endl;
-	Case5_a_Scan:
+	Case14_a_Scan:
 		cout << "[a] = ";
 		cin >> a;
 		if (a == 0)
 		{
 			cout << "a不可为0！" << endl;
-			goto Case5_a_Scan;
+			goto Case14_a_Scan;
 		}
 		cout << "[b] = ";
 		cin >> b;
