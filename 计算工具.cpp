@@ -50,6 +50,7 @@
 #define subtract		1
 #define multiply		2
 #define divide			3
+// #pragma execution_character_set("utf-8")
 
 
 /*----------全局变量/结构体/对象声明区/杂项区1----------*/
@@ -102,7 +103,7 @@ double getRandData(long, long);
 simplify_quadratic_radical_struct getSimplifiedQuadraticRadical(long);
 void swapData(long&, long&);
 general_struct_1 getSortedData(general_struct_1, long&);
-simplify_fraction_struct getSimplifiedFraction(long&, long&);
+simplify_fraction_struct getSimplifiedFraction(const long&, const long&);
 template <typename T1>
 T1 getAbsoluteData(T1);
 void displayFraction(simplify_fraction_struct);
@@ -110,7 +111,7 @@ long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, bool);
 long getLowestCommonMultiple(simplify_fraction_struct);
 long getSumData(general_struct_1);
-bool checkEqualArray(vector<long>, vector<long>)
+bool checkEqualArray(vector<long>, vector<long>);
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
 void find(long long n, long long c);
 long long pollard_rho(long long n, long long c);
@@ -309,7 +310,7 @@ general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 
 
 // 分数约分函数
-simplify_fraction_struct getSimplifiedFraction(long& numerator, long& denominator)	// 传引用，减少内存占用 
+simplify_fraction_struct getSimplifiedFraction(const long& numerator, const long& denominator)	// 传引用，减少内存占用 
 {
 	simplify_fraction_struct temp;				// 声明要返回的专用结构体
 	general_struct_1 gcd;						// 公约数传参用此通用结构体
@@ -549,7 +550,7 @@ class action
 	private:
 	inline void showGeneralErrorMsg()
 	{
-		cerr << "抱歉，程序运行出现异常，你可以选择把异常信息反馈给开发者"  << endl;
+		cerr << "抱歉，程序运行出现异常，你可以选择把异常信息反馈给开发者。"  << endl;
 	}
 	
 	public:
@@ -712,8 +713,11 @@ class display_mult
 			tmp1.data_array.push_back(numerator_radical_array[i]);
 		for (var i = 1; i < denominator_radical_array.size(); i = i + 2)
 			tmp2.data_array.push_back(denominator_radical_array[i]);
-		tmp1 = getSortedData(tmp1, tmp1.data_array.size());
-		tmp2 = getSortedData(tmp2, tmp2.data_array.size());
+		// 从"unsigned __int64"转换为"long&"会出错
+		long tmp1_size = tmp1.data_array.size();
+		long tmp2_size = tmp2.data_array.size();
+		tmp1 = getSortedData(tmp1, tmp1_size);
+		tmp2 = getSortedData(tmp2, tmp2_size);
 		if (!checkEqualArray(tmp1.data_array, tmp2.data_array))
 			return false;
 		return true;
@@ -727,7 +731,7 @@ class display_mult
 		{
 			for (var j = temp.size() - 2; j > 0; j = j - 2)
 			{
-				if (temp.data_array[j] < temp.data_array[j - 2])
+				if (temp[j] < temp[j - 2])
 				{
 					swapData(temp[j - 2], temp[j]);
 					swapData(temp[j - 1], temp[j + 1]);
@@ -745,7 +749,8 @@ class display_mult
 						swapData(temp[j], temp[j + 2]);
 				}
 			}
-		}			
+		}
+		return temp;
 	}
 	
 	// 输出单行函数
@@ -787,7 +792,7 @@ class display_mult
 	
 	void setDenominator_constant(long dci)
 	{
-		denominator_constant_array.push_back(nci);
+		denominator_constant_array.push_back(dci);
 	}
 	
 	void setDenominator_radical(long dri, bool state = add)
@@ -891,6 +896,7 @@ clock_t start, stop;			// 初始化计时函数
 /*----------主函数----------*/
 int main(void)
 {
+	system("chcp 65001");	// 设置Unicode（UTF-8无签名）- 代码页65001，避免Windows环境下中文出现乱码
 	action action;
 	// 加载总控制台
 	action.showMasterConsole();
@@ -903,10 +909,10 @@ Select_Num_Scan:
 	{
 	case 1:		// 解/分析二元一次方程
 	{
-		float* a = new float;		// 用于方程的输入
-		float* b = new float;
-		float* c = new float;
-		float* Delta = new float;
+		long* a = new long;		// 用于方程的输入
+		long* b = new long;
+		long* c = new long;
+		long* Delta = new long;
 		general_struct_1 factor_a, factor_c;
 
 		// int m1, d1, m2, d2, m3, d3, mid4, mid5, mid6, d = 0; //
@@ -1341,7 +1347,7 @@ PrimeNum_Output:
 		long x1, y1, x2, y2;
 		cout << "已知两个点的坐标A（x1，y1）、B（x2，y2），请依次输入x1、y1、x2、y2的值." << endl;
 		cin >> x1 >> y1 >> x2 >> y2;
-		cout >> "两点之间的距离为：";
+		cout << "两点之间的距离为：";
 		display_mult display;
 		display.setNumerator_radical(pow((x1 - x2), 2) + pow((y1 - y2), 2));
 		display.displayMult();
@@ -1383,8 +1389,6 @@ PrimeNum_Output:
 			printf("[输出数%ld] = ", i + 1);
 			cout << *randnum << endl;
 		}
-
-
 		delete max, min, randnum, randnumamount;
 		goto Select_Num_Scan;
 	}
@@ -1516,10 +1520,6 @@ PrimeNum_Output:
 				catch (long err_tmp)
 				{
 					action.showRadicalMinusErrorMsg(err_tmp);
-				}
-				catch (float)
-				{
-					action
 				}
 				cout << "=== end" << endl;
 				display.displayMult();
