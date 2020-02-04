@@ -883,6 +883,19 @@ class display_mult
 		cout << " / ";
 		displayLine(d_constant_merged, denominator_radical_array, gcd);
 	}
+	
+	void clr()
+	{
+		numerator_constant_array.clear();
+		numerator_radical_array.clear();
+		denominator_constant_array.clear();
+		denominator_radical_array.clear();
+		gcd_tmp.data_array.clear();
+		gcd_tmp.count = 0;
+		n_constant_merged = 0;
+		d_constant_merged = 0;
+		gcd = 1;
+	}
 	//~display_mult();  // 析构函数
 };
 
@@ -920,7 +933,7 @@ Select_Num_Scan:
 		// float mid7, mid8, mid9; //
 		// 用于分数除法，暂时还用不到
 
-		cout << "{!}程序启动，方程类型：ax^2+bx+c=0 \n" << endl;
+		cout << "{!}方程类型：ax^2+bx+c=0 \n" << endl;
 	A_Scan:
 		printf("{!}请输入a的值。 \n");
 		printf("[a]");
@@ -930,9 +943,6 @@ Select_Num_Scan:
 			cout << "∵a=0，∴该方程不属于二元一次方程，请重新输入a的值." << endl;
 			goto A_Scan;
 		}
-		else
-			goto B_Scan;
-	B_Scan:
 		printf("{!}请输入b的值。 \n");
 		printf("[b]");
 
@@ -942,14 +952,31 @@ Select_Num_Scan:
 		cin >> *c;
 		// 输入结束
 		cout << endl;	// 输出空行
-		printf("%gx^2+%gx+%g=0 \n\n", *a, *b, *c);
+		printf("%ldx^2+%ldx+%ld=0 \n\n", *a, *b, *c);
 		*Delta = pow(*b, 2) - 4 * *a * *c;
 		if (*Delta >= 0)
 		{
 			cout << "由韦达定理，\nx(1)+x(2) = -b/a = " << -*b / *a << "." << endl
 				 << "x(1)x(2) = c/a = " << *c / *a << "." << endl
-				 << "|x(1)-x(2)| = " << getAbsoluteData(sqrt(*Delta)) / pow(*a, 2) << endl << endl;
+				 << "|x(1)-x(2)| = ";
+			display_mult display;
+			display.setNumerator_radical(*Delta);
+			display.setDenominator_constant(getAbsoluteData(*a));
+			display.displayMult();
+			cout << endl << endl;
 		}
+		long x_numerator, x_denominator, y_numerator, y_denominator;	// 声明x轴、y轴坐标
+		// 开始运算，赋值
+		x_numerator = - *b;
+		x_denominator = 2 * *a;
+		y_numerator = 4 * *a * *c - *b * *b;
+		y_denominator = 4 * *a;
+		// 调用函数
+		cout << "对称轴(顶点坐标) : ( ";
+		displayFraction(getSimplifiedFraction(x_numerator, x_denominator));
+		cout << " , ";
+		displayFraction(getSimplifiedFraction(y_numerator, y_denominator));
+		cout << " )" << endl << endl;
 		cout << "[解法1：因式分解法(实验性，bug可能较多)]" << endl;
 		// 开始a的因数计算，只需要正值即可
 		factor_a = getFactor(*a, disabled);
@@ -1032,7 +1059,7 @@ Select_Num_Scan:
 		
 	Method_2:
 		cout << "[解法2：公式法]" << endl;
-		printf("Δ=%g^2-4×%g×%g=%g. \n", *b, *a, *c, *Delta);
+		printf("Δ=%ld^2-4×%ld×%ld=%ld. \n", *b, *a, *c, *Delta);
 		if (*Delta > 0)	// 如果判别式大于零
 		{
 			cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
@@ -1396,32 +1423,6 @@ PrimeNum_Output:
 
 	case 14:	// 二次函数解析式计算
 	{
-		double a, b, c;
-		cout << "请分别输入抛物线一般式的a,b,c的值" << endl;
-	Case14_a_Scan:
-		cout << "[a] = ";
-		cin >> a;
-		if (a == 0)
-		{
-			cout << "a不可为0！" << endl;
-			goto Case14_a_Scan;
-		}
-		cout << "[b] = ";
-		cin >> b;
-		cout << "[c] = ";
-		cin >> c;
-		long x_numerator, x_denominator, y_numerator, y_denominator;				// 声明x轴、y轴坐标
-		// 开始运算，赋值
-		x_numerator = -b;
-		x_denominator = 2 * a;
-		y_numerator = 4 * a * c - b * b;
-		y_denominator = 4 * a;
-		// 调用函数
-		cout << "对称轴(顶点坐标) : ( ";
-		displayFraction(getSimplifiedFraction(x_numerator, x_denominator));
-		cout << " , ";
-		displayFraction(getSimplifiedFraction(y_numerator, y_denominator));
-		cout << " )" << endl;
 		goto Select_Num_Scan;
 	}
 
