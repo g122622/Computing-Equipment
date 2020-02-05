@@ -130,24 +130,27 @@ void _checkID(int[], char[]);
 // 计算最小公倍数函数
 long getLowestCommonMultiple(general_struct_1 temp)
 {
-	long data_amount = temp.count;				// 非引用
+	if (temp.count == 0)
+		return 0;
+	long data_amount = temp.count;	// 非引用
 	// 数据预处理1：输入数全部取绝对值，同时赋值给temp
 	for (var i = 0; i < data_amount; i++)
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	// 数据预处理2：冒泡排序，选出最小值(函数返回值类型为结构体，可以函数全局使用temp，但count已失效）
 	temp = getSortedData(temp, data_amount);
 	// 数据预处理3：删除值为零的元素，容器大小相应缩减
-	for (vector<var>::iterator iter = temp.data_array.begin(); iter != temp.data_array.end(); ++iter)
+	for (var i = 0; i < temp.data_array.size(); i++)
 	{
-		if (*iter == 0)
+		if (temp.data_array[i] == 0)
 		{
-			iter = temp.data_array.erase(iter);
+			temp.data_array.erase(temp.data_array.begin() + i);
+			i--;
 			data_amount--;
-			--iter;			// 由于删除了一个元素，将迭代器指针前移
 		}
 		else break;
-		if (iter == temp.data_array.end()) break;	// 额外的判断，避免越界
 	}
+	if (temp.data_array.empty())
+		return 0;
 	//<---数据预处理结束--->
 	long LowestCommonMultiple;
 	// 这两个临时值为缩减代码横向体积而设立，便于编辑和浏览
@@ -177,7 +180,7 @@ general_struct_1 getFactor(long num_input, bool minus_output_state)
 	general_struct_1 temp;
 	for (var factor = 1; factor <= (num_input / 2); factor++)
 	{
-		if ((double)num_input / factor == (long)num_input / factor)
+		if (!(num_input % factor))
 		{
 			// 初始化容器内存，插入新元素
 			temp.data_array.push_back(0);
@@ -204,24 +207,29 @@ general_struct_1 getFactor(long num_input, bool minus_output_state)
 // 计算最大公约数函数
 long getGreatestCommonDivisor(general_struct_1 temp)
 {
+	if (temp.count == 0)
+		return 1;
 	long data_amount = temp.count;				// 不可使用引用，避免count的值被冒泡排序函数所改变
 	// 数据预处理1：输入数全部取绝对值，同时赋值给temp
 	for (var i = 0; i < data_amount; i++)
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	// 数据预处理2：冒泡排序，选出最小值(函数返回值类型为结构体，可以函数全局使用temp，但count已失效）
 	temp = getSortedData(temp, data_amount);
+	if (data_amount == 1 && temp.data_array[0] == 0)
+		return 1;
 	// 数据预处理3：删除值为零的元素，容器大小相应缩减
-	for (vector<var>::iterator iter = temp.data_array.begin(); iter != temp.data_array.end(); ++iter)
+	for (var i = 0; i < temp.data_array.size(); i++)
 	{
-		if (*iter == 0)
+		if (temp.data_array[i] == 0)
 		{
-			iter = temp.data_array.erase(iter);
+			temp.data_array.erase(temp.data_array.begin() + i);
+			i--;
 			data_amount--;
-			--iter;			// 由于删除了一个元素，将迭代器指针前移
 		}
 		else break;
-		if (iter == temp.data_array.end()) break;	// 额外的判断，避免越界
 	}
+	if (temp.data_array.empty())
+		return 1;
 	//<---数据预处理结束--->
 	for (var j = temp.data_array[0]; j > 0; j--)	// 选取最小数进行嵌套循环，j的最终结果为最大公约数
 	{
@@ -234,7 +242,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 				return j;
 		}
 	}
-	return abnormality;
+	return 1;
 }
 
 
@@ -757,15 +765,15 @@ class display_mult
 	void displayLine(long cst, vector<long> vectmp, long gcd = 1)
 	{
 			if (cst != 0)
-				cout << cst / gcd << " ";
+				cout << cst / gcd;
 			for (var j = 0; j < vectmp.size(); j = j + 2)
 			{
 				// 前部分（系数）
 				if (vectmp[j] == 0 || vectmp[j + 1] == 0) continue;
 				if (vectmp[j] / gcd < 0)
-					cout << "- ";
+					cout << "-";
 				else if (cst != 0)
-					cout << "+ ";
+					cout << "+";
 				if (getAbsoluteData(vectmp[j] / gcd) != 1)
 					cout << getAbsoluteData(vectmp[j] / gcd);
 				// 后部分（根号）(不用考虑根号内为1的情况）
@@ -914,8 +922,8 @@ int main(void)
 	// 加载总控制台
 	action.showMasterConsole();
 Select_Num_Scan:
-	cout << endl;
-	cout << "[输入]";
+	cout << endl
+		 << "[输入]";
 	cin >> SwitchNum;
 	cout << "====================" << endl << endl;
 	switch (SwitchNum)
@@ -1079,7 +1087,7 @@ Select_Num_Scan:
 			{
 				display_mult displayx1, displayx2;
 				displayx1.setNumerator_constant(- *b);
-				displayx1.setNumerator_radical(*Delta, subtract);
+				displayx1.setNumerator_radical(*Delta);
 				displayx1.setDenominator_constant(2 * *a);
 				displayx1.displayMult();
 				cout << ",∴x(2)=";
@@ -1248,7 +1256,7 @@ PrimeNum_Output:
 		cin >> temp.data_array[i];
 		}
 		// 调用函数，输出
-//		cout << "最小公倍数为：" << getLowestCommonMultiple(temp) << endl;
+		cout << "最小公倍数为：" << getLowestCommonMultiple(temp) << endl;
 		cout << "最大公约数为：" << getGreatestCommonDivisor(temp) << endl;
 		goto Select_Num_Scan;
 	}						// case 3
