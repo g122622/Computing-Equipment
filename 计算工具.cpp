@@ -174,7 +174,7 @@ long getLowestCommonMultiple(general_struct_1 temp)
 }
 
 
-// 因数分解函数（count从零开始）
+// 因数分解函数
 general_struct_1 getFactor(long num_input, bool minus_output_state)
 {
 	general_struct_1 temp;
@@ -189,14 +189,15 @@ general_struct_1 getFactor(long num_input, bool minus_output_state)
 		}
 	}
 	temp.data_array.push_back(0);
-	temp.data_array[temp.count] = num_input;// 这里的count计数器不可再累加，巧妙避免其比预期值大1
+	temp.data_array[temp.count] = num_input;
+	temp.count++;
 	if (minus_output_state == enabled)
 	{
 		// 如果启用负数显示，往内存中再存负数
-		for (long i = 0; i <= temp.count; i++)
+		for (long i = 0; i < temp.count; i++)
 		{
 			temp.data_array.push_back(0);
-			temp.data_array[temp.count+1] = - temp.data_array[i];
+			temp.data_array[temp.count + i] = - temp.data_array[i];
 		}
 		temp.count = temp.count * 2;
 	}
@@ -964,14 +965,18 @@ Select_Num_Scan:
 		*Delta = pow(*b, 2) - 4 * *a * *c;
 		if (*Delta >= 0)
 		{
-			cout << "由韦达定理，\nx(1)+x(2) = -b/a = " << -*b / *a << "." << endl
-				 << "x(1)x(2) = c/a = " << *c / *a << "." << endl
+			cout << "由韦达定理，\nx(1)+x(2) = -b/a = ";
+			displayFraction(getSimplifiedFraction(-*b, *a));
+			cout << "." << endl
+				 << "x(1)x(2) = c/a = ";
+			displayFraction(getSimplifiedFraction(*c, *a));
+			cout << "." << endl
 				 << "|x(1)-x(2)| = ";
 			display_mult display;
 			display.setNumerator_radical(*Delta);
 			display.setDenominator_constant(getAbsoluteData(*a));
 			display.displayMult();
-			cout << endl << endl;
+			cout << "." << endl << endl;
 		}
 		long x_numerator, x_denominator, y_numerator, y_denominator;	// 声明x轴、y轴坐标
 		// 开始运算，赋值
@@ -994,14 +999,14 @@ Select_Num_Scan:
 		else	// 计算*c的负数因数
 			factor_c = getFactor(-*c, enabled);	// 传入c的相反数，使c始终为正
 		// 因数计算完成，开始for循环+if条件匹配
-		for (var i = 0; i <= factor_c.count; i++)
+		for (var i = 0; i < factor_c.count; i++)
 		{
-			for (var j = 0; j <= factor_a.count; j++)
+			for (var j = 0; j < factor_a.count; j++)
 			{
-				if (factor_a.data_array[j] * (*c / factor_c.data_array[i]) + factor_c.data_array[i] * (*a / factor_a.data_array[j]) == *b)//触发输出的条件
+				if (factor_a.data_array[j] * (*c / factor_c.data_array[i]) + factor_c.data_array[i] * (*a / factor_a.data_array[j]) == *b)// 触发输出的条件
 				{
 					// ！！！开始输出 Output
-					if (factor_c.data_array[i] == *c / factor_c.data_array[i] and factor_a.data_array[j] == *a / factor_a.data_array[j]) //输出完全平方
+					if (factor_c.data_array[i] == *c / factor_c.data_array[i] and factor_a.data_array[j] == *a / factor_a.data_array[j]) // 输出完全平方
 					{
 						cout << "( ";
 						if (factor_a.data_array[j] != 1) /////1
@@ -1040,17 +1045,17 @@ Select_Num_Scan:
 					else
 						cout << "x + " << *c / factor_c.data_array[i] << " = 0" << endl;
 					// <---输出最终结果--->
-					if ((float)-FZC[i] / FZA[j] == (float)(-*c / FZC[i]) / (*a / FZA[j]))	// 以等根形式输出结果
+					if ((double)-FZC[i] / FZA[j] == (double)(-*c / FZC[i]) / (*a / FZA[j]))	// 以等根形式输出结果
 					{
 					EqualRoot_Output:
 						cout << "∴x(1)=x(2)=";
-						displayFraction(getSimplifiedFraction(FZC[i], FZA[j]));
+						displayFraction(getSimplifiedFraction(-FZC[i], FZA[j]));
 						cout << "." << endl << endl;
 					}
 					else	// 以不等根形式输出结果
 					{
 						cout << "∴x(1)=";
-						displayFraction(getSimplifiedFraction(FZC[i], FZA[j]));
+						displayFraction(getSimplifiedFraction(-FZC[i], FZA[j]));
 						cout << "，x(2)=";
 						// 暂存，防止G++抽风
 						long tmp1 = -*c / FZC[i];
@@ -1192,8 +1197,8 @@ Case2_Scan:
 		if (*predicttime >= 60)
 		{
 Select_BigTask_Scan_Default:
-			cout << "你输入的数预计运算时间大于一分钟，检测到大型任务，是否继续？" << endl;
-			cout << "请输入[0:Y/1:N]";
+			cout << "你输入的数预计运算时间大于一分钟，检测到大型任务，是否继续？" << endl
+				 << "请输入[0:Y/1:N]";
 			long* Select_BigTask_Scan = new long;
 			cin >> *Select_BigTask_Scan;
 			cout << endl;	// 空一行
@@ -1219,9 +1224,9 @@ Select_BigTask_Scan_0:
 			goto Default_Output;
 Default_Output:
 		// 调用函数(不启用负数输出)
-		factor = getFactor(*numscan, disabled);
+		factor = getFactor(*numscan, enabled);
 		// 开始输出
-		for (long i = 0; i <= factor.count; i++)
+		for (long i = 0; i < factor.count; i++)
 			printf("[整因数 %ld ] = %ld\n", i + 1, factor.data_array[i]);
 PrimeNum_Output:
 		if (factor.count <= 2)
