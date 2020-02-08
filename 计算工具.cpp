@@ -533,9 +533,9 @@ void find(long long n, long long c)
 
 
 // 以下都是身份证验证码计算所需要的函数（by boshuzhang）
-int _checkIDinput(char ID[])		// 检验身份证是否为18位 
+int _checkIDinput(char ID[])	// 检验身份证是否为18位 
 { 
-	if (strlen(ID) == 18)	// 字符串最后一位/0 
+	if (strlen(ID) == 18)		// 字符串最后一位/0 
 		return 1;
 	else return 0;
 }
@@ -545,13 +545,23 @@ void _checkID(int IDNumber[], char ID[])
 {
 	int i = 0;	// i为计数器
 	int checksum = 0;
-	for ( ; i < 17; i++)
+	for (; i < 17; i++)
 		checksum += IDNumber[i] * factor[i];
-	if ( IDNumber[17] == check_table[checksum % 11] or (ID[17] == 'x' and check_table[checksum % 11] == 2))
+	if (IDNumber[17] == check_table[checksum % 11] or (ID[17] == 'x' and check_table[checksum % 11] == 2))
 		cout << "正确身份证号码/n";
 	else cout << "错误身份证号码/n"; 
 }
 
+
+/*----------运算符重载区----------*/
+// vector重载"+"运算符
+vector<long> operator+(const vector<long>& vec1, const vector<long>& vec2)
+{
+	vector<long> temp = vec1;
+	for (var i = 0; i < vec2.size(); i++)
+		temp.push_back(vec2[i]);
+	return temp;
+}
 
 /*----------对象声明区----------*/
 class action
@@ -613,7 +623,7 @@ class action
 };
 
 
-class display_mult
+class mult
 {
 	private:
 	// 转储mult
@@ -624,9 +634,9 @@ class display_mult
 	general_struct_1 gcd_tmp;	// 用于计算公约数
 	long n_constant_merged = 0, d_constant_merged = 0;
 	long gcd = 1;
-
+	bool denominator_state = true;
 	// 预处理函数
-	void preProcess(vector<long>& temp)
+	void preProcessRadical(vector<long>& temp)
 	{
 		// 数据预处理：删除为0的元素
 		for (var i = 0; i < temp.size(); i++)
@@ -815,33 +825,49 @@ class display_mult
 			denominator_radical_array.push_back(-dri);
 	}
 	
-	void displayMult()
+	void simplifyMult()
 	{
-		// 检查两个分母容器状态，若均为空则判定为分母无效，单独显示分子
+		// 检查两个分母容器状态，若均为空则判定为分母无效
 		if (denominator_constant_array.empty() && denominator_radical_array.empty())
 		{
-			preProcess(numerator_radical_array);
+			denominator_state = false;
+			preProcessRadical(numerator_radical_array);
 			n_constant_merged = getSumData(numerator_constant_array);
 			simplifyRadical(numerator_radical_array, n_constant_merged);
 			mergeRadical(numerator_radical_array);
 			displayLine(n_constant_merged, numerator_radical_array);
 			return;
 		}
-		preProcess(numerator_radical_array);
-		preProcess(denominator_radical_array);
-		n_constant_merged = getSumData(numerator_constant_array);
-		d_constant_merged = getSumData(denominator_constant_array);
-		simplifyRadical(numerator_radical_array, n_constant_merged);
-		simplifyRadical(denominator_radical_array, d_constant_merged);
-		mergeRadical(numerator_radical_array);
-		mergeRadical(denominator_radical_array);
-		gcd_tmp.data_array.push_back(n_constant_merged);
-		gcd_tmp.data_array.push_back(d_constant_merged);
-		selectCoefficient(numerator_radical_array);
-		selectCoefficient(denominator_radical_array);
-		gcd_tmp.count = gcd_tmp.data_array.size();
-		gcd = getGreatestCommonDivisor(gcd_tmp);
-		// 开始输出
+		else
+		{
+			denominator_state = true;
+			preProcessRadical(numerator_radical_array);
+			preProcessRadical(denominator_radical_array);
+			n_constant_merged = getSumData(numerator_constant_array);
+			d_constant_merged = getSumData(denominator_constant_array);
+			simplifyRadical(numerator_radical_array, n_constant_merged);
+			simplifyRadical(denominator_radical_array, d_constant_merged);
+			mergeRadical(numerator_radical_array);
+			mergeRadical(denominator_radical_array);
+			gcd_tmp.data_array.push_back(n_constant_merged);
+			gcd_tmp.data_array.push_back(d_constant_merged);
+			selectCoefficient(numerator_radical_array);
+			selectCoefficient(denominator_radical_array);
+			gcd_tmp.count = gcd_tmp.data_array.size();
+			gcd = getGreatestCommonDivisor(gcd_tmp);
+			return;
+		}
+	}
+
+	void displayMult()
+	{
+		simplifyMult();
+		// 检查两个分母容器状态，若均为空则判定为分母无效，单独显示分子
+		if (!denominator_state)
+		{
+			displayLine(n_constant_merged, numerator_radical_array);
+			return;
+		}
 		// 另：分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 / 2）
 		// 另：上下互为相反数，可整体约
 		// 另：负号提出来显示在最前端
@@ -893,7 +919,7 @@ class display_mult
 		displayLine(d_constant_merged, denominator_radical_array, gcd);
 	}
 	
-	void clr()
+	void clearAll()
 	{
 		numerator_constant_array.clear();
 		numerator_radical_array.clear();
@@ -905,7 +931,78 @@ class display_mult
 		d_constant_merged = 0;
 		gcd = 1;
 	}
-	//~display_mult();  // 析构函数
+
+	// 重载"+"运算符
+	mult operator+(const mult& mult_2)
+	{
+		mult temp;
+		// 检查分母，若分母存在，则通分
+		// case1：均无分母，分子直接相加
+		if (this->denominator_constant_array.empty() && this->denominator_radical_array.empty() && mult_2.denominator_constant_array.empty() && mult_2.denominator_radical_array.empty())
+		{
+			temp.numerator_constant_array = this->numerator_constant_array + mult_2.numerator_constant_array;
+			temp.numerator_radical_array = this->numerator_radical_array + mult_2.numerator_radical_array;
+		}
+		// case2：有分母存在
+		else
+		{
+			
+		}
+		return temp;
+	}
+
+	// 重载"-"运算符
+	mult operator-(const mult& mult_2)
+	{
+		mult temp;
+		// 加相反数
+		temp = 
+		return temp;
+	}
+
+	// 重载"*"运算符
+	mult operator*(const mult& mult_2)
+	{
+		/*
+		Tips:
+		1.这里的根式以原数据的形式存储。
+		2.仅仅作乘法运算，不用考虑化简，移交给后面的模块处理，这在化简模块设计时就已经考虑到。
+		*/ 
+		mult temp;
+		long nc_sum_1 = getSumData(this->numerator_constant_array);
+		long nc_sum_2 = getSumData(mult_2.numerator_constant_array);
+		temp.numerator_constant_array.push_back(nc_sum_1 * nc_sum_2);
+		for (var i = 0; i < mult_2.numerator_radical_array.size(); i++)
+			temp.numerator_radical_array.push_back(pow(nc_sum_1, 2) * mult_2.numerator_radical_array[i]);
+		for (var i = 0; i < this->numerator_radical_array.size(); i++)
+			temp.numerator_radical_array.push_back(pow(nc_sum_2, 2) * this->numerator_radical_array[i]);
+		for (var i = 0; i < this->numerator_radical_array.size(); i++)
+			for (var j = 0; j < mult_2.numerator_radical_array.size(); j++)
+				temp.numerator_radical_array.push_back(this->numerator_radical_array[i] * mult_2.numerator_radical_array[j]);
+		// 若分母不存在，则退出
+		if (this->denominator_constant_array.empty() && this->denominator_radical_array.empty() && mult_2.denominator_constant_array.empty() && mult_2.denominator_radical_array.empty())
+			return temp;
+		long dc_sum_1 = getSumData(this->denominator_constant_array);
+		long dc_sum_2 = getSumData(mult_2.denominator_constant_array);
+		temp.numerator_constant_array.push_back(dc_sum_1 * dc_sum_2);
+		for (var i = 0; i < mult_2.denominator_radical_array.size(); i++)
+			temp.denominator_radical_array.push_back(pow(dc_sum_1, 2) * mult_2.denominator_radical_array[i]);
+		for (var i = 0; i < this->denominator_radical_array.size(); i++)
+			temp.denominator_radical_array.push_back(pow(dc_sum_2, 2) * this->denominator_radical_array[i]);
+		for (var i = 0; i < this->denominator_radical_array.size(); i++)
+			for (var j = 0; j < mult_2.denominator_radical_array.size(); j++)
+				temp.denominator_radical_array.push_back(this->denominator_radical_array[i] * mult_2.denominator_radical_array[j]);
+		return temp;
+	}
+	/*Box operator+(const Box& b)
+	{
+		Box box;
+		box.length = this->length + b.length;
+		box.breadth = this->breadth + b.breadth;
+		box.height = this->height + b.height;
+		return box;
+	}*/
+	//~mult();  // 析构函数
 };
 
 
@@ -972,7 +1069,7 @@ Select_Num_Scan:
 			displayFraction(getSimplifiedFraction(*c, *a));
 			cout << "." << endl
 				 << "|x(1)-x(2)| = ";
-			display_mult display;
+			mult display;
 			display.setNumerator_radical(*Delta);
 			display.setDenominator_constant(getAbsoluteData(*a));
 			display.displayMult();
@@ -980,9 +1077,9 @@ Select_Num_Scan:
 		}
 		long x_numerator, x_denominator, y_numerator, y_denominator;	// 声明x轴、y轴坐标
 		// 开始运算，赋值
-		x_numerator = - *b;
+		x_numerator   = - *b;
 		x_denominator = 2 * *a;
-		y_numerator = 4 * *a * *c - *b * *b;
+		y_numerator   = 4 * *a * *c - *b * *b;
 		y_denominator = 4 * *a;
 		// 调用函数
 		cout << "对称轴(顶点坐标) : ( ";
@@ -1090,7 +1187,7 @@ Select_Num_Scan:
 			}
 			else	// 不是完全平方数
 			{
-				display_mult displayx1, displayx2;
+				mult displayx1, displayx2;
 				displayx1.setNumerator_constant(- *b);
 				displayx1.setNumerator_radical(*Delta);
 				displayx1.setDenominator_constant(2 * *a);
@@ -1224,12 +1321,12 @@ Select_BigTask_Scan_0:
 			goto Default_Output;
 Default_Output:
 		// 调用函数(不启用负数输出)
-		factor = getFactor(*numscan, enabled);
+		factor = getFactor(*numscan, disabled);
 		// 开始输出
 		for (long i = 0; i < factor.count; i++)
 			printf("[整因数 %ld ] = %ld\n", i + 1, factor.data_array[i]);
-PrimeNum_Output:
-		if (factor.count <= 2)
+	PrimeNum_Output:
+		if (factor.count < 3)
 			cout << "{!}该数是质数。" << endl;
 		stop = clock();	// 停止计时
 		*duration = (float)(stop - start) / CLOCKS_PER_SEC;
@@ -1356,7 +1453,7 @@ PrimeNum_Output:
 		cout << "已知两条平行直线y=kx+b，请依次输入k、b1、b2的值." << endl;
 		cin >> k >> b1 >> b2;
 		cout << "两直线距离为：";
-		display_mult display;
+		mult display;
 		display.setNumerator_constant(getAbsoluteData(b1 - b2));
 		display.setDenominator_constant(k * k + 1);
 		display.displayMult();
@@ -1373,7 +1470,7 @@ PrimeNum_Output:
 		cout << "已知A（m，n），直线l：y = kx + b，请依次输入m、n、k、b的值." << endl;
 		cin >> m >> n >> k >> b;
 		cout << "点A到直线l的距离为：";
-		display_mult display;
+		mult display;
 		display.setNumerator_constant(getAbsoluteData(k * m - n + b));
 		display.setDenominator_radical(k * k + 1);
 		display.displayMult();
@@ -1388,7 +1485,7 @@ PrimeNum_Output:
 		cout << "已知两个点的坐标A（x1，y1）、B（x2，y2），请依次输入x1、y1、x2、y2的值." << endl;
 		cin >> x1 >> y1 >> x2 >> y2;
 		cout << "两点之间的距离为：";
-		display_mult display;
+		mult display;
 		display.setNumerator_radical(pow((x1 - x2), 2) + pow((y1 - y2), 2));
 		display.displayMult();
 		cout << endl;	// 空一行
@@ -1493,7 +1590,7 @@ PrimeNum_Output:
 			{
 			case 1:
 			{
-				display_mult display;
+				mult display;
 				long nca, nra, dca, dra, nc, nr, dc, dr;
 				cout << "分子->常数\n"
 					<< "分子->根号\n"
