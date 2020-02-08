@@ -1,5 +1,5 @@
 // 工程名称：计算工具
-// 日期：20200122
+// 日期：20200208
 // 版本：v0.0.0（还没有release过）
 // 开发平台：Windows：Microsoft Visual Studio；Notepad++；Android：c4droid；Web：Github
 // 开发语言：C++
