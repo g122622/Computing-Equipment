@@ -613,12 +613,14 @@ class action
 		cerr << "异常消息：在进行平方根运算时根号内的值为负（001）" << endl;
 		cerr << "异常值：" << error_value << endl;
 		cerr << "异常值地址：" << &error_value << endl;
+		system("pause");
 	}
 
 	inline void showDenZeroErrorMsg(den_zero_err_str error_str)
 	{
 		showGeneralErrorMsg();
 		cerr << "异常消息：多项式运算中分母为零（002）" << endl;
+		system("pause");
 	}
 };
 
@@ -835,7 +837,6 @@ class mult
 			n_constant_merged = getSumData(numerator_constant_array);
 			simplifyRadical(numerator_radical_array, n_constant_merged);
 			mergeRadical(numerator_radical_array);
-			displayLine(n_constant_merged, numerator_radical_array);
 			return;
 		}
 		else
@@ -919,6 +920,7 @@ class mult
 		displayLine(d_constant_merged, denominator_radical_array, gcd);
 	}
 	
+	void 
 	void clearAll()
 	{
 		numerator_constant_array.clear();
@@ -946,7 +948,26 @@ class mult
 		// case2：有分母存在
 		else
 		{
-			
+			mult simp_tmp_1, simp_tmp_2;	// 存储原分母，用于通分
+			mult simp_tmp_3, simp_tmp_4;	// 存储原分子
+			mult num_mult_1, num_mult_2, den_mult;		// 存储结果
+			// 计算分母
+			simp_tmp_1.numerator_constant_array = this->denominator_constant_array;
+			simp_tmp_1.numerator_radical_array  = this->denominator_radical_array;
+			simp_tmp_2.numerator_constant_array = mult_2.denominator_constant_array;
+			simp_tmp_2.numerator_radical_array  = mult_2.denominator_radical_array;
+			den_mult = simp_tmp_1 * simp_tmp_2;
+			// 计算分子（相乘后相加）
+			simp_tmp_3.numerator_constant_array = this->numerator_constant_array;
+			simp_tmp_3.numerator_radical_array  = this->numerator_radical_array;
+			simp_tmp_4.numerator_constant_array = mult_2.numerator_constant_array;
+			simp_tmp_4.numerator_radical_array  = mult_2.numerator_radical_array;
+			num_mult_1 = simp_tmp_3 * simp_tmp_2;
+			num_mult_2 = simp_tmp_4 * simp_tmp_1;
+			// 开始给temp赋值
+			temp = num_mult_1 + num_mult_2;	// 存储最终分子
+			temp.denominator_constant_array = den_mult.denominator_constant_array;
+			temp.denominator_radical_array  = den_mult.denominator_radical_array;
 		}
 		return temp;
 	}
@@ -994,6 +1015,7 @@ class mult
 				temp.denominator_radical_array.push_back(this->denominator_radical_array[i] * mult_2.denominator_radical_array[j]);
 		return temp;
 	}
+	// 另：先开发取倒数函数、取相反数函数
 	/*Box operator+(const Box& b)
 	{
 		Box box;
