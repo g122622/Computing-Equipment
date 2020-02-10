@@ -111,7 +111,7 @@ long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, bool);
 long getLowestCommonMultiple(simplify_fraction_struct);
 long getSumData(general_struct_1);
-bool checkEqualArray(vector<long>, vector<long>);
+bool checkEqualArray(vector<long>&, vector<long>&);
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
 void find(long long n, long long c);
 long long pollard_rho(long long n, long long c);
@@ -391,17 +391,26 @@ long getSumData(vector<long> temp)
 }
 
 
-// 判断相等vec容器函数
-bool checkEqualArray(vector<long> vec1, vector<long> vec2)
+// 判断相等vec容器函数（命名貌似和函数库冲突了）
+bool checkEqualArray(const vector<long>& vec1, const vector<long>& vec2)
 {
 	if (vec1.size() != vec2.size())
 		return false;
 	for (var i = 0; i < vec1.size(); i++)
-	{
 		if (vec1[i] != vec2[i])
 			return false;
-	}
 	return true;
+}
+
+
+// 交换vec容器函数
+void swapVec(vector<long>& vec1, vector<long>& vec2)
+{
+	vector<long> temp;
+	temp = vec2;
+	vec2.clear();
+	vec2 = vec1;
+	vec1 = temp;
 }
 
 
@@ -920,7 +929,24 @@ class mult
 		displayLine(d_constant_merged, denominator_radical_array, gcd);
 	}
 	
-	void 
+	void reciprocal()
+	{
+		swapVec(numerator_constant_array, denominator_constant_array);
+		swapVec(numerator_radical_array, denominator_radical_array);
+		if (!denominator_state)	// 若原分母不存在，则取倒后分子为1
+			numerator_constant_array.push_back(1);
+	}
+
+	mult getThis()
+	{
+		mult temp;
+		temp.numerator_constant_array   = this->numerator_constant_array;
+		temp.numerator_radical_array    = this->numerator_radical_array;
+		temp.denominator_constant_array = this->denominator_constant_array;
+		temp.denominator_radical_array  = this->denominator_radical_array;
+		return temp;
+	}
+
 	void clearAll()
 	{
 		numerator_constant_array.clear();
@@ -943,7 +969,7 @@ class mult
 		if (this->denominator_constant_array.empty() && this->denominator_radical_array.empty() && mult_2.denominator_constant_array.empty() && mult_2.denominator_radical_array.empty())
 		{
 			temp.numerator_constant_array = this->numerator_constant_array + mult_2.numerator_constant_array;
-			temp.numerator_radical_array = this->numerator_radical_array + mult_2.numerator_radical_array;
+			temp.numerator_radical_array  = this->numerator_radical_array + mult_2.numerator_radical_array;
 		}
 		// case2：有分母存在
 		else
@@ -1015,7 +1041,15 @@ class mult
 				temp.denominator_radical_array.push_back(this->denominator_radical_array[i] * mult_2.denominator_radical_array[j]);
 		return temp;
 	}
-	// 另：先开发取倒数函数、取相反数函数
+
+	// 重载/运算符
+	mult operator/(const mult& mult_2)
+	{
+		mult temp = mult_2;
+		temp.reciprocal();
+		return getThis() * temp;
+	}
+	// 另：先开发取倒数函数、取相反数函数、getThis函数
 	/*Box operator+(const Box& b)
 	{
 		Box box;
@@ -1053,7 +1087,7 @@ Select_Num_Scan:
 		long* a = new long;		// 用于方程的输入
 		long* b = new long;
 		long* c = new long;
-		long* Delta = new long;
+		long* delta = new long;
 		general_struct_1 factor_a, factor_c;
 
 		// int m1, d1, m2, d2, m3, d3, mid4, mid5, mid6, d = 0; //
@@ -1081,8 +1115,8 @@ Select_Num_Scan:
 		// 输入结束
 		cout << endl;	// 输出空行
 		printf("%ldx^2+%ldx+%ld=0 \n\n", *a, *b, *c);
-		*Delta = pow(*b, 2) - 4 * *a * *c;
-		if (*Delta >= 0)
+		*delta = pow(*b, 2) - 4 * *a * *c;
+		if (*delta >= 0)
 		{
 			cout << "由韦达定理，\nx(1)+x(2) = -b/a = ";
 			displayFraction(getSimplifiedFraction(-*b, *a));
@@ -1092,7 +1126,7 @@ Select_Num_Scan:
 			cout << "." << endl
 				 << "|x(1)-x(2)| = ";
 			mult display;
-			display.setNumerator_radical(*Delta);
+			display.setNumerator_radical(*delta);
 			display.setDenominator_constant(getAbsoluteData(*a));
 			display.displayMult();
 			cout << "." << endl << endl;
@@ -1104,11 +1138,21 @@ Select_Num_Scan:
 		y_numerator   = 4 * *a * *c - *b * *b;
 		y_denominator = 4 * *a;
 		// 调用函数
-		cout << "对称轴(顶点坐标) : ( ";
+		cout << "顶点坐标：( ";
 		displayFraction(getSimplifiedFraction(x_numerator, x_denominator));
 		cout << " , ";
 		displayFraction(getSimplifiedFraction(y_numerator, y_denominator));
-		cout << " )" << endl << endl;
+		cout << " )." << endl << endl;
+		cout << "当x=";
+		displayFraction(getSimplifiedFraction(x_numerator, x_denominator));
+		cout << "时，二次函数有最";
+		if (*a > 0)
+			cout << "小";
+		else
+			cout << "大";
+		cout << "值";
+		displayFraction(getSimplifiedFraction(y_numerator, y_denominator));
+		cout << "." << endl << endl;
 		cout << "[解法1：因式分解法(实验性，bug可能较多)]" << endl;
 		// 开始a的因数计算，只需要正值即可
 		factor_a = getFactor(*a, disabled);
@@ -1191,19 +1235,19 @@ Select_Num_Scan:
 		
 	Method_2:
 		cout << "[解法2：公式法]" << endl;
-		printf("Δ=%ld^2-4×%ld×%ld=%ld. \n", *b, *a, *c, *Delta);
-		if (*Delta > 0)	// 如果判别式大于零
+		printf("Δ=%ld^2-4×%ld×%ld=%ld. \n", *b, *a, *c, *delta);
+		if (*delta > 0)	// 如果判别式大于零
 		{
 			cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
 			cout << "∴x(1)=";
-			if (sqrt(*Delta) == (long)sqrt(*Delta))	// 是完全平方数
+			if (sqrt(*delta) == (long)sqrt(*delta))	// 是完全平方数
 			{
 				// 中间量，避免安卓端Linux的G++出现蜜汁编译错误
-				long temp1 = -1 * *b + sqrt(*Delta);
-				long temp2 = -1 * *b - sqrt(*Delta);
+				long temp1 = -1 * *b + sqrt(*delta);
+				long temp2 = -1 * *b - sqrt(*delta);
 				long temp3 = 2 * *a;
 				displayFraction(getSimplifiedFraction(temp1, temp3));
-				cout << ",∴x(2)=";
+				cout << "，x(2)=";
 				displayFraction(getSimplifiedFraction(temp2, temp3));
 				cout << "." << endl;
 			}
@@ -1211,12 +1255,12 @@ Select_Num_Scan:
 			{
 				mult displayx1, displayx2;
 				displayx1.setNumerator_constant(- *b);
-				displayx1.setNumerator_radical(*Delta);
+				displayx1.setNumerator_radical(*delta);
 				displayx1.setDenominator_constant(2 * *a);
 				displayx1.displayMult();
-				cout << ",∴x(2)=";
+				cout << "，x(2)=";
 				displayx2.setNumerator_constant(-*b);
-				displayx2.setNumerator_radical(*Delta, subtract);
+				displayx2.setNumerator_radical(*delta, subtract);
 				displayx2.setDenominator_constant(2 * *a);
 				displayx2.displayMult();
 				cout << "." << endl;
@@ -1252,7 +1296,7 @@ Select_Num_Scan:
 		}
 		else	// 判别式不大于零
 		{
-			if (*Delta == 0)	// 如果判别式为零，则不需要判定Δ是否为完全平方
+			if (*delta == 0)	// 如果判别式为零，则不需要判定Δ是否为完全平方
 			{
 				cout << "∵Δ=0，∴方程有两个相等的实数根." << endl;
 				printf("∴x(1)=x(2)=");
@@ -1272,7 +1316,7 @@ Select_Num_Scan:
 		   "请输入c的值 " << std::endl; scanf("%d/%d", &m3, &d3);
 		   }			*/
 		   //释放内存
-		delete a, b, c, Delta;
+		delete a, b, c, delta;
 		goto Select_Num_Scan;
 	}						// case1
 
