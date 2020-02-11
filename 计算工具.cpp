@@ -646,6 +646,7 @@ class mult
 	long n_constant_merged = 0, d_constant_merged = 0;
 	long gcd = 1;
 	bool denominator_state = true;
+
 	// 预处理函数
 	void preProcessRadical(vector<long>& temp)
 	{
@@ -929,6 +930,19 @@ class mult
 		displayLine(d_constant_merged, denominator_radical_array, gcd);
 	}
 	
+	void opposite()
+	{
+		// 无分子，则式子为0，不做任何操作
+		if (numerator_constant_array.empty() && numerator_radical_array.empty())
+			return;
+		mult temp  = getThis() * -1;
+		this->denominator_state = clearAll();
+		this->numerator_constant_array   = temp.numerator_constant_array;
+		this->numerator_radical_array    = temp.numerator_radical_array;
+		this->denominator_constant_array = temp.denominator_constant_array;
+		this->denominator_radical_array  = temp.denominator_radical_array;
+	}
+
 	void reciprocal()
 	{
 		swapVec(numerator_constant_array, denominator_constant_array);
@@ -947,7 +961,7 @@ class mult
 		return temp;
 	}
 
-	void clearAll()
+	bool clearAll()
 	{
 		numerator_constant_array.clear();
 		numerator_radical_array.clear();
@@ -958,6 +972,9 @@ class mult
 		n_constant_merged = 0;
 		d_constant_merged = 0;
 		gcd = 1;
+		bool temp = denominator_state;
+		denominator_state = true;
+		return temp;
 	}
 
 	// 重载"+"运算符
@@ -1001,10 +1018,10 @@ class mult
 	// 重载"-"运算符
 	mult operator-(const mult& mult_2)
 	{
-		mult temp;
+		mult temp = mult_2;
+		temp.opposite();
 		// 加相反数
-		temp = 
-		return temp;
+		return getThis() + temp;
 	}
 
 	// 重载"*"运算符
@@ -1042,13 +1059,22 @@ class mult
 		return temp;
 	}
 
+	mult operator*(const long& num)
+	{
+		mult temp;
+		temp.setNumerator_constant(num);
+		return getThis() * temp;
+	}
+
 	// 重载/运算符
 	mult operator/(const mult& mult_2)
 	{
 		mult temp = mult_2;
 		temp.reciprocal();
+		// 乘以倒数
 		return getThis() * temp;
 	}
+
 	// 另：先开发取倒数函数、取相反数函数、getThis函数
 	/*Box operator+(const Box& b)
 	{
