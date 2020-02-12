@@ -110,8 +110,9 @@ void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, bool);
 long getLowestCommonMultiple(simplify_fraction_struct);
-long getSumData(general_struct_1);
-bool checkEqualArray(vector<long>&, vector<long>&);
+long getSumData(const vector<long>&);
+bool checkEqualArray(const vector<long>&, const vector<long>&);
+void swapVec(vector<long>&, vector<long>&);
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
 void find(long long n, long long c);
 long long pollard_rho(long long n, long long c);
@@ -381,7 +382,7 @@ T1 getAbsoluteData(T1 numscan)
 
 
 // 求和函数
-long getSumData(vector<long> temp)
+long getSumData(const vector<long>& temp)
 {
 	long count = temp.size();
 	long sum = 0;
@@ -567,8 +568,8 @@ void _checkID(int IDNumber[], char ID[])
 vector<long> operator+(const vector<long>& vec1, const vector<long>& vec2)
 {
 	vector<long> temp = vec1;
-	for (var i = 0; i < vec2.size(); i++)
-		temp.push_back(vec2[i]);
+	for (auto item : vec2)
+		temp.push_back(item);
 	return temp;
 }
 
@@ -1036,26 +1037,26 @@ class mult
 		long nc_sum_1 = getSumData(this->numerator_constant_array);
 		long nc_sum_2 = getSumData(mult_2.numerator_constant_array);
 		temp.numerator_constant_array.push_back(nc_sum_1 * nc_sum_2);
-		for (var i = 0; i < mult_2.numerator_radical_array.size(); i++)
-			temp.numerator_radical_array.push_back(pow(nc_sum_1, 2) * mult_2.numerator_radical_array[i]);
-		for (var i = 0; i < this->numerator_radical_array.size(); i++)
-			temp.numerator_radical_array.push_back(pow(nc_sum_2, 2) * this->numerator_radical_array[i]);
-		for (var i = 0; i < this->numerator_radical_array.size(); i++)
-			for (var j = 0; j < mult_2.numerator_radical_array.size(); j++)
-				temp.numerator_radical_array.push_back(this->numerator_radical_array[i] * mult_2.numerator_radical_array[j]);
+		for (auto item : mult_2.numerator_radical_array)
+			temp.numerator_radical_array.push_back(pow(nc_sum_1, 2) * item);
+		for (auto item : this->numerator_radical_array)
+			temp.numerator_radical_array.push_back(pow(nc_sum_2, 2) * item);
+		for (auto item1 : this->numerator_radical_array)
+			for (auto item2 : mult_2.numerator_radical_array)
+				temp.numerator_radical_array.push_back(item1 * item2);
 		// 若分母不存在，则退出
 		if (this->denominator_constant_array.empty() && this->denominator_radical_array.empty() && mult_2.denominator_constant_array.empty() && mult_2.denominator_radical_array.empty())
 			return temp;
 		long dc_sum_1 = getSumData(this->denominator_constant_array);
 		long dc_sum_2 = getSumData(mult_2.denominator_constant_array);
 		temp.numerator_constant_array.push_back(dc_sum_1 * dc_sum_2);
-		for (var i = 0; i < mult_2.denominator_radical_array.size(); i++)
-			temp.denominator_radical_array.push_back(pow(dc_sum_1, 2) * mult_2.denominator_radical_array[i]);
-		for (var i = 0; i < this->denominator_radical_array.size(); i++)
-			temp.denominator_radical_array.push_back(pow(dc_sum_2, 2) * this->denominator_radical_array[i]);
-		for (var i = 0; i < this->denominator_radical_array.size(); i++)
-			for (var j = 0; j < mult_2.denominator_radical_array.size(); j++)
-				temp.denominator_radical_array.push_back(this->denominator_radical_array[i] * mult_2.denominator_radical_array[j]);
+		for (auto item : mult_2.denominator_radical_array)
+			temp.denominator_radical_array.push_back(pow(dc_sum_1, 2) * item);
+		for (auto item : this->denominator_radical_array)
+			temp.denominator_radical_array.push_back(pow(dc_sum_2, 2) * item);
+		for (auto item1 : this->denominator_radical_array)
+			for (auto item2 : mult_2.denominator_radical_array)
+				temp.denominator_radical_array.push_back(item1 * item2);
 		return temp;
 	}
 
@@ -1075,15 +1076,6 @@ class mult
 		return getThis() * temp;
 	}
 
-	// 另：先开发取倒数函数、取相反数函数、getThis函数
-	/*Box operator+(const Box& b)
-	{
-		Box box;
-		box.length = this->length + b.length;
-		box.breadth = this->breadth + b.breadth;
-		box.height = this->height + b.height;
-		return box;
-	}*/
 	//~mult();  // 析构函数
 };
 
@@ -1422,11 +1414,10 @@ Default_Output:
 			cout << "{!}该数是质数。" << endl;
 		stop = clock();	// 停止计时
 		*duration = (float)(stop - start) / CLOCKS_PER_SEC;
-		printf("\n{!}本次计算共耗时%f秒。\n", *duration);
+		printf("\n{!}本次计算共耗时%f秒.\n", *duration);
 		//			printf("   Processing time is %f sec.\n", *duration);
 					// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
 					// FOREGROUND_INTENSITY | FOREGROUND_GREEN);/////set绿色
-		printf("{!}执行完毕，无错误。No errors.\n");
 		// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
 		// FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN |
 		// FOREGROUND_BLUE);/////set白色
