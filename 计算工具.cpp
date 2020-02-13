@@ -179,11 +179,10 @@ long getLowestCommonMultiple(general_struct_1 temp)
 general_struct_1 getFactor(long num_input, bool minus_output_state)
 {
 	general_struct_1 temp;
-	for (var factor = 1; factor <= (num_input / 2); factor++)
+	for (var factor = 1; factor <= (num_input / 2); ++factor)
 	{
 		if (!(num_input % factor))
 		{
-			// 初始化容器内存，插入新元素
 			temp.data_array.push_back(0);
 			temp.data_array[temp.count] = factor;
 			temp.count++;
@@ -931,6 +930,23 @@ class mult
 		displayLine(d_constant_merged, denominator_radical_array, gcd);
 	}
 	
+	long double getApproximateValue()
+	{
+		long double numerator = 0;
+		numerator = getSumData(this->numerator_constant_array);
+		for (auto item : this->numerator_constant_array)
+			numerator += (long double)sqrt(item);
+		if (this->denominator_constant_array.empty() && this->denominator_radical_array.empty())
+			return numerator;	// 分母无效
+		long double denominator = 0;
+		denominator = getSumData(this->denominator_constant_array);
+		for (auto item : this->denominator_constant_array)
+			denominator += (long double)sqrt(item);
+		if (denominator == 0)	// 分母为零，抛出异常
+			throw denominator;
+		return (long double)numerator / denominator;
+	}
+
 	void opposite()
 	{
 		// 无分子，则式子为0，不做任何操作
