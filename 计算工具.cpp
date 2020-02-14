@@ -391,7 +391,7 @@ long getSumData(const vector<long>& temp)
 }
 
 
-// 判断相等vec容器函数（命名貌似和函数库冲突了）
+// 判断相等vec容器函数
 bool checkEqualArray(const vector<long>& vec1, const vector<long>& vec2)
 {
 	if (vec1.size() != vec2.size())
@@ -406,8 +406,7 @@ bool checkEqualArray(const vector<long>& vec1, const vector<long>& vec2)
 // 交换vec容器函数
 void swapVec(vector<long>& vec1, vector<long>& vec2)
 {
-	vector<long> temp;
-	temp = vec2;
+	vector<long> temp = vec2;
 	vec2.clear();
 	vec2 = vec1;
 	vec1 = temp;
@@ -932,15 +931,15 @@ class mult
 	
 	long double getApproximateValue()
 	{
-		long double numerator = 0;
+		long double numerator = 0.0;
 		numerator = getSumData(this->numerator_constant_array);
-		for (auto item : this->numerator_constant_array)
+		for (auto item : this->numerator_radical_array)
 			numerator += (long double)sqrt(item);
 		if (this->denominator_constant_array.empty() && this->denominator_radical_array.empty())
 			return numerator;	// 分母无效
-		long double denominator = 0;
+		long double denominator = 0.0;
 		denominator = getSumData(this->denominator_constant_array);
-		for (auto item : this->denominator_constant_array)
+		for (auto item : this->denominator_radical_array)
 			denominator += (long double)sqrt(item);
 		if (denominator == 0)	// 分母为零，抛出异常
 			throw denominator;
@@ -1732,6 +1731,7 @@ Default_Output:
 					action.showRadicalMinusErrorMsg(err_tmp);
 				}
 				cout << "=== end" << endl;
+				cout << (long double)display.getApproximateValue() << endl;
 				display.displayMult();
 				cout << endl;
 			}
