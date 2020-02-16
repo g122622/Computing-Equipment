@@ -179,28 +179,21 @@ long getLowestCommonMultiple(general_struct_1 temp)
 general_struct_1 getFactor(long num_input, bool minus_output_state)
 {
 	general_struct_1 temp;
-	for (var factor = 1; factor <= (num_input / 2); ++factor)
-	{
+	for (var factor = 1; factor <= sqrt(num_input); ++factor)
 		if (!(num_input % factor))
-		{
-			temp.data_array.push_back(0);
-			temp.data_array[temp.count] = factor;
-			temp.count++;
-		}
-	}
-	temp.data_array.push_back(0);
-	temp.data_array[temp.count] = num_input;
-	temp.count++;
-	if (minus_output_state == enabled)
+			temp.data_array.push_back(factor);
+	long temp_size_1 = temp.data_array.size();
+	for (var i = temp_size_1 - 1; i > -1; --i)
+		temp.data_array.push_back(num_input / temp.data_array[i]);
+	if (sqrt(num_input) == (long)sqrt(num_input))	// 输入数为完全平方
+		temp.data_array.erase(temp.data_array.begin() + temp_size_1);
+	if (minus_output_state == enabled)	// 如果启用负数显示，往内存中再存负数
 	{
-		// 如果启用负数显示，往内存中再存负数
-		for (long i = 0; i < temp.count; i++)
-		{
-			temp.data_array.push_back(0);
-			temp.data_array[temp.count + i] = - temp.data_array[i];
-		}
-		temp.count = temp.count * 2;
+		long temp_size_2 = temp.data_array.size();
+		for (var i = 0; i < temp_size_2; ++i)
+			temp.data_array.push_back(-temp.data_array[i]);
 	}
+	temp.count = temp.data_array.size();
 	return temp;
 }
 
@@ -1104,7 +1097,10 @@ clock_t start, stop;			// 初始化计时函数
 /*----------主函数----------*/
 int main(void)
 {
-	system("chcp 65001");	// 设置Unicode（UTF-8无签名）- 代码页65001，避免Windows环境下中文出现乱码
+#ifdef _WIN32
+	// 设置Unicode（UTF-8无签名）- 代码页65001，避免Windows环境下中文出现乱码
+	system("chcp 65001");
+#endif
 	action action;
 	// 加载总控制台
 	action.showMasterConsole();
@@ -1297,34 +1293,6 @@ Select_Num_Scan:
 				displayx2.setDenominator_constant(2 * *a);
 				displayx2.displayMult();
 				cout << "." << endl;
-				/*simplify_quadratic_radical_struct delta_simped;
-				general_struct_1 temp;
-				delta_simped = simplifyQuadraticRadical(*Delta);
-				temp.count = 3;
-				for (var i = 0; i < 3; i++)	// 内存初始化
-					temp.data_array.push_back(0);
-				// 元素赋值
-				temp.data_array[0] = - *b;
-				temp.data_array[1] = 2 * *a;
-				temp.data_array[2] = delta_simped.out_radical;
-				long gcd = getGreatestCommonDivisor(temp);
-				cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
-				for (var i = 0; i < 2; i++)	// 循环输出
-				{
-					printf("∴x(%d) = ", i + 1);
-					if ((2 * *a / gcd) < 0)	// 判断式子前是否显示负号
-						cout << "-";
-					cout << "(" << -*b / gcd;		// 分子元素1
-					if (i == 0)				// 分子元素1与分子元素2之间的加减号
-						cout << "+";
-					else
-						cout << "-";
-					if (delta_simped.out_radical / gcd != 1)
-						cout << delta_simped.out_radical / gcd;	// 分子元素2（根号外）
-					cout << "√";			// 根号
-					cout << delta_simped.in_radical;
-					cout << ")/";			// 分数线
-					cout << getAbsoluteData(2 * *a / gcd) << endl;*/
 	 		}
 		}
 		else	// 判别式不大于零
@@ -1339,16 +1307,6 @@ Select_Num_Scan:
 			else		// 判别式为负，无实数根
 				cout << "∵Δ<0,∴方程没有实数根.\n{!}计算中止." << endl;
 		}				// else
-						// 分数模块（暂不准备开发）
-						/* }//来自if mid1 = 0,1,2,3,4,5,6,7,8,9 为假的判断//
-		   else { std::cout <<
-		   "输入分数请用“/”作为分数线 " << std::endl;
-		   std::cout << "请输入a的值 " << std::endl;
-		   scanf("%d/%d", &m1, &d1); std::cout << "请输入*b的值 "
-		   << std::endl; scanf("%d/%d", &m2, &d2); std::cout <<
-		   "请输入c的值 " << std::endl; scanf("%d/%d", &m3, &d3);
-		   }			*/
-		   //释放内存
 		delete a, b, c, delta;
 		goto Select_Num_Scan;
 	}						// case1
@@ -1361,7 +1319,6 @@ Select_Num_Scan:
 		{
 			cout << "{!}程序开始执行。\n[正在测速，请稍侯。调试信息请忽略。]" << endl;
 			start = clock();	// 开始测速
-			// 调用函数
 			factor = getFactor(10000000, disabled);
 			stop = clock();		// 停止测速
 			pretime = (float)(stop - start) / CLOCKS_PER_SEC;
@@ -1372,14 +1329,9 @@ Select_Num_Scan:
 		long double* predicttime = new long double;
 		double* duration = new double;
 		long* numscan = new long;
-		// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
-		// FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN |
-		// FOREGROUND_BLUE);/////set白色
 Case2_Scan:
 		printf("{!}请输入一个整数，十一位数及以下，按回车键继续。\n");
-		//			printf
-		("   Please enter an integer,eleven digits or less,press enter to continue.\n\n");
-		printf("[输入整数]");
+		cout << "[输入整数]";
 		cin >> *numscan;
 		if (*numscan < 0)
 		{
@@ -1412,17 +1364,17 @@ Select_BigTask_Scan_Default:
 			}			// switch
 
 		}				// if
-Select_BigTask_Scan_0:
+	Select_BigTask_Scan_0:
 		start = clock();	// 开始计时
 		if (*numscan == 0 or *numscan == 2)	// 判断输入是否为0,2
 			goto PrimeNum_Output;
 		else
 			goto Default_Output;
-Default_Output:
+	Default_Output:
 		// 调用函数(不启用负数输出)
 		factor = getFactor(*numscan, disabled);
 		// 开始输出
-		for (long i = 0; i < factor.count; i++)
+		for (var i = 0; i < factor.count; i++)
 			printf("[整因数 %ld ] = %ld\n", i + 1, factor.data_array[i]);
 	PrimeNum_Output:
 		if (factor.count < 3)
@@ -1430,12 +1382,6 @@ Default_Output:
 		stop = clock();	// 停止计时
 		*duration = (float)(stop - start) / CLOCKS_PER_SEC;
 		printf("\n{!}本次计算共耗时%f秒.\n", *duration);
-		//			printf("   Processing time is %f sec.\n", *duration);
-					// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
-					// FOREGROUND_INTENSITY | FOREGROUND_GREEN);/////set绿色
-		// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
-		// FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN |
-		// FOREGROUND_BLUE);/////set白色
 		cout.unsetf(ios::fixed); // 消除显示锁定
 		delete duration;
 		delete numscan, predicttime;
