@@ -91,10 +91,10 @@ struct simplify_fraction_struct
 // 分母为零错误结构体
 struct den_zero_err_str
 {
-	vector<long> numerator_constant_array;
-	vector<long> numerator_radical_array;
-	vector<long> denominator_constant_array;
-	vector<long> denominator_radical_array;
+	vector<long> num_cst_arr;
+	vector<long> num_rad_arr;
+	vector<long> den_cst_arr;
+	vector<long> den_rad_arr;
 };
 
 
@@ -630,13 +630,15 @@ class mult
 {
 	private:
 	// 转储mult
-	vector<long> numerator_constant_array;
-	vector<long> numerator_radical_array;
-	vector<long> denominator_constant_array;
-	vector<long> denominator_radical_array;
+	vector<long> num_cst_arr;
+	vector<long> num_rad_arr;
+	vector<long> den_cst_arr;
+	vector<long> den_rad_arr;
+
 	general_struct_1 gcd_tmp;	// 用于计算公约数
 	long n_constant_merged = 0, d_constant_merged = 0;
 	long gcd = 1;
+	bool mult_imput = false;
 	bool denominator_state = true;
 
 	// 预处理函数
@@ -725,17 +727,17 @@ class mult
 	// 判断整体约分函数
 	bool checkEntirety()
 	{
-		if (numerator_radical_array.empty() || denominator_radical_array.empty())
+		if (num_rad_arr.empty() || den_rad_arr.empty())
 			return false;
 		if (n_constant_merged == 0 && d_constant_merged != 0)
 			return false;
 		if (d_constant_merged == 0 && n_constant_merged != 0)
 			return false;
 		general_struct_1 tmp1, tmp2;
-		for (var i = 1; i < numerator_radical_array.size(); i = i + 2)
-			tmp1.data_array.push_back(numerator_radical_array[i]);
-		for (var i = 1; i < denominator_radical_array.size(); i = i + 2)
-			tmp2.data_array.push_back(denominator_radical_array[i]);
+		for (var i = 1; i < num_rad_arr.size(); i = i + 2)
+			tmp1.data_array.push_back(num_rad_arr[i]);
+		for (var i = 1; i < den_rad_arr.size(); i = i + 2)
+			tmp2.data_array.push_back(den_rad_arr[i]);
 		// 从"unsigned __int64"转换为"long&"会出错
 		long tmp1_size = tmp1.data_array.size();
 		long tmp2_size = tmp2.data_array.size();
@@ -799,7 +801,7 @@ class mult
 	public:
 	void setNumerator_constant(long nci)
 	{
-		numerator_constant_array.push_back(nci);
+		num_cst_arr.push_back(nci);
 	}
 	
 	void setNumerator_radical(long nri, bool state = add)
@@ -808,14 +810,14 @@ class mult
 			throw nri;
 /* 			cout << "error! minus-nums is not expected!" << endl;*/
 		if (state == add)
-			numerator_radical_array.push_back(nri);
+			num_rad_arr.push_back(nri);
 		if (state == subtract)	// 允许负数的存在
-			numerator_radical_array.push_back(-nri);
+			num_rad_arr.push_back(-nri);
 	}
 	
 	void setDenominator_constant(long dci)
 	{
-		denominator_constant_array.push_back(dci);
+		den_cst_arr.push_back(dci);
 	}
 	
 	void setDenominator_radical(long dri, bool state = add)
@@ -824,38 +826,76 @@ class mult
 			throw dri;
 /* 			cout << "error! minus-nums is not expected!" << endl;*/
 		if (state == add)
-			denominator_radical_array.push_back(dri);
+			den_rad_arr.push_back(dri);
 		if (state == subtract)	// 允许负数的存在
-			denominator_radical_array.push_back(-dri);
+			den_rad_arr.push_back(-dri);
 	}
 	
+
+	// -----分数输入重载-----
+	void setNumerator_constant(mult nci)
+	{
+		mult_imput = true;
+		num_cst_arr.push_back(nci);
+	}
+
+	void setNumerator_radical(mult nri, bool state = add)
+	{
+		mult_imput = true;
+		if (nri < 0)
+			throw nri;
+		/* 			cout << "error! minus-nums is not expected!" << endl;*/
+		if (state == add)
+			num_rad_arr.push_back(nri);
+		if (state == subtract)	// 允许负数的存在
+			num_rad_arr.push_back(-nri);
+	}
+
+	void setDenominator_constant(mult dci)
+	{
+		mult_imput = true;
+		den_cst_arr.push_back(dci);
+	}
+
+	void setDenominator_radical(mult dri, bool state = add)
+	{
+		mult_imput = true;
+		if (dri < 0)
+			throw dri;
+		/* 			cout << "error! minus-nums is not expected!" << endl;*/
+		if (state == add)
+			den_rad_arr.push_back(dri);
+		if (state == subtract)	// 允许负数的存在
+			den_rad_arr.push_back(-dri);
+	}
+
 	void simplifyMult()
 	{
 		// 检查两个分母容器状态，若均为空则判定为分母无效
-		if (denominator_constant_array.empty() && denominator_radical_array.empty())
+		if (den_cst_arr.empty() && den_rad_arr.empty())
 		{
 			denominator_state = false;
-			preProcessRadical(numerator_radical_array);
-			n_constant_merged = getSumData(numerator_constant_array);
-			simplifyRadical(numerator_radical_array, n_constant_merged);
-			mergeRadical(numerator_radical_array);
+			preProcessRadical(num_rad_arr);
+			n_constant_merged = getSumData(num_cst_arr);
+			simplifyRadical(num_rad_arr, n_constant_merged);
+			mergeRadical(num_rad_arr);
 			return;
 		}
 		else
 		{
 			denominator_state = true;
-			preProcessRadical(numerator_radical_array);
-			preProcessRadical(denominator_radical_array);
-			n_constant_merged = getSumData(numerator_constant_array);
-			d_constant_merged = getSumData(denominator_constant_array);
-			simplifyRadical(numerator_radical_array, n_constant_merged);
-			simplifyRadical(denominator_radical_array, d_constant_merged);
-			mergeRadical(numerator_radical_array);
-			mergeRadical(denominator_radical_array);
+			preProcessRadical(num_rad_arr);
+			preProcessRadical(den_rad_arr);
+			n_constant_merged = getSumData(num_cst_arr);
+			d_constant_merged = getSumData(den_cst_arr);
+			simplifyRadical(num_rad_arr, n_constant_merged);
+			simplifyRadical(den_rad_arr, d_constant_merged);
+			mergeRadical(num_rad_arr);
+			mergeRadical(den_rad_arr);
 			gcd_tmp.data_array.push_back(n_constant_merged);
 			gcd_tmp.data_array.push_back(d_constant_merged);
-			selectCoefficient(numerator_radical_array);
-			selectCoefficient(denominator_radical_array);
+			selectCoefficient(num_rad_arr);
+			selectCoefficient(den_rad_arr);
 			gcd_tmp.count = gcd_tmp.data_array.size();
 			gcd = getGreatestCommonDivisor(gcd_tmp);
 			return;
@@ -868,7 +908,7 @@ class mult
 		// 检查两个分母容器状态，若均为空则判定为分母无效，单独显示分子
 		if (!denominator_state)
 		{
-			displayLine(n_constant_merged, numerator_radical_array);
+			displayLine(n_constant_merged, num_rad_arr);
 			return;
 		}
 		// 另：分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 / 2）
@@ -876,11 +916,11 @@ class mult
 		// 另：负号提出来显示在最前端
 		// bug反馈：异常显示时内存地址始终不变
 		vector<long> tmp1, tmp2;
-		tmp1 = sortRadical(numerator_radical_array);
-		tmp2 = sortRadical(denominator_radical_array);
+		tmp1 = sortRadical(num_rad_arr);
+		tmp2 = sortRadical(den_rad_arr);
 		tmp1.push_back(n_constant_merged);
 		tmp2.push_back(d_constant_merged);
-		if (denominator_radical_array.empty() && d_constant_merged == 0)
+		if (den_rad_arr.empty() && d_constant_merged == 0)
 		{
 			// 分母为0（暂时先抛出这个，以后会引入异常类，程序崩溃了就先不管）
 			throw d_constant_merged;
@@ -891,16 +931,16 @@ class mult
 			cout << "1";
 			return;
 		}
-		if (numerator_radical_array.empty() && n_constant_merged == 0)
+		if (num_rad_arr.empty() && n_constant_merged == 0)
 		{
 			// 分子为0
 			cout << "0";
 			return;
 		}
-		if (d_constant_merged / gcd == 1 && denominator_radical_array.empty())
+		if (d_constant_merged / gcd == 1 && den_rad_arr.empty())
 		{
 			// 分母为1
-			displayLine(n_constant_merged, numerator_radical_array, gcd);
+			displayLine(n_constant_merged, num_rad_arr, gcd);
 			return;
 		}
 		if (checkEntirety())
@@ -917,22 +957,22 @@ class mult
 			return;
 		}
 		Default_Display:
-		displayLine(n_constant_merged, numerator_radical_array, gcd);
+		displayLine(n_constant_merged, num_rad_arr, gcd);
 		cout << " / ";
-		displayLine(d_constant_merged, denominator_radical_array, gcd);
+		displayLine(d_constant_merged, den_rad_arr, gcd);
 	}
 	
 	long double getApproximateValue()
 	{
 		long double numerator = 0.0;
-		numerator = getSumData(this->numerator_constant_array);
-		for (auto item : this->numerator_radical_array)
+		numerator = getSumData(this->num_cst_arr);
+		for (auto item : this->num_rad_arr)
 			numerator += (long double)sqrt(item);
-		if (this->denominator_constant_array.empty() && this->denominator_radical_array.empty())
+		if (this->den_cst_arr.empty() && this->den_rad_arr.empty())
 			return numerator;	// 分母无效
 		long double denominator = 0.0;
-		denominator = getSumData(this->denominator_constant_array);
-		for (auto item : this->denominator_radical_array)
+		denominator = getSumData(this->den_cst_arr);
+		for (auto item : this->den_rad_arr)
 			denominator += (long double)sqrt(item);
 		if (denominator == 0)	// 分母为零，抛出异常
 			throw denominator;
@@ -942,40 +982,40 @@ class mult
 	void opposite()
 	{
 		// 无分子，则式子为0，不做任何操作
-		if (numerator_constant_array.empty() && numerator_radical_array.empty())
+		if (num_cst_arr.empty() && num_rad_arr.empty())
 			return;
 		mult temp  = getThis() * -1;
 		this->denominator_state = clearAll();
-		this->numerator_constant_array   = temp.numerator_constant_array;
-		this->numerator_radical_array    = temp.numerator_radical_array;
-		this->denominator_constant_array = temp.denominator_constant_array;
-		this->denominator_radical_array  = temp.denominator_radical_array;
+		this->num_cst_arr   = temp.num_cst_arr;
+		this->num_rad_arr    = temp.num_rad_arr;
+		this->den_cst_arr = temp.den_cst_arr;
+		this->den_rad_arr  = temp.den_rad_arr;
 	}
 
 	void reciprocal()
 	{
-		swapVec(numerator_constant_array, denominator_constant_array);
-		swapVec(numerator_radical_array, denominator_radical_array);
+		swapVec(num_cst_arr, den_cst_arr);
+		swapVec(num_rad_arr, den_rad_arr);
 		if (!denominator_state)	// 若原分母不存在，则取倒后分子为1
-			numerator_constant_array.push_back(1);
+			num_cst_arr.push_back(1);
 	}
 
 	mult getThis()
 	{
 		mult temp;
-		temp.numerator_constant_array   = this->numerator_constant_array;
-		temp.numerator_radical_array    = this->numerator_radical_array;
-		temp.denominator_constant_array = this->denominator_constant_array;
-		temp.denominator_radical_array  = this->denominator_radical_array;
+		temp.num_cst_arr   = this->num_cst_arr;
+		temp.num_rad_arr    = this->num_rad_arr;
+		temp.den_cst_arr = this->den_cst_arr;
+		temp.den_rad_arr  = this->den_rad_arr;
 		return temp;
 	}
 
 	bool clearAll()
 	{
-		numerator_constant_array.clear();
-		numerator_radical_array.clear();
-		denominator_constant_array.clear();
-		denominator_radical_array.clear();
+		num_cst_arr.clear();
+		num_rad_arr.clear();
+		den_cst_arr.clear();
+		den_rad_arr.clear();
 		gcd_tmp.data_array.clear();
 		gcd_tmp.count = 0;
 		n_constant_merged = 0;
@@ -992,10 +1032,10 @@ class mult
 		mult temp;
 		// 检查分母，若分母存在，则通分
 		// case1：均无分母，分子直接相加
-		if (this->denominator_constant_array.empty() && this->denominator_radical_array.empty() && mult_2.denominator_constant_array.empty() && mult_2.denominator_radical_array.empty())
+		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
 		{
-			temp.numerator_constant_array = this->numerator_constant_array + mult_2.numerator_constant_array;
-			temp.numerator_radical_array  = this->numerator_radical_array + mult_2.numerator_radical_array;
+			temp.num_cst_arr = this->num_cst_arr + mult_2.num_cst_arr;
+			temp.num_rad_arr  = this->num_rad_arr + mult_2.num_rad_arr;
 		}
 		// case2：有分母存在
 		else
@@ -1004,22 +1044,22 @@ class mult
 			mult simp_tmp_3, simp_tmp_4;	// 存储原分子
 			mult num_mult_1, num_mult_2, den_mult;		// 存储结果
 			// 计算分母
-			simp_tmp_1.numerator_constant_array = this->denominator_constant_array;
-			simp_tmp_1.numerator_radical_array  = this->denominator_radical_array;
-			simp_tmp_2.numerator_constant_array = mult_2.denominator_constant_array;
-			simp_tmp_2.numerator_radical_array  = mult_2.denominator_radical_array;
+			simp_tmp_1.num_cst_arr = this->den_cst_arr;
+			simp_tmp_1.num_rad_arr  = this->den_rad_arr;
+			simp_tmp_2.num_cst_arr = mult_2.den_cst_arr;
+			simp_tmp_2.num_rad_arr  = mult_2.den_rad_arr;
 			den_mult = simp_tmp_1 * simp_tmp_2;
 			// 计算分子（相乘后相加）
-			simp_tmp_3.numerator_constant_array = this->numerator_constant_array;
-			simp_tmp_3.numerator_radical_array  = this->numerator_radical_array;
-			simp_tmp_4.numerator_constant_array = mult_2.numerator_constant_array;
-			simp_tmp_4.numerator_radical_array  = mult_2.numerator_radical_array;
+			simp_tmp_3.num_cst_arr = this->num_cst_arr;
+			simp_tmp_3.num_rad_arr  = this->num_rad_arr;
+			simp_tmp_4.num_cst_arr = mult_2.num_cst_arr;
+			simp_tmp_4.num_rad_arr  = mult_2.num_rad_arr;
 			num_mult_1 = simp_tmp_3 * simp_tmp_2;
 			num_mult_2 = simp_tmp_4 * simp_tmp_1;
 			// 开始给temp赋值
 			temp = num_mult_1 + num_mult_2;	// 存储最终分子
-			temp.denominator_constant_array = den_mult.denominator_constant_array;
-			temp.denominator_radical_array  = den_mult.denominator_radical_array;
+			temp.den_cst_arr = den_mult.den_cst_arr;
+			temp.den_rad_arr  = den_mult.den_rad_arr;
 		}
 		return temp;
 	}
@@ -1042,29 +1082,29 @@ class mult
 		2.仅仅作乘法运算，不用考虑化简，移交给后面的模块处理，这在化简模块设计时就已经考虑到。
 		*/ 
 		mult temp;
-		long nc_sum_1 = getSumData(this->numerator_constant_array);
-		long nc_sum_2 = getSumData(mult_2.numerator_constant_array);
-		temp.numerator_constant_array.push_back(nc_sum_1 * nc_sum_2);
-		for (auto item : mult_2.numerator_radical_array)
-			temp.numerator_radical_array.push_back(pow(nc_sum_1, 2) * item);
-		for (auto item : this->numerator_radical_array)
-			temp.numerator_radical_array.push_back(pow(nc_sum_2, 2) * item);
-		for (auto item1 : this->numerator_radical_array)
-			for (auto item2 : mult_2.numerator_radical_array)
-				temp.numerator_radical_array.push_back(item1 * item2);
+		long nc_sum_1 = getSumData(this->num_cst_arr);
+		long nc_sum_2 = getSumData(mult_2.num_cst_arr);
+		temp.num_cst_arr.push_back(nc_sum_1 * nc_sum_2);
+		for (auto item : mult_2.num_rad_arr)
+			temp.num_rad_arr.push_back(pow(nc_sum_1, 2) * item);
+		for (auto item : this->num_rad_arr)
+			temp.num_rad_arr.push_back(pow(nc_sum_2, 2) * item);
+		for (auto item1 : this->num_rad_arr)
+			for (auto item2 : mult_2.num_rad_arr)
+				temp.num_rad_arr.push_back(item1 * item2);
 		// 若分母不存在，则退出
-		if (this->denominator_constant_array.empty() && this->denominator_radical_array.empty() && mult_2.denominator_constant_array.empty() && mult_2.denominator_radical_array.empty())
+		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
 			return temp;
-		long dc_sum_1 = getSumData(this->denominator_constant_array);
-		long dc_sum_2 = getSumData(mult_2.denominator_constant_array);
-		temp.numerator_constant_array.push_back(dc_sum_1 * dc_sum_2);
-		for (auto item : mult_2.denominator_radical_array)
-			temp.denominator_radical_array.push_back(pow(dc_sum_1, 2) * item);
-		for (auto item : this->denominator_radical_array)
-			temp.denominator_radical_array.push_back(pow(dc_sum_2, 2) * item);
-		for (auto item1 : this->denominator_radical_array)
-			for (auto item2 : mult_2.denominator_radical_array)
-				temp.denominator_radical_array.push_back(item1 * item2);
+		long dc_sum_1 = getSumData(this->den_cst_arr);
+		long dc_sum_2 = getSumData(mult_2.den_cst_arr);
+		temp.num_cst_arr.push_back(dc_sum_1 * dc_sum_2);
+		for (auto item : mult_2.den_rad_arr)
+			temp.den_rad_arr.push_back(pow(dc_sum_1, 2) * item);
+		for (auto item : this->den_rad_arr)
+			temp.den_rad_arr.push_back(pow(dc_sum_2, 2) * item);
+		for (auto item1 : this->den_rad_arr)
+			for (auto item2 : mult_2.den_rad_arr)
+				temp.den_rad_arr.push_back(item1 * item2);
 		return temp;
 	}
 
