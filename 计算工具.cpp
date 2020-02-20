@@ -106,11 +106,12 @@ general_struct_1 getSortedData(general_struct_1, long&);
 simplify_fraction_struct getSimplifiedFraction(const long&, const long&);
 template <typename T1>
 T1 getAbsoluteData(T1);
+template<typename T1>
+T1 getSumData(const vector<T1>& temp);
 void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, bool);
 long getLowestCommonMultiple(simplify_fraction_struct);
-long getSumData(const vector<long>&);
 bool checkEqualArray(const vector<long>&, const vector<long>&);
 void swapVec(vector<long>&, vector<long>&);
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
@@ -364,7 +365,7 @@ void displayFraction(simplify_fraction_struct temp)
 
 
 // 取绝对值函数
-template <typename T1>
+template<typename T1>
 T1 getAbsoluteData(T1 numscan)
 {
 	if (numscan < 0)
@@ -374,12 +375,12 @@ T1 getAbsoluteData(T1 numscan)
 
 
 // 求和函数
-long getSumData(const vector<long>& temp)
+template<typename T1>
+T1 getSumData(const vector<T1>& temp)
 {
-	long count = temp.size();
-	long sum = 0;
-	for (var i = 0; i < count; i++)
-		sum = sum + temp[i];
+	T1 sum = 0;
+	for (auto item : temp)
+		sum += item;
 	return sum;
 }
 
@@ -628,7 +629,7 @@ class action
 
 class mult
 {
-	private:
+private:
 	// 转储mult
 	vector<long> num_cst_arr;
 	vector<long> num_rad_arr;
@@ -798,7 +799,7 @@ class mult
 			}
 	}
 
-	public:
+public:
 	void setNumerator_constant(long nci)
 	{
 		num_cst_arr.push_back(nci);
@@ -825,44 +826,6 @@ class mult
 		if (dri < 0)
 			throw dri;
 /* 			cout << "error! minus-nums is not expected!" << endl;*/
-		if (state == add)
-			den_rad_arr.push_back(dri);
-		if (state == subtract)	// 允许负数的存在
-			den_rad_arr.push_back(-dri);
-	}
-	
-
-	// -----分数输入重载-----
-	void setNumerator_constant(mult nci)
-	{
-		mult_imput = true;
-		num_cst_arr.push_back(nci);
-	}
-
-	void setNumerator_radical(mult nri, bool state = add)
-	{
-		mult_imput = true;
-		if (nri < 0)
-			throw nri;
-		/* 			cout << "error! minus-nums is not expected!" << endl;*/
-		if (state == add)
-			num_rad_arr.push_back(nri);
-		if (state == subtract)	// 允许负数的存在
-			num_rad_arr.push_back(-nri);
-	}
-
-	void setDenominator_constant(mult dci)
-	{
-		mult_imput = true;
-		den_cst_arr.push_back(dci);
-	}
-
-	void setDenominator_radical(mult dri, bool state = add)
-	{
-		mult_imput = true;
-		if (dri < 0)
-			throw dri;
-		/* 			cout << "error! minus-nums is not expected!" << endl;*/
 		if (state == add)
 			den_rad_arr.push_back(dri);
 		if (state == subtract)	// 允许负数的存在
@@ -986,10 +949,10 @@ class mult
 			return;
 		mult temp  = getThis() * -1;
 		this->denominator_state = clearAll();
-		this->num_cst_arr   = temp.num_cst_arr;
-		this->num_rad_arr    = temp.num_rad_arr;
+		this->num_cst_arr = temp.num_cst_arr;
+		this->num_rad_arr = temp.num_rad_arr;
 		this->den_cst_arr = temp.den_cst_arr;
-		this->den_rad_arr  = temp.den_rad_arr;
+		this->den_rad_arr = temp.den_rad_arr;
 	}
 
 	void reciprocal()
@@ -1003,10 +966,10 @@ class mult
 	mult getThis()
 	{
 		mult temp;
-		temp.num_cst_arr   = this->num_cst_arr;
-		temp.num_rad_arr    = this->num_rad_arr;
+		temp.num_cst_arr = this->num_cst_arr;
+		temp.num_rad_arr = this->num_rad_arr;
 		temp.den_cst_arr = this->den_cst_arr;
-		temp.den_rad_arr  = this->den_rad_arr;
+		temp.den_rad_arr = this->den_rad_arr;
 		return temp;
 	}
 
@@ -1035,7 +998,7 @@ class mult
 		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
 		{
 			temp.num_cst_arr = this->num_cst_arr + mult_2.num_cst_arr;
-			temp.num_rad_arr  = this->num_rad_arr + mult_2.num_rad_arr;
+			temp.num_rad_arr = this->num_rad_arr + mult_2.num_rad_arr;
 		}
 		// case2：有分母存在
 		else
@@ -1045,23 +1008,30 @@ class mult
 			mult num_mult_1, num_mult_2, den_mult;		// 存储结果
 			// 计算分母
 			simp_tmp_1.num_cst_arr = this->den_cst_arr;
-			simp_tmp_1.num_rad_arr  = this->den_rad_arr;
+			simp_tmp_1.num_rad_arr = this->den_rad_arr;
 			simp_tmp_2.num_cst_arr = mult_2.den_cst_arr;
-			simp_tmp_2.num_rad_arr  = mult_2.den_rad_arr;
+			simp_tmp_2.num_rad_arr = mult_2.den_rad_arr;
 			den_mult = simp_tmp_1 * simp_tmp_2;
 			// 计算分子（相乘后相加）
 			simp_tmp_3.num_cst_arr = this->num_cst_arr;
-			simp_tmp_3.num_rad_arr  = this->num_rad_arr;
+			simp_tmp_3.num_rad_arr = this->num_rad_arr;
 			simp_tmp_4.num_cst_arr = mult_2.num_cst_arr;
-			simp_tmp_4.num_rad_arr  = mult_2.num_rad_arr;
+			simp_tmp_4.num_rad_arr = mult_2.num_rad_arr;
 			num_mult_1 = simp_tmp_3 * simp_tmp_2;
 			num_mult_2 = simp_tmp_4 * simp_tmp_1;
 			// 开始给temp赋值
 			temp = num_mult_1 + num_mult_2;	// 存储最终分子
 			temp.den_cst_arr = den_mult.den_cst_arr;
-			temp.den_rad_arr  = den_mult.den_rad_arr;
+			temp.den_rad_arr = den_mult.den_rad_arr;
 		}
 		return temp;
+	}
+
+	mult operator+(const long& num)
+	{
+		mult temp;
+		temp.setNumerator_constant(num);
+		return getThis() + temp;
 	}
 
 	// 重载"-"运算符
@@ -1071,6 +1041,13 @@ class mult
 		temp.opposite();
 		// 加相反数
 		return getThis() + temp;
+	}
+
+	mult operator-(const long& num)
+	{
+		mult temp;
+		temp.setNumerator_constant(num);
+		return getThis() - temp;
 	}
 
 	// 重载"*"运算符
@@ -1124,8 +1101,52 @@ class mult
 		return getThis() * temp;
 	}
 
-	//~mult();  // 析构函数
+	mult operator/(const long& num)
+	{
+		mult temp;
+		temp.setNumerator_constant(num);
+		return getThis() / temp;
+	}
+	mult() {};
+	~mult() {};
 };
+// 反序计算，在类外部定义
+mult operator+(const long& num, const mult& num_mult)
+{
+	mult temp;
+	temp.setNumerator_constant(num);
+	return temp + num_mult;
+}
+mult operator-(const long& num, const mult& num_mult)
+{
+	mult temp;
+	temp.setNumerator_constant(num);
+	return temp - num_mult;
+}
+mult operator*(const long& num, const mult& num_mult)
+{
+	mult temp;
+	temp.setNumerator_constant(num);
+	return temp * num_mult;
+}
+mult operator/(const long& num, const mult& num_mult)
+{
+	mult temp;
+	temp.setNumerator_constant(num);
+	return temp / num_mult;
+}
+
+
+class equation
+{
+private:
+
+public:
+
+	equation() {};
+	~equation() {};
+};
+// 不等式类用继承的方式生成
 
 
 /*----------全局变量/结构体/对象声明区/杂项区2----------*/
@@ -1135,6 +1156,7 @@ long long SwitchNum;
 clock_t start, stop;			// 初始化计时函数
 
 /*----------主函数----------*/
+using namespace std;
 int main(void)
 {
 #ifdef _WIN32
@@ -1142,8 +1164,7 @@ int main(void)
 	system("chcp 65001");
 #endif
 	action action;
-	// 加载总控制台
-	action.showMasterConsole();
+	action.showMasterConsole();	// 加载总控制台
 Select_Num_Scan:
 	cout << endl
 		 << "[输入]";
@@ -1347,6 +1368,14 @@ Select_Num_Scan:
 			else		// 判别式为负，无实数根
 				cout << "∵Δ<0,∴方程没有实数根.\n{!}计算中止." << endl;
 		}				// else
+
+/*		cout << "[解法3：配方法]" << endl;
+		mult _a, _b, _c;
+		_a.setNumerator_constant(1);
+		_b.setNumerator_constant(*b);
+		_b.setDenominator_constant(*a);
+		_c.setNumerator_constant(*c);
+		_c.setDenominator_constant(*a);*/
 		delete a, b, c, delta;
 		goto Select_Num_Scan;
 	}						// case1
