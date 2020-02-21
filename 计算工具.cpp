@@ -24,7 +24,7 @@
 */
 
 /*
-命名规范：
+命名规范：（代码千万条，注释第一条。格式不规范，版主两行泪！！！(=・ω・=)）
 函数（function）：abcDefgh
 字符串/对象/结构体：abc_defgh
 标签（label）：Abc_Defgh
@@ -108,6 +108,8 @@ template <typename T1>
 T1 getAbsoluteData(T1);
 template<typename T1>
 T1 getSumData(const vector<T1>& temp);
+template<typename T1>
+T1 fix(T1 num);
 void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, bool);
@@ -404,6 +406,13 @@ void swapVec(vector<long>& vec1, vector<long>& vec2)
 	vec2.clear();
 	vec2 = vec1;
 	vec1 = temp;
+}
+
+
+template<typename T1>
+T1 fix(T1 num)
+{
+
 }
 
 
@@ -1156,7 +1165,6 @@ long long SwitchNum;
 clock_t start, stop;			// 初始化计时函数
 
 /*----------主函数----------*/
-using namespace std;
 int main(void)
 {
 #ifdef _WIN32
