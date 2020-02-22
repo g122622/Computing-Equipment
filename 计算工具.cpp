@@ -24,7 +24,8 @@
 */
 
 /*
-命名规范：（代码千万条，注释第一条。格式不规范，版主两行泪！！！(=・ω・=)）
+（代码千万条，注释第一条。格式不规范，版主两行泪！！！ヾ(￣▽￣)）
+命名规范：
 函数（function）：abcDefgh
 字符串/对象/结构体：abc_defgh
 标签（label）：Abc_Defgh
@@ -104,12 +105,14 @@ simplify_quadratic_radical_struct getSimplifiedQuadraticRadical(long);
 void swapData(long&, long&);
 general_struct_1 getSortedData(general_struct_1, long&);
 simplify_fraction_struct getSimplifiedFraction(const long&, const long&);
-template <typename T1>
+template<typename T1>
 T1 getAbsoluteData(T1);
 template<typename T1>
 T1 getSumData(const vector<T1>& temp);
 template<typename T1>
 T1 fix(T1 num);
+template<typename T1>
+bool isPrimeNum(T1 num);
 void displayFraction(simplify_fraction_struct);
 long getGreatestCommonDivisor(general_struct_1);
 general_struct_1 getFactor(long, bool);
@@ -181,7 +184,13 @@ long getLowestCommonMultiple(general_struct_1 temp)
 // 因数分解函数
 general_struct_1 getFactor(long num_input, bool minus_output_state)
 {
-	general_struct_1 temp;
+	general_struct_1 temp;	// 输入为零
+	if (num_input == 0)
+	{
+		temp.data_array.push_back(0);
+		temp.count = temp.data_array.size();
+		return temp;
+	}
 	for (var factor = 1; factor <= sqrt(num_input); ++factor)
 		if (!(num_input % factor))
 			temp.data_array.push_back(factor);
@@ -416,6 +425,24 @@ T1 fix(T1 num)
 }
 
 
+// 判断质数函数
+template<typename T1>
+bool isPrimeNum(T1 num)
+{
+	T1 count = 0;
+	for (T1 factor = 1; factor <= sqrt(num); ++factor)
+	{
+		if (!(num % factor))
+			++count;
+		if (count == 2)
+			break;
+	}
+	if (count == 1)
+		return true;
+	return false;
+}
+
+
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
 map<long long, int>m;
 long long Random(long long n)
@@ -644,6 +671,8 @@ private:
 	vector<long> num_rad_arr;
 	vector<long> den_cst_arr;
 	vector<long> den_rad_arr;
+	vector<long> num_rad_arr_simp;
+	vector<long> den_rad_arr_simp;
 
 	general_struct_1 gcd_tmp;	// 用于计算公约数
 	long n_constant_merged = 0, d_constant_merged = 0;
