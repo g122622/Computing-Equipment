@@ -52,6 +52,7 @@
 #define multiply		2
 #define divide			3
 // #pragma execution_character_set("utf-8")
+#define debug
 
 
 /*----------全局变量/结构体/对象声明区/杂项区1----------*/
@@ -421,7 +422,7 @@ void swapVec(vector<long>& vec1, vector<long>& vec2)
 template<typename T1>
 T1 fix(T1 num)
 {
-
+	
 }
 
 
