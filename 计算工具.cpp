@@ -56,7 +56,7 @@
 
 
 /*----------全局变量/结构体/对象声明区/杂项区1----------*/
-typedef long var;
+typedef long long var;
 using namespace std;
 const int times = 50;
 int number = 0;
@@ -64,28 +64,27 @@ const int factor[] = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};// �
 const int check_table[] = {1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2};// 校验值对应表
 
 
-
 /*----------结构体声明区----------*/
 // 二次根式化简结构体
 struct simplify_quadratic_radical_struct
 {
-	long in_radical;
-	long out_radical;
+	var in_radical;
+	var out_radical;
 };
 
 // 通用结构体1
 struct general_struct_1
 {
-	vector<long> data_array;	// 这里使用了vector动态向量容器（实验性）
-	long count = 0;
+	vector<var> data_array;	// 这里使用了vector动态向量容器（实验性）
+	var count = 0;
 };
 
 // 分数约分结构体
 struct simplify_fraction_struct
 {
-	long simplified_numerator;		// 分子
-	long simplified_denominator;	// 分母
-	long greatest_common_divisor;	// 最大公约数
+	var simplified_numerator;		// 分子
+	var simplified_denominator;	// 分母
+	var greatest_common_divisor;	// 最大公约数
 	bool single_display_state;
 	bool minus_display_state;
 };
@@ -93,42 +92,47 @@ struct simplify_fraction_struct
 // 分母为零错误结构体
 struct den_zero_err_str
 {
-	vector<long> num_cst_arr;
-	vector<long> num_rad_arr;
-	vector<long> den_cst_arr;
-	vector<long> den_rad_arr;
+	vector<var> num_cst_arr;
+	vector<var> num_rad_arr;
+	vector<var> den_cst_arr;
+	vector<var> den_rad_arr;
 };
 
 
 /*----------函数声明区----------*/
-double getRandData(long, long);
-simplify_quadratic_radical_struct getSimplifiedQuadraticRadical(long);
-void swapData(long&, long&);
-general_struct_1 getSortedData(general_struct_1, long&);
-simplify_fraction_struct getSimplifiedFraction(const long&, const long&);
+double getRandData(var, var);
+simplify_quadratic_radical_struct getSimplifiedQuadraticRadical(var);
+general_struct_1 getSortedData(general_struct_1, var&);
+simplify_fraction_struct getSimplifiedFraction(const var&, const var&);
+template<typename T1>
+void swapData(T1& num1, T1& num2);
 template<typename T1>
 T1 getAbsoluteData(T1);
 template<typename T1>
 T1 getSumData(const vector<T1>& temp);
 template<typename T1>
-T1 fix(T1 num);
+void invertVec(vector<T1>& vec);
+template<typename T1>
+T1 fixNum(const T1& num, const T1& digit);
+template<typename T1>
+bool isIntNum(const T1& num);
 template<typename T1>
 bool isPrimeNum(T1 num);
 void displayFraction(simplify_fraction_struct);
-long getGreatestCommonDivisor(general_struct_1);
-general_struct_1 getFactor(long, bool);
-long getLowestCommonMultiple(simplify_fraction_struct);
-bool checkEqualArray(const vector<long>&, const vector<long>&);
-void swapVec(vector<long>&, vector<long>&);
+var getGreatestCommonDivisor(general_struct_1);
+general_struct_1 getFactor(var, bool);
+var getLowestCommonMultiple(simplify_fraction_struct);
+bool isEqualArray(const vector<var>&, const vector<var>&);
+void swapVec(vector<var>&, vector<var>&);
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
-void find(long long n, long long c);
-long long pollard_rho(long long n, long long c);
-long long gcd(long long a, long long b);
-bool miller_rabin(long long n);
-bool witness(long long a, long long n);
-long long q_pow(long long a, long long b, long long mod);
-long long q_mul(long long a, long long b, long long mod);
-long long Random(long long n);
+void find(var n, var c);
+var pollard_rho(var n, var c);
+var gcd(var a, var b);
+bool miller_rabin(var n);
+bool witness(var a, var n);
+var q_pow(var a, var b, var mod);
+var q_mul(var a, var b, var mod);
+var Random(var n);
 // 以下都是身份证验证码计算所需要的函数（by boshuzhang）
 int _checkIDinput(char[]);
 void _checkID(int[], char[]);
@@ -136,11 +140,11 @@ void _checkID(int[], char[]);
 
 /*----------函数定义区----------*/
 // 计算最小公倍数函数
-long getLowestCommonMultiple(general_struct_1 temp)
+var getLowestCommonMultiple(general_struct_1 temp)
 {
 	if (temp.count == 0)
 		return 0;
-	long data_amount = temp.count;	// 非引用
+	var data_amount = temp.count;	// 非引用
 	// 数据预处理1：输入数全部取绝对值，同时赋值给temp
 	for (var i = 0; i < data_amount; i++)
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
@@ -160,17 +164,17 @@ long getLowestCommonMultiple(general_struct_1 temp)
 	if (temp.data_array.empty())
 		return 0;
 	//<---数据预处理结束--->
-	long LowestCommonMultiple;
+	var LowestCommonMultiple;
 	// 这两个临时值为缩减代码横向体积而设立，便于编辑和浏览
 	double* dm1 = new double;
-	long* lm2 = new long;
+	var* lm2 = new var;
 	for (var i = 1; i > 0; i++)
 	{
 		LowestCommonMultiple = temp.data_array[data_amount - 1] * i;	// 选取最大值
 		for (var j = data_amount - 2; j >= 0; j--)	// 选取第二大的值
 		{
 			*dm1 = (double)LowestCommonMultiple / temp.data_array[j];
-			*lm2 = (long)LowestCommonMultiple / temp.data_array[j];
+			*lm2 = (var)LowestCommonMultiple / temp.data_array[j];
 			if (*dm1 != *lm2) break;	// 若不符合条件，直接break掉内层循环
 			if (j == 0)			// 判断是否全部满足
 				delete dm1, lm2;
@@ -183,7 +187,7 @@ long getLowestCommonMultiple(general_struct_1 temp)
 
 
 // 因数分解函数
-general_struct_1 getFactor(long num_input, bool minus_output_state)
+general_struct_1 getFactor(var num_input, bool minus_output_state)
 {
 	general_struct_1 temp;	// 输入为零
 	if (num_input == 0)
@@ -195,14 +199,14 @@ general_struct_1 getFactor(long num_input, bool minus_output_state)
 	for (var factor = 1; factor <= sqrt(num_input); ++factor)
 		if (!(num_input % factor))
 			temp.data_array.push_back(factor);
-	long temp_size_1 = temp.data_array.size();
+	var temp_size_1 = temp.data_array.size();
 	for (var i = temp_size_1 - 1; i > -1; --i)
 		temp.data_array.push_back(num_input / temp.data_array[i]);
-	if (sqrt(num_input) == (long)sqrt(num_input))	// 输入数为完全平方
+	if (sqrt(num_input) == (var)sqrt(num_input))	// 输入数为完全平方
 		temp.data_array.erase(temp.data_array.begin() + temp_size_1);
 	if (minus_output_state == enabled)	// 如果启用负数显示，往内存中再存负数
 	{
-		long temp_size_2 = temp.data_array.size();
+		var temp_size_2 = temp.data_array.size();
 		for (var i = 0; i < temp_size_2; ++i)
 			temp.data_array.push_back(-temp.data_array[i]);
 	}
@@ -212,11 +216,11 @@ general_struct_1 getFactor(long num_input, bool minus_output_state)
 
 
 // 计算最大公约数函数
-long getGreatestCommonDivisor(general_struct_1 temp)
+var getGreatestCommonDivisor(general_struct_1 temp)
 {
 	if (temp.count == 0)
 		return 1;
-	long data_amount = temp.count;				// 不可使用引用，避免count的值被冒泡排序函数所改变
+	var data_amount = temp.count;				// 不可使用引用，避免count的值被冒泡排序函数所改变
 	// 数据预处理1：输入数全部取绝对值，同时赋值给temp
 	for (var i = 0; i < data_amount; i++)
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
@@ -243,7 +247,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 		for (var k = data_amount - 1; k >= 0; k--)
 		{
 			// 判断是否能整除，若不能则直接break
-			if ((double)temp.data_array[k] / j != (long)temp.data_array[k] / j)
+			if ((double)temp.data_array[k] / j != (var)temp.data_array[k] / j)
 				break;
 			if (k == 0)		// 如果一直算到k=0，都没有break，则此时j为最大公约数
 				return j;
@@ -254,7 +258,7 @@ long getGreatestCommonDivisor(general_struct_1 temp)
 
 
 // 生成随机数列的函数（by zzy_1988）
-double getRandData(long min, long max)
+double getRandData(var min, var max)
 {	// 计算 0，1之间的随机小数,得到的值域近似为(0,1)
 	double m1 = (double)(rand() % 101) / 101;
 	// 将区间变为(min+1,max)
@@ -269,7 +273,7 @@ double getRandData(long min, long max)
 
 
 // 二次根式化简函数
-simplify_quadratic_radical_struct simplifyQuadraticRadical(long numscan)
+simplify_quadratic_radical_struct simplifyQuadraticRadical(var numscan)
 {
 	if (numscan < 0)
 		throw numscan;
@@ -281,9 +285,9 @@ simplify_quadratic_radical_struct simplifyQuadraticRadical(long numscan)
 		temp.out_radical = 0;
 		return temp;
 	}
-	for (long i = numscan; i > 0; i--)
+	for (var i = numscan; i > 0; i--)
 	{
-		if ((double)numscan / i == (long)numscan / i && (double)sqrt(i) == (long)sqrt(i))
+		if ((double)numscan / i == (var)numscan / i && (double)sqrt(i) == (var)sqrt(i))
 			// 第一个条件：确保i为numscan的整因数；第二个条件：确保i是最大的完全平方因数
 		{
 			temp.in_radical = numscan / i;	// 输出根号内剩余的数
@@ -296,18 +300,17 @@ simplify_quadratic_radical_struct simplifyQuadraticRadical(long numscan)
 
 
 // 数对交换函数
-void swapData(long& num1, long& num2)
+template<typename T1>
+void swapData(T1& num1, T1& num2)
 {
-	long* temp = new long;	// 给缓存分配内存空间
-	*temp = num2;
+	T1 temp = num2;
 	num2 = num1;
-	num1 = *temp;
-	delete temp;			// 释放内存
+	num1 = temp;
 }
 
 
 // 冒泡排序函数（从小到大）
-general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
+general_struct_1 getSortedData(general_struct_1 temp, var& dataamount)
 {
 	for (var k = 0; k < dataamount; k++)
 	{
@@ -325,7 +328,7 @@ general_struct_1 getSortedData(general_struct_1 temp, long& dataamount)
 
 
 // 分数约分函数
-simplify_fraction_struct getSimplifiedFraction(const long& numerator, const long& denominator)	// 传引用，减少内存占用 
+simplify_fraction_struct getSimplifiedFraction(const var& numerator, const var& denominator)	// 传引用，减少内存占用 
 {
 	simplify_fraction_struct temp;				// 声明要返回的专用结构体
 	general_struct_1 gcd;						// 公约数传参用此通用结构体
@@ -398,7 +401,7 @@ T1 getSumData(const vector<T1>& temp)
 
 
 // 判断相等vec容器函数
-bool checkEqualArray(const vector<long>& vec1, const vector<long>& vec2)
+bool isEqualArray(const vector<var>& vec1, const vector<var>& vec2)
 {
 	if (vec1.size() != vec2.size())
 		return false;
@@ -410,19 +413,69 @@ bool checkEqualArray(const vector<long>& vec1, const vector<long>& vec2)
 
 
 // 交换vec容器函数
-void swapVec(vector<long>& vec1, vector<long>& vec2)
+void swapVec(vector<var>& vec1, vector<var>& vec2)
 {
-	vector<long> temp = vec2;
+	vector<var> temp = vec2;
 	vec2.clear();
 	vec2 = vec1;
 	vec1 = temp;
 }
 
 
+// 反序vec容器函数
 template<typename T1>
-T1 fix(T1 num)
+void invertVec(vector<T1>& vec)
 {
+	for (var i = 0; i < (float)vec.size() / 2; i++)
+		swapData(vec[i], vec[vec.size() - i - 1]);
+}
+
+
+template<typename T1>
+T1 fixNum(const T1& num, const T1& digit)
+{
+	var count = 0;
+	T1 integer = num;
+	vector<T1> digit_arr;
+	if (!isIntNum(num))
+	{
+		long double decimal = (long double)num - (var)num;
+		while (true)	// 小数转整数，为后续操作做准备
+		{
+			decimal *= 10;
+			count++;
+			if (isIntNum(decimal))
+				break;
+		}
+		while (true)	// 反序取出小数部分
+		{
+			digit_arr.push_back(decimal % 10);
+			decimal /= 10;
+			if (decimal == 0)
+				break;
+		}
+	}
+	while (true)		// 反序取出整数部分
+	{
+		digit_arr.push_back(integer % 10);
+		integer /= 10;
+		if (integer == 0)
+			break;
+	}
+	invertVec(digit_arr);	// 正序
 	
+
+	return 0;
+}
+
+
+// 判断整数函数
+template<typename T1>
+inline bool isIntNum(const T1& num)
+{
+	if ((var)num == (long double)num)
+		return true;
+	return false;
 }
 
 
@@ -445,16 +498,16 @@ bool isPrimeNum(T1 num)
 
 
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
-map<long long, int>m;
-long long Random(long long n)
+map<var, int>m;
+var Random(var n)
 {
 	return ((double)rand() / RAND_MAX * n + 0.5);
 }
 
 
-long long q_mul(long long a, long long b, long long mod) // 快速乘法取模
+var q_mul(var a, var b, var mod) // 快速乘法取模
 {
-	long long ans = 0;
+	var ans = 0;
 	while (b)
 	{
 		if (b & 1)
@@ -468,9 +521,9 @@ long long q_mul(long long a, long long b, long long mod) // 快速乘法取模
 }
 
 
-long long q_pow(long long a, long long b, long long mod) // 快速乘法下的快速幂
+var q_pow(var a, var b, var mod) // 快速乘法下的快速幂
 {
-	long long ans = 1;
+	var ans = 1;
 	while (b)
 	{
 		if (b & 1)
@@ -484,9 +537,9 @@ long long q_pow(long long a, long long b, long long mod) // 快速乘法下的�
 }
 
 
-bool witness(long long a, long long n)	// miller_rabin算法的精华
+bool witness(var a, var n)	// miller_rabin算法的精华
 {
-	long long tem = n - 1;
+	var tem = n - 1;
 	int j = 0;
 	while (tem % 2 == 0)
 	{
@@ -494,7 +547,7 @@ bool witness(long long a, long long n)	// miller_rabin算法的精华
 		j++;
 	}
 
-	long long x = q_pow(a, tem, n);		// 得到a^(n-1) mod n
+	var x = q_pow(a, tem, n);		// 得到a^(n-1) mod n
 	if (x == 1 || x == n - 1) return true;
 	while (j--)
 	{
@@ -505,7 +558,7 @@ bool witness(long long a, long long n)	// miller_rabin算法的精华
 }
 
 
-bool miller_rabin(long long n)  // 检验n是否是素数
+bool miller_rabin(var n)  // 检验n是否是素数
 {
 
 	if (n == 2)
@@ -514,7 +567,7 @@ bool miller_rabin(long long n)  // 检验n是否是素数
 		return false;
 	for (int i = 1; i <= times; i++)		// 做times次随机检验
 	{
-		long long a = Random(n - 2) + 1;	// 得到随机检验算子 a
+		var a = Random(n - 2) + 1;	// 得到随机检验算子 a
 		if (!witness(a, n))					// 用a检验n是否是素数
 			return false;
 	}
@@ -522,7 +575,7 @@ bool miller_rabin(long long n)  // 检验n是否是素数
 }
 
 
-long long gcd(long long a, long long b)
+var gcd(var a, var b)
 {
 	if (b == 0)
 		return a;
@@ -530,9 +583,9 @@ long long gcd(long long a, long long b)
 }
 
 
-long long pollard_rho(long long n, long long c)// 找到n的一个因子
+var pollard_rho(var n, var c)// 找到n的一个因子
 {
-	long long x, y, d, i = 1, k = 2;
+	var x, y, d, i = 1, k = 2;
 	x = Random(n - 1) + 1;
 	y = x;
 	while (1)
@@ -553,7 +606,7 @@ long long pollard_rho(long long n, long long c)// 找到n的一个因子
 }
 
 
-void find(long long n, long long c)
+void find(var n, var c)
 {
 	if (n == 1)
 		return;
@@ -563,7 +616,7 @@ void find(long long n, long long c)
 		number++;
 		return;
 	}
-	long long p = n;
+	var p = n;
 	while (p >= n)
 		p = pollard_rho(p, c--);
 	find(p, c);
@@ -594,9 +647,9 @@ void _checkID(int IDNumber[], char ID[])
 
 /*----------运算符重载区----------*/
 // vector重载"+"运算符
-vector<long> operator+(const vector<long>& vec1, const vector<long>& vec2)
+vector<var> operator+(const vector<var>& vec1, const vector<var>& vec2)
 {
-	vector<long> temp = vec1;
+	vector<var> temp = vec1;
 	for (auto item : vec2)
 		temp.push_back(item);
 	return temp;
@@ -646,7 +699,7 @@ class action
 		cout << "系统消息：请输入正确的数。" << endl << endl;
 	}
 	
-	inline void showRadicalMinusErrorMsg(long& error_value)
+	inline void showRadicalMinusErrorMsg(var& error_value)
 	{
 		showGeneralErrorMsg();
 		cerr << "异常消息：在进行平方根运算时根号内的值为负（001）" << endl;
@@ -668,21 +721,21 @@ class mult
 {
 private:
 	// 转储mult
-	vector<long> num_cst_arr;
-	vector<long> num_rad_arr;
-	vector<long> den_cst_arr;
-	vector<long> den_rad_arr;
-	vector<long> num_rad_arr_simp;
-	vector<long> den_rad_arr_simp;
+	vector<var> num_cst_arr;
+	vector<var> num_rad_arr;
+	vector<var> den_cst_arr;
+	vector<var> den_rad_arr;
+	vector<var> num_rad_arr_simp;
+	vector<var> den_rad_arr_simp;
 
 	general_struct_1 gcd_tmp;	// 用于计算公约数
-	long n_constant_merged = 0, d_constant_merged = 0;
-	long gcd = 1;
+	var n_constant_merged = 0, d_constant_merged = 0;
+	var gcd = 1;
 	bool mult_imput = false;
 	bool denominator_state = true;
 
 	// 预处理函数
-	void preProcessRadical(vector<long>& temp)
+	void preProcessRadical(vector<var>& temp)
 	{
 		// 数据预处理：删除为0的元素
 		for (var i = 0; i < temp.size(); i++)
@@ -696,12 +749,12 @@ private:
 	}
 
 	// 化简根式函数
-	void simplifyRadical(vector<long>& temp, long& cst)
+	void simplifyRadical(vector<var>& temp, var& cst)
 	{
 		// 检查容器是否有数据
 		if (temp.empty()) return;
 		simplify_quadratic_radical_struct sqr;
-		long end_const = temp.size();	// 缓冲常量，避免temp.end()内存地址随元素的插入而改变
+		var end_const = temp.size();	// 缓冲常量，避免temp.end()内存地址随元素的插入而改变
 		// 计算+暂存
 		for (var i = 0; i < end_const; i++)
 		{
@@ -726,7 +779,7 @@ private:
 	}
 	
 	// 合并根式函数
-	void mergeRadical(vector<long>& temp)
+	void mergeRadical(vector<var>& temp)
 	{
 		// 检查容器是否有数据
 		if (temp.empty()) return;
@@ -758,7 +811,7 @@ private:
 	}
 	
 	// 选择系数函数
-	void selectCoefficient(vector<long> temp)
+	void selectCoefficient(vector<var> temp)
 	{
 		for (var i = 0; i < temp.size(); i = i + 2)
 			gcd_tmp.data_array.push_back(temp[i]);
@@ -778,18 +831,18 @@ private:
 			tmp1.data_array.push_back(num_rad_arr[i]);
 		for (var i = 1; i < den_rad_arr.size(); i = i + 2)
 			tmp2.data_array.push_back(den_rad_arr[i]);
-		// 从"unsigned __int64"转换为"long&"会出错
-		long tmp1_size = tmp1.data_array.size();
-		long tmp2_size = tmp2.data_array.size();
+		// 从"unsigned __int64"转换为"var&"会出错
+		var tmp1_size = tmp1.data_array.size();
+		var tmp2_size = tmp2.data_array.size();
 		tmp1 = getSortedData(tmp1, tmp1_size);
 		tmp2 = getSortedData(tmp2, tmp2_size);
-		if (!checkEqualArray(tmp1.data_array, tmp2.data_array))
+		if (!isEqualArray(tmp1.data_array, tmp2.data_array))
 			return false;
 		return true;
 	}
 	
 	// 根式排序函数
-	vector<long> sortRadical(vector<long> temp)
+	vector<var> sortRadical(vector<var> temp)
 	{
 		// 系数由小至大
 		for (var k = 0; k < temp.size(); k++)
@@ -819,7 +872,7 @@ private:
 	}
 	
 	// 输出单行函数
-	void displayLine(long cst, vector<long> vectmp, long gcd = 1)
+	void displayLine(var cst, vector<var> vectmp, var gcd = 1)
 	{
 			if (cst != 0)
 				cout << cst / gcd;
@@ -839,12 +892,12 @@ private:
 	}
 
 public:
-	void setNumerator_constant(long nci)
+	void setNumerator_constant(var nci)
 	{
 		num_cst_arr.push_back(nci);
 	}
 	
-	void setNumerator_radical(long nri, bool state = add)
+	void setNumerator_radical(var nri, bool state = add)
 	{
 		if (nri < 0)
 			throw nri;
@@ -855,12 +908,12 @@ public:
 			num_rad_arr.push_back(-nri);
 	}
 	
-	void setDenominator_constant(long dci)
+	void setDenominator_constant(var dci)
 	{
 		den_cst_arr.push_back(dci);
 	}
 	
-	void setDenominator_radical(long dri, bool state = add)
+	void setDenominator_radical(var dri, bool state = add)
 	{
 		if (dri < 0)
 			throw dri;
@@ -917,7 +970,7 @@ public:
 		// 另：上下互为相反数，可整体约
 		// 另：负号提出来显示在最前端
 		// bug反馈：异常显示时内存地址始终不变
-		vector<long> tmp1, tmp2;
+		vector<var> tmp1, tmp2;
 		tmp1 = sortRadical(num_rad_arr);
 		tmp2 = sortRadical(den_rad_arr);
 		tmp1.push_back(n_constant_merged);
@@ -927,7 +980,7 @@ public:
 			// 分母为0（暂时先抛出这个，以后会引入异常类，程序崩溃了就先不管）
 			throw d_constant_merged;
 		}
-		if (checkEqualArray(tmp1, tmp2))
+		if (isEqualArray(tmp1, tmp2))
 		{
 			// 上下完全一致
 			cout << "1";
@@ -949,10 +1002,8 @@ public:
 		{
 			// 若比值始终不变，则启用分数显示（注意tmp1.size()为单数）
 			for (var i = 2; i < tmp1.size(); i = i + 2)
-			{
 				if ((double)(tmp1[i] / tmp2[i]) != (double)(tmp1[0] / tmp2[0]))
 					goto Default_Display;
-			}
 			displayFraction(getSimplifiedFraction(tmp1[0], tmp2[0]));
 			/* 1 3 2 5
 			    2 3 4 5 */
@@ -1066,7 +1117,7 @@ public:
 		return temp;
 	}
 
-	mult operator+(const long& num)
+	mult operator+(const var& num)
 	{
 		mult temp;
 		temp.setNumerator_constant(num);
@@ -1082,7 +1133,7 @@ public:
 		return getThis() + temp;
 	}
 
-	mult operator-(const long& num)
+	mult operator-(const var& num)
 	{
 		mult temp;
 		temp.setNumerator_constant(num);
@@ -1098,8 +1149,8 @@ public:
 		2.仅仅作乘法运算，不用考虑化简，移交给后面的模块处理，这在化简模块设计时就已经考虑到。
 		*/ 
 		mult temp;
-		long nc_sum_1 = getSumData(this->num_cst_arr);
-		long nc_sum_2 = getSumData(mult_2.num_cst_arr);
+		var nc_sum_1 = getSumData(this->num_cst_arr);
+		var nc_sum_2 = getSumData(mult_2.num_cst_arr);
 		temp.num_cst_arr.push_back(nc_sum_1 * nc_sum_2);
 		for (auto item : mult_2.num_rad_arr)
 			temp.num_rad_arr.push_back(pow(nc_sum_1, 2) * item);
@@ -1111,8 +1162,8 @@ public:
 		// 若分母不存在，则退出
 		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
 			return temp;
-		long dc_sum_1 = getSumData(this->den_cst_arr);
-		long dc_sum_2 = getSumData(mult_2.den_cst_arr);
+		var dc_sum_1 = getSumData(this->den_cst_arr);
+		var dc_sum_2 = getSumData(mult_2.den_cst_arr);
 		temp.num_cst_arr.push_back(dc_sum_1 * dc_sum_2);
 		for (auto item : mult_2.den_rad_arr)
 			temp.den_rad_arr.push_back(pow(dc_sum_1, 2) * item);
@@ -1124,7 +1175,7 @@ public:
 		return temp;
 	}
 
-	mult operator*(const long& num)
+	mult operator*(const var& num)
 	{
 		mult temp;
 		temp.setNumerator_constant(num);
@@ -1140,7 +1191,7 @@ public:
 		return getThis() * temp;
 	}
 
-	mult operator/(const long& num)
+	mult operator/(const var& num)
 	{
 		mult temp;
 		temp.setNumerator_constant(num);
@@ -1150,25 +1201,25 @@ public:
 	~mult() {};
 };
 // 反序计算，在类外部定义
-mult operator+(const long& num, const mult& num_mult)
+mult operator+(const var& num, const mult& num_mult)
 {
 	mult temp;
 	temp.setNumerator_constant(num);
 	return temp + num_mult;
 }
-mult operator-(const long& num, const mult& num_mult)
+mult operator-(const var& num, const mult& num_mult)
 {
 	mult temp;
 	temp.setNumerator_constant(num);
 	return temp - num_mult;
 }
-mult operator*(const long& num, const mult& num_mult)
+mult operator*(const var& num, const mult& num_mult)
 {
 	mult temp;
 	temp.setNumerator_constant(num);
 	return temp * num_mult;
 }
-mult operator/(const long& num, const mult& num_mult)
+mult operator/(const var& num, const mult& num_mult)
 {
 	mult temp;
 	temp.setNumerator_constant(num);
@@ -1191,7 +1242,7 @@ public:
 /*----------全局变量/结构体/对象声明区/杂项区2----------*/
 long double pretime;
 bool speedTestState = enabled;		// 避免多次测速
-long long SwitchNum;
+var SwitchNum;
 clock_t start, stop;			// 初始化计时函数
 
 /*----------主函数----------*/
@@ -1212,10 +1263,10 @@ Select_Num_Scan:
 	{
 	case 1:		// 解/分析二元一次方程
 	{
-		long* a = new long;		// 用于方程的输入
-		long* b = new long;
-		long* c = new long;
-		long* delta = new long;
+		var* a = new var;		// 用于方程的输入
+		var* b = new var;
+		var* c = new var;
+		var* delta = new var;
 		general_struct_1 factor_a, factor_c;
 
 		// int m1, d1, m2, d2, m3, d3, mid4, mid5, mid6, d = 0; //
@@ -1259,7 +1310,7 @@ Select_Num_Scan:
 			display.displayMult();
 			cout << "." << endl << endl;
 		}
-		long x_numerator, x_denominator, y_numerator, y_denominator;	// 声明x轴、y轴坐标
+		var x_numerator, x_denominator, y_numerator, y_denominator;	// 声明x轴、y轴坐标
 		// 开始运算，赋值
 		x_numerator   = - *b;
 		x_denominator = 2 * *a;
@@ -1349,8 +1400,8 @@ Select_Num_Scan:
 						displayFraction(getSimplifiedFraction(-FZC[i], FZA[j]));
 						cout << "，x(2)=";
 						// 暂存，防止G++抽风
-						long tmp1 = -*c / FZC[i];
-						long tmp2 = *a / FZA[j];
+						var tmp1 = -*c / FZC[i];
+						var tmp2 = *a / FZA[j];
 						displayFraction(getSimplifiedFraction(tmp1, tmp2));
 						cout << "." << endl << endl;
 					}
@@ -1368,12 +1419,12 @@ Select_Num_Scan:
 		{
 			cout << "∵Δ>0，∴方程有两个不相等的实数根." << endl;
 			cout << "∴x(1)=";
-			if (sqrt(*delta) == (long)sqrt(*delta))	// 是完全平方数
+			if (sqrt(*delta) == (var)sqrt(*delta))	// 是完全平方数
 			{
 				// 中间量，避免安卓端Linux的G++出现蜜汁编译错误
-				long temp1 = -1 * *b + sqrt(*delta);
-				long temp2 = -1 * *b - sqrt(*delta);
-				long temp3 = 2 * *a;
+				var temp1 = -1 * *b + sqrt(*delta);
+				var temp2 = -1 * *b - sqrt(*delta);
+				var temp3 = 2 * *a;
 				displayFraction(getSimplifiedFraction(temp1, temp3));
 				cout << "，x(2)=";
 				displayFraction(getSimplifiedFraction(temp2, temp3));
@@ -1435,7 +1486,7 @@ Select_Num_Scan:
 		// 测速结束
 		long double* predicttime = new long double;
 		double* duration = new double;
-		long* numscan = new long;
+		var* numscan = new var;
 Case2_Scan:
 		printf("{!}请输入一个整数，十一位数及以下，按回车键继续。\n");
 		cout << "[输入整数]";
@@ -1454,7 +1505,7 @@ Case2_Scan:
 Select_BigTask_Scan_Default:
 			cout << "你输入的数预计运算时间大于一分钟，检测到大型任务，是否继续？" << endl
 				 << "请输入[0:Y/1:N]";
-			long* Select_BigTask_Scan = new long;
+			var* Select_BigTask_Scan = new var;
 			cin >> *Select_BigTask_Scan;
 			cout << endl;	// 空一行
 			switch (*Select_BigTask_Scan)
@@ -1502,7 +1553,7 @@ Select_BigTask_Scan_Default:
 	Case3_Scan:
 		cout << "[数据的数量] = " << endl;
 		cin >> temp.count;
-		for (long i = 0; i < temp.count; i++)
+		for (var i = 0; i < temp.count; i++)
 		{
 		printf("[输入数据%ld] = ", i + 1);
 		temp.data_array.push_back(0);
@@ -1522,7 +1573,7 @@ Select_BigTask_Scan_Default:
 	Case4_Scan:
 		cout << "{!}请输入一个正整数：" << endl << "[a]=";
 		cin >> *numscan;
-		if (sqrt(*numscan) == (long long)sqrt(*numscan))
+		if (sqrt(*numscan) == (var)sqrt(*numscan))
 			cout << "该数是完全平方数。开方值为：" << sqrt(*numscan) << "." << endl;
 		else
 			cout << "该数不是完全平方数。" << endl;
@@ -1534,7 +1585,7 @@ Select_BigTask_Scan_Default:
 	case 5:		// 数据排序
 	{
 		general_struct_1 input;
-		long* numamount = new long;
+		var* numamount = new var;
 	Case5_Scan:
 		cout << "请输入数据的数量" << endl << "[数量]";
 		cin >> *numamount;
@@ -1559,8 +1610,8 @@ Select_BigTask_Scan_Default:
 
 	case 6:		// 分数约分
 	{
-		long* numscan1 = new long;
-		long* numscan2 = new long;
+		var* numscan1 = new var;
+		var* numscan2 = new var;
 		simplify_fraction_struct simplified;
 		cout << "请输入两个正整数，分别作为分子和分母。" << endl
 			<< "[分子]";
@@ -1580,7 +1631,7 @@ Select_BigTask_Scan_Default:
 
 	case 7:		// 二次根式化简
 	{
-		long* numscan = new long;
+		var* numscan = new var;
 		cout << "请输入要化简的二次根式：" << endl << "√";
 		cin >> *numscan;
 		simplify_quadratic_radical_struct returnNums;
@@ -1600,7 +1651,7 @@ Select_BigTask_Scan_Default:
 
 	case 8:		// 直线到直线距离计算
 	{
-		long k, b1, b2;
+		var k, b1, b2;
 		cout << "已知两条平行直线y=kx+b，请依次输入k、b1、b2的值." << endl;
 		cin >> k >> b1 >> b2;
 		cout << "两直线距离为：";
@@ -1617,7 +1668,7 @@ Select_BigTask_Scan_Default:
 
 	case 9:		// 点到直线距离计算
 	{
-		long m, n, k, b;
+		var m, n, k, b;
 		cout << "已知A（m，n），直线l：y = kx + b，请依次输入m、n、k、b的值." << endl;
 		cin >> m >> n >> k >> b;
 		cout << "点A到直线l的距离为：";
@@ -1632,7 +1683,7 @@ Select_BigTask_Scan_Default:
 
 	case 10:	// 点到点距离计算
 	{
-		long x1, y1, x2, y2;
+		var x1, y1, x2, y2;
 		cout << "已知两个点的坐标A（x1，y1）、B（x2，y2），请依次输入x1、y1、x2、y2的值." << endl;
 		cin >> x1 >> y1 >> x2 >> y2;
 		cout << "两点之间的距离为：";
@@ -1647,10 +1698,10 @@ Select_BigTask_Scan_Default:
 	case 13:	// 生成随机数
 	{
 		// 申请内存
-		long* max = new long;
-		long* min = new long;
-		long* randnum = new long;
-		long* randnumamount = new long;
+		var* max = new var;
+		var* min = new var;
+		var* randnum = new var;
+		var* randnumamount = new var;
 		cout << "请输入要生成的随机数的区间。" << endl;
 		cout << "[最小值]" << endl;
 		cin >> *min;
@@ -1671,7 +1722,7 @@ Select_BigTask_Scan_Default:
 			for (var i = 0;i < 3;i++)
 				(*max)++;
 		// 开始调用，生成随机数
-		for (long i = 0;i < *randnumamount;i++)
+		for (var i = 0;i < *randnumamount;i++)
 		{
 			*randnum = getRandData(*min, *max);
 			printf("[输出数%ld] = ", i + 1);
@@ -1690,8 +1741,8 @@ Select_BigTask_Scan_Default:
 
 	case 15:		// 分解质因数（by 倚剑笑紅尘）
 	{
-		long long tar;
-		cout << "输入一个正整数（值域：long long）" << endl;
+		var tar;
+		cout << "输入一个正整数（值域：var）" << endl;
 		cin >> tar;
 		number = 0;
 		m.clear();
@@ -1699,7 +1750,7 @@ Select_BigTask_Scan_Default:
 		printf("%lld = ", tar);
 		if (m.empty())
 			printf("%lld\n", tar);
-		for (map<long long, int>::iterator iter = m.begin(); iter != m.end();)
+		for (map<var, int>::iterator iter = m.begin(); iter != m.end();)
 		{
 			printf("%lld^%d", iter->first, iter->second);
 			if ((++iter) != m.end())
@@ -1733,7 +1784,7 @@ Select_BigTask_Scan_Default:
 	{
 		cout << "[开发者测试]" << endl;
 		cout << "1.根式化简\n0.退出\n";
-		long tmp;
+		var tmp;
 		cin >> tmp;
 		for (; ; )
 		{
@@ -1742,7 +1793,7 @@ Select_BigTask_Scan_Default:
 			case 1:
 			{
 				mult display;
-				long nca, nra, dca, dra, nc, nr, dc, dr;
+				var nca, nra, dca, dra, nc, nr, dc, dr;
 				cout << "分子->常数\n"
 					<< "分子->根号\n"
 					<< "分母->常数\n"
@@ -1779,7 +1830,7 @@ Select_BigTask_Scan_Default:
 						display.setDenominator_radical(dr);
 					}
 				}
-				catch (long err_tmp)
+				catch (var err_tmp)
 				{
 					action.showRadicalMinusErrorMsg(err_tmp);
 				}
