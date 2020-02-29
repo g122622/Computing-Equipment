@@ -719,20 +719,28 @@ class action
 
 class mult
 {
+/*
+Tips:
+1.若不需要分母，则分母不set任何数据；反之若要使用分母，则set任一非零数（一般对用户数据不做处理）。
+2.未完待续。
+*/
 private:
-	// 转储mult
+	// 存储mult
 	vector<var> num_cst_arr;
 	vector<var> num_rad_arr;
 	vector<var> den_cst_arr;
 	vector<var> den_rad_arr;
 	vector<var> num_rad_arr_simp;
 	vector<var> den_rad_arr_simp;
+	var n_constant_merged = 0, d_constant_merged = 0;
 
 	general_struct_1 gcd_tmp;	// 用于计算公约数
-	var n_constant_merged = 0, d_constant_merged = 0;
 	var gcd = 1;
-	bool mult_imput = false;
-	bool denominator_state = true;
+
+	// 存储状态（布尔值区）
+	bool mult_imput			= false;
+	bool denominator_state	= true;
+	bool is_simped			= false;
 
 	// 预处理函数
 	void preProcessRadical(vector<var>& temp)
@@ -783,9 +791,9 @@ private:
 	{
 		// 检查容器是否有数据
 		if (temp.empty()) return;
-		for (var j = 1; j < temp.size(); j = j + 2)
+		for (var j = 1; j < temp.size(); j += 2)
 		{
-			for (var i = 1; i < temp.size(); i = i + 2)
+			for (var i = 1; i < temp.size(); i += 2)
 			{
 				if (j == i) continue;	// 避免错误计算
 				if (temp[j] == temp[i])
@@ -800,7 +808,7 @@ private:
 			}
 		}
 		// 检查系数，删除系数为零的项
-		for (var i = 0; i < temp.size(); i = i + 2)
+		for (var i = 0; i < temp.size(); i += 2)
 		{
 			if (temp[i] == 0)
 			{
@@ -811,26 +819,26 @@ private:
 	}
 	
 	// 选择系数函数
-	void selectCoefficient(vector<var> temp)
+	void selectCoefficient(const vector<var>& temp)
 	{
-		for (var i = 0; i < temp.size(); i = i + 2)
+		for (var i = 0; i < temp.size(); i += 2)
 			gcd_tmp.data_array.push_back(temp[i]);
 	}
 
 	// 判断整体约分函数
 	bool checkEntirety()
 	{
-		if (num_rad_arr.empty() || den_rad_arr.empty())
+		if (num_rad_arr_simp.empty() || den_rad_arr_simp.empty())
 			return false;
 		if (n_constant_merged == 0 && d_constant_merged != 0)
 			return false;
 		if (d_constant_merged == 0 && n_constant_merged != 0)
 			return false;
 		general_struct_1 tmp1, tmp2;
-		for (var i = 1; i < num_rad_arr.size(); i = i + 2)
-			tmp1.data_array.push_back(num_rad_arr[i]);
-		for (var i = 1; i < den_rad_arr.size(); i = i + 2)
-			tmp2.data_array.push_back(den_rad_arr[i]);
+		for (var i = 1; i < num_rad_arr_simp.size(); i += 2)
+			tmp1.data_array.push_back(num_rad_arr_simp[i]);
+		for (var i = 1; i < den_rad_arr_simp.size(); i += 2)
+			tmp2.data_array.push_back(den_rad_arr_simp[i]);
 		// 从"unsigned __int64"转换为"var&"会出错
 		var tmp1_size = tmp1.data_array.size();
 		var tmp2_size = tmp2.data_array.size();
@@ -847,7 +855,7 @@ private:
 		// 系数由小至大
 		for (var k = 0; k < temp.size(); k++)
 		{
-			for (var j = temp.size() - 2; j > 0; j = j - 2)
+			for (var j = temp.size() - 2; j > 0; j -= 2)
 			{
 				if (temp[j] < temp[j - 2])
 				{
@@ -876,7 +884,7 @@ private:
 	{
 			if (cst != 0)
 				cout << cst / gcd;
-			for (var j = 0; j < vectmp.size(); j = j + 2)
+			for (var j = 0; j < vectmp.size(); j += 2)
 			{
 				// 前部分（系数）
 				if (vectmp[j] == 0 || vectmp[j + 1] == 0) continue;
@@ -895,6 +903,7 @@ public:
 	void setNumerator_constant(var nci)
 	{
 		num_cst_arr.push_back(nci);
+		is_simped = false;
 	}
 	
 	void setNumerator_radical(var nri, bool state = add)
@@ -906,11 +915,13 @@ public:
 			num_rad_arr.push_back(nri);
 		if (state == subtract)	// 允许负数的存在
 			num_rad_arr.push_back(-nri);
+		is_simped = false;
 	}
 	
 	void setDenominator_constant(var dci)
 	{
 		den_cst_arr.push_back(dci);
+		is_simped = false;
 	}
 	
 	void setDenominator_radical(var dri, bool state = add)
@@ -922,39 +933,44 @@ public:
 			den_rad_arr.push_back(dri);
 		if (state == subtract)	// 允许负数的存在
 			den_rad_arr.push_back(-dri);
+		is_simped = false;
 	}
 
 	void simplifyMult()
 	{
+		if (is_simped)
+			return;
+		is_simped = true;
+		num_rad_arr_simp = num_rad_arr;
+		den_rad_arr_simp = den_rad_arr;
 		// 检查两个分母容器状态，若均为空则判定为分母无效
 		if (den_cst_arr.empty() && den_rad_arr.empty())
 		{
 			denominator_state = false;
-			preProcessRadical(num_rad_arr);
+			preProcessRadical(num_rad_arr_simp);
 			n_constant_merged = getSumData(num_cst_arr);
-			simplifyRadical(num_rad_arr, n_constant_merged);
-			mergeRadical(num_rad_arr);
-			return;
+			simplifyRadical(num_rad_arr_simp, n_constant_merged);
+			mergeRadical(num_rad_arr_simp);
 		}
 		else
 		{
 			denominator_state = true;
-			preProcessRadical(num_rad_arr);
-			preProcessRadical(den_rad_arr);
+			preProcessRadical(num_rad_arr_simp);
+			preProcessRadical(den_rad_arr_simp);
 			n_constant_merged = getSumData(num_cst_arr);
 			d_constant_merged = getSumData(den_cst_arr);
-			simplifyRadical(num_rad_arr, n_constant_merged);
-			simplifyRadical(den_rad_arr, d_constant_merged);
-			mergeRadical(num_rad_arr);
-			mergeRadical(den_rad_arr);
+			simplifyRadical(num_rad_arr_simp, n_constant_merged);
+			simplifyRadical(den_rad_arr_simp, d_constant_merged);
+			mergeRadical(num_rad_arr_simp);
+			mergeRadical(den_rad_arr_simp);
 			gcd_tmp.data_array.push_back(n_constant_merged);
 			gcd_tmp.data_array.push_back(d_constant_merged);
-			selectCoefficient(num_rad_arr);
-			selectCoefficient(den_rad_arr);
+			selectCoefficient(num_rad_arr_simp);
+			selectCoefficient(den_rad_arr_simp);
 			gcd_tmp.count = gcd_tmp.data_array.size();
 			gcd = getGreatestCommonDivisor(gcd_tmp);
-			return;
 		}
+		return;
 	}
 
 	void displayMult()
@@ -963,7 +979,7 @@ public:
 		// 检查两个分母容器状态，若均为空则判定为分母无效，单独显示分子
 		if (!denominator_state)
 		{
-			displayLine(n_constant_merged, num_rad_arr);
+			displayLine(n_constant_merged, num_rad_arr_simp);
 			return;
 		}
 		// 另：分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 / 2）
@@ -971,11 +987,11 @@ public:
 		// 另：负号提出来显示在最前端
 		// bug反馈：异常显示时内存地址始终不变
 		vector<var> tmp1, tmp2;
-		tmp1 = sortRadical(num_rad_arr);
-		tmp2 = sortRadical(den_rad_arr);
+		tmp1 = sortRadical(num_rad_arr_simp);
+		tmp2 = sortRadical(den_rad_arr_simp);
 		tmp1.push_back(n_constant_merged);
 		tmp2.push_back(d_constant_merged);
-		if (den_rad_arr.empty() && d_constant_merged == 0)
+		if (den_rad_arr_simp.empty() && d_constant_merged == 0)
 		{
 			// 分母为0（暂时先抛出这个，以后会引入异常类，程序崩溃了就先不管）
 			throw d_constant_merged;
@@ -986,13 +1002,13 @@ public:
 			cout << "1";
 			return;
 		}
-		if (num_rad_arr.empty() && n_constant_merged == 0)
+		if (num_rad_arr_simp.empty() && n_constant_merged == 0)
 		{
 			// 分子为0
 			cout << "0";
 			return;
 		}
-		if (d_constant_merged / gcd == 1 && den_rad_arr.empty())
+		if (d_constant_merged / gcd == 1 && den_rad_arr_simp.empty())
 		{
 			// 分母为1
 			displayLine(n_constant_merged, num_rad_arr, gcd);
@@ -1001,7 +1017,7 @@ public:
 		if (checkEntirety())
 		{
 			// 若比值始终不变，则启用分数显示（注意tmp1.size()为单数）
-			for (var i = 2; i < tmp1.size(); i = i + 2)
+			for (var i = 2; i < tmp1.size(); i += 2)
 				if ((double)(tmp1[i] / tmp2[i]) != (double)(tmp1[0] / tmp2[0]))
 					goto Default_Display;
 			displayFraction(getSimplifiedFraction(tmp1[0], tmp2[0]));
@@ -1010,9 +1026,9 @@ public:
 			return;
 		}
 		Default_Display:
-		displayLine(n_constant_merged, num_rad_arr, gcd);
+		displayLine(n_constant_merged, num_rad_arr_simp, gcd);
 		cout << " / ";
-		displayLine(d_constant_merged, den_rad_arr, gcd);
+		displayLine(d_constant_merged, den_rad_arr_simp, gcd);
 	}
 	
 	long double getApproximateValue()
