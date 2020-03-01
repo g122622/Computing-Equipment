@@ -778,7 +778,7 @@ private:
 			if (temp[i] >= 0)
 				temp.push_back(sqr.out_radical);
 			else
-				temp.push_back( - sqr.out_radical);
+				temp.push_back(-sqr.out_radical);
 			temp.push_back(sqr.in_radical);
 		}
 		temp.erase(temp.begin(), temp.begin() + end_const);	// 清除原数据
@@ -880,7 +880,7 @@ private:
 	}
 	
 	// 输出单行函数
-	void displayLine(var cst, vector<var> vectmp, var gcd = 1)
+	void displayLine(const var& cst, const vector<var>& vectmp, var gcd = 1)
 	{
 			if (cst != 0)
 				cout << cst / gcd;
@@ -994,29 +994,27 @@ public:
 		if (den_rad_arr_simp.empty() && d_constant_merged == 0)
 		{
 			// 分母为0（暂时先抛出这个，以后会引入异常类，程序崩溃了就先不管）
+			cerr << "error!" << endl;
 			throw d_constant_merged;
 		}
-		if (isEqualArray(tmp1, tmp2))
+		if (isEqualArray(tmp1, tmp2))// 上下完全一致
 		{
-			// 上下完全一致
 			cout << "1";
 			return;
 		}
-		if (num_rad_arr_simp.empty() && n_constant_merged == 0)
+		if (num_rad_arr_simp.empty() && n_constant_merged == 0)// 分子为0
 		{
-			// 分子为0
 			cout << "0";
 			return;
 		}
-		if (d_constant_merged / gcd == 1 && den_rad_arr_simp.empty())
+		if (d_constant_merged / gcd == 1 && den_rad_arr_simp.empty())// 分母为1
 		{
-			// 分母为1
 			displayLine(n_constant_merged, num_rad_arr, gcd);
 			return;
 		}
 		if (checkEntirety())
 		{
-			// 若比值始终不变，则启用分数显示（注意tmp1.size()为单数）
+			// 若比值始终不变，则启用分数显示（注意tmp1.size()为奇数）
 			for (var i = 2; i < tmp1.size(); i += 2)
 				if ((double)(tmp1[i] / tmp2[i]) != (double)(tmp1[0] / tmp2[0]))
 					goto Default_Display;
@@ -1808,7 +1806,7 @@ Select_BigTask_Scan_Default:
 			{
 			case 1:
 			{
-				mult display;
+				mult m1, m2;
 				var nca, nra, dca, dra, nc, nr, dc, dr;
 				cout << "分子->常数\n"
 					<< "分子->根号\n"
@@ -1821,14 +1819,14 @@ Select_BigTask_Scan_Default:
 					for (var i = 0; i < nca; i++)
 					{
 						cin >> nc;
-						display.setNumerator_constant(nc);
+						m1.setNumerator_constant(nc);
 					}
 					cout << "=== end" << endl;
 					cout << "分子->根号 --- begin" << endl;
 					for (var i = 0; i < nra; i++)
 					{
 						cin >> nr;
-						display.setNumerator_radical(nr);
+						m1.setNumerator_radical(nr);
 					}
 					cout << "=== end" << endl;
 					// ----------
@@ -1836,14 +1834,14 @@ Select_BigTask_Scan_Default:
 					for (var i = 0; i < dca; i++)
 					{
 						cin >> dc;
-						display.setDenominator_constant(dc);
+						m1.setDenominator_constant(dc);
 					}
 					cout << "=== end" << endl;
 					cout << "分母->根号 --- begin" << endl;
 					for (var i = 0; i < dra; i++)
 					{
 						cin >> dr;
-						display.setDenominator_radical(dr);
+						m1.setDenominator_radical(dr);
 					}
 				}
 				catch (var err_tmp)
@@ -1851,9 +1849,21 @@ Select_BigTask_Scan_Default:
 					action.showRadicalMinusErrorMsg(err_tmp);
 				}
 				cout << "=== end" << endl;
-				cout << (long double)display.getApproximateValue() << endl;
-				display.displayMult();
+				mult m3 = m1 * m1;
+				//cout << (long double)m1.getApproximateValue() << endl;
+				m3.displayMult();
 				cout << endl;
+			}
+
+			case 2:
+			{
+				vector<var> vec;
+				for (var i = 0; i < 5; i++)
+				{
+					vec.push_back(0);
+					cin >> vec[i];
+				}
+				cout << getSumData(vec);
 			}
 
 			case 0:
