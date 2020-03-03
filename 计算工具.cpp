@@ -940,7 +940,6 @@ public:
 	{
 		if (is_simped)
 			return;
-		is_simped = true;
 		num_rad_arr_simp = num_rad_arr;
 		den_rad_arr_simp = den_rad_arr;
 		// 检查两个分母容器状态，若均为空则判定为分母无效
@@ -970,6 +969,7 @@ public:
 			gcd_tmp.count = gcd_tmp.data_array.size();
 			gcd = getGreatestCommonDivisor(gcd_tmp);
 		}
+		is_simped = true;
 		return;
 	}
 
@@ -982,7 +982,7 @@ public:
 			displayLine(n_constant_merged, num_rad_arr_simp);
 			return;
 		}
-		// 另：分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 / 2）
+		// TODO:分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 / 2）
 		// 另：上下互为相反数，可整体约
 		// 另：负号提出来显示在最前端
 		// bug反馈：异常显示时内存地址始终不变
@@ -1051,7 +1051,7 @@ public:
 		// 无分子，则式子为0，不做任何操作
 		if (num_cst_arr.empty() && num_rad_arr.empty())
 			return;
-		mult temp  = getThis() * -1;
+		mult temp = getThis() * -1;
 		this->denominator_state = clearAll();
 		this->num_cst_arr = temp.num_cst_arr;
 		this->num_rad_arr = temp.num_rad_arr;
@@ -1079,17 +1079,21 @@ public:
 
 	bool clearAll()
 	{
-		num_cst_arr.clear();
-		num_rad_arr.clear();
-		den_cst_arr.clear();
-		den_rad_arr.clear();
-		gcd_tmp.data_array.clear();
-		gcd_tmp.count = 0;
-		n_constant_merged = 0;
-		d_constant_merged = 0;
-		gcd = 1;
-		bool temp = denominator_state;
-		denominator_state = true;
+		this->num_cst_arr.clear();
+		this->num_rad_arr.clear();
+		this->den_cst_arr.clear();
+		this->den_rad_arr.clear();
+		this->num_rad_arr_simp.clear();
+		this->den_rad_arr_simp.clear();
+		this->gcd_tmp.data_array.clear();
+		this->gcd_tmp.count = 0;
+		this->n_constant_merged = 0;
+		this->d_constant_merged = 0;
+		this->gcd = 1;
+		bool temp = this->denominator_state;
+		this->mult_imput		= false;
+		this->denominator_state	= true;
+		this->is_simped			= false;
 		return temp;
 	}
 
@@ -1161,24 +1165,31 @@ public:
 		Tips:
 		1.这里的根式以原数据的形式存储。
 		2.仅仅作乘法运算，不用考虑化简，移交给后面的模块处理，这在化简模块设计时就已经考虑到。
-		*/ 
+		3.应该以尽量减少计算量为原则，建立完备的分类讨论体系。
+		*/
 		mult temp;
 		var nc_sum_1 = getSumData(this->num_cst_arr);
 		var nc_sum_2 = getSumData(mult_2.num_cst_arr);
-		temp.num_cst_arr.push_back(nc_sum_1 * nc_sum_2);
+		temp.num_cst_arr.push_back(nc_sum_1 * nc_sum_2);	// 所有常数相乘（仅限常数）
 		for (auto item : mult_2.num_rad_arr)
-			temp.num_rad_arr.push_back(pow(nc_sum_1, 2) * item);
+			temp.num_rad_arr.push_back(pow(nc_sum_1, 2) * item);// this常数与mult_2根号相乘
 		for (auto item : this->num_rad_arr)
-			temp.num_rad_arr.push_back(pow(nc_sum_2, 2) * item);
+			temp.num_rad_arr.push_back(pow(nc_sum_2, 2) * item);// mult_2常数与this根号相乘
 		for (auto item1 : this->num_rad_arr)
 			for (auto item2 : mult_2.num_rad_arr)
-				temp.num_rad_arr.push_back(item1 * item2);
-		// 若分母不存在，则退出
+				temp.num_rad_arr.push_back(item1 * item2);	// 所有根号相乘（仅限根号）
+		// 若二式分母均不存在，则退出
 		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
 			return temp;
+		// 若其中一式分母不存在，强制增加分母"1"
+		if (this->den_cst_arr.empty() && this->den_rad_arr.empty())
+			this->setDenominator_constant(1);
+		if (mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
+			temp.setDenominator_constant(1);
+		// 开始计算分母
 		var dc_sum_1 = getSumData(this->den_cst_arr);
 		var dc_sum_2 = getSumData(mult_2.den_cst_arr);
-		temp.num_cst_arr.push_back(dc_sum_1 * dc_sum_2);
+		temp.den_cst_arr.push_back(dc_sum_1 * dc_sum_2);
 		for (auto item : mult_2.den_rad_arr)
 			temp.den_rad_arr.push_back(pow(dc_sum_1, 2) * item);
 		for (auto item : this->den_rad_arr)
@@ -1227,11 +1238,9 @@ mult operator-(const var& num, const mult& num_mult)
 	temp.setNumerator_constant(num);
 	return temp - num_mult;
 }
-mult operator*(const var& num, const mult& num_mult)
+mult operator*(var& num, mult& num_mult)
 {
-	mult temp;
-	temp.setNumerator_constant(num);
-	return temp * num_mult;
+	return num_mult * num;
 }
 mult operator/(const var& num, const mult& num_mult)
 {
@@ -1849,7 +1858,7 @@ Select_BigTask_Scan_Default:
 					action.showRadicalMinusErrorMsg(err_tmp);
 				}
 				cout << "=== end" << endl;
-				mult m3 = m1 * m1;
+				mult m3 = m1 - m1;
 				//cout << (long double)m1.getApproximateValue() << endl;
 				m3.displayMult();
 				cout << endl;
