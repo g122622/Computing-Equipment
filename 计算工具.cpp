@@ -719,6 +719,7 @@ class action
 
 class mult
 {
+	// TODO:preProcessDen()运用到全局
 /*
 Tips:
 1.若不需要分母，则分母不set任何数据；反之若要使用分母，则set任一非零数（一般对用户数据不做处理）。
@@ -738,11 +739,17 @@ private:
 	var gcd = 1;
 
 	// 存储状态（布尔值区）
-	bool mult_imput			= false;
-	bool denominator_state	= true;
-	bool is_simped			= false;
+	bool is_simped				= false;
+	bool has_pre_process_den	= false;
 
-	// 预处理函数
+	// 分母预处理函数
+	void preProcessDen()
+	{
+		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && !has_pre_process_den)
+			this->setDenominator_constant(1);
+	}
+
+	// 根式预处理函数
 	void preProcessRadical(vector<var>& temp)
 	{
 		// 数据预处理：删除为0的元素
@@ -938,6 +945,7 @@ public:
 
 	void simplifyMult()
 	{
+		preProcessDen();
 		if (is_simped)
 			return;
 		num_rad_arr_simp = num_rad_arr;
@@ -1031,6 +1039,7 @@ public:
 	
 	long double getApproximateValue()
 	{
+		preProcessDen()
 		long double numerator = 0.0;
 		numerator = getSumData(this->num_cst_arr);
 		for (auto item : this->num_rad_arr)
@@ -1077,6 +1086,11 @@ public:
 		return temp;
 	}
 
+	void setThis(const mult&)
+	{
+		this->denominator_state = this->clearAll();
+	}
+
 	bool clearAll()
 	{
 		this->num_cst_arr.clear();
@@ -1091,7 +1105,6 @@ public:
 		this->d_constant_merged = 0;
 		this->gcd = 1;
 		bool temp = this->denominator_state;
-		this->mult_imput		= false;
 		this->denominator_state	= true;
 		this->is_simped			= false;
 		return temp;
@@ -1100,6 +1113,7 @@ public:
 	// 重载"+"运算符
 	mult operator+(const mult& mult_2)
 	{
+		this->is_simped = false;
 		mult temp;
 		// 检查分母，若分母存在，则通分
 		// case1：均无分母，分子直接相加
@@ -1137,6 +1151,7 @@ public:
 
 	mult operator+(const var& num)
 	{
+		this->is_simped = false;
 		mult temp;
 		temp.setNumerator_constant(num);
 		return getThis() + temp;
@@ -1145,6 +1160,7 @@ public:
 	// 重载"-"运算符
 	mult operator-(const mult& mult_2)
 	{
+		this->is_simped = false;
 		mult temp = mult_2;
 		temp.opposite();
 		// 加相反数
@@ -1153,6 +1169,7 @@ public:
 
 	mult operator-(const var& num)
 	{
+		this->is_simped = false;
 		mult temp;
 		temp.setNumerator_constant(num);
 		return getThis() - temp;
@@ -1167,6 +1184,7 @@ public:
 		2.仅仅作乘法运算，不用考虑化简，移交给后面的模块处理，这在化简模块设计时就已经考虑到。
 		3.应该以尽量减少计算量为原则，建立完备的分类讨论体系。
 		*/
+		this->is_simped = false;
 		mult temp;
 		var nc_sum_1 = getSumData(this->num_cst_arr);
 		var nc_sum_2 = getSumData(mult_2.num_cst_arr);
@@ -1202,6 +1220,7 @@ public:
 
 	mult operator*(const var& num)
 	{
+		this->is_simped = false;
 		mult temp;
 		temp.setNumerator_constant(num);
 		return getThis() * temp;
@@ -1210,6 +1229,7 @@ public:
 	// 重载/运算符
 	mult operator/(const mult& mult_2)
 	{
+		this->is_simped = false;
 		mult temp = mult_2;
 		temp.reciprocal();
 		// 乘以倒数
@@ -1218,12 +1238,22 @@ public:
 
 	mult operator/(const var& num)
 	{
+		this->is_simped = false;
 		mult temp;
 		temp.setNumerator_constant(num);
 		return getThis() / temp;
 	}
-	mult() {};
-	~mult() {};
+
+	// 重载++运算符
+	void operator++()
+	{
+		this->is_simped = false;
+		setThis(getThis() + 1);
+	}
+
+	//mult() {};
+	//~mult() {};
+
 };
 // 反序计算，在类外部定义
 mult operator+(const var& num, const mult& num_mult)
