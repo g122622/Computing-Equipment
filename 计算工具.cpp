@@ -740,13 +740,17 @@ private:
 
 	// 存储状态（布尔值区）
 	bool is_simped				= false;
-	bool has_pre_process_den	= false;
+	bool have_pre_process_den	= false;
 
 	// 分母预处理函数
 	void preProcessDen()
 	{
-		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && !has_pre_process_den)
+		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && !have_pre_process_den)
+		{
 			this->setDenominator_constant(1);
+			have_pre_process_den = true;
+		}
+		return;
 	}
 
 	// 根式预处理函数
@@ -951,16 +955,16 @@ public:
 		num_rad_arr_simp = num_rad_arr;
 		den_rad_arr_simp = den_rad_arr;
 		// 检查两个分母容器状态，若均为空则判定为分母无效
-		if (den_cst_arr.empty() && den_rad_arr.empty())
-		{
-			denominator_state = false;
-			preProcessRadical(num_rad_arr_simp);
-			n_constant_merged = getSumData(num_cst_arr);
-			simplifyRadical(num_rad_arr_simp, n_constant_merged);
-			mergeRadical(num_rad_arr_simp);
-		}
-		else
-		{
+//		if (den_cst_arr.empty() && den_rad_arr.empty())
+//		{
+//			denominator_state = false;
+//			preProcessRadical(num_rad_arr_simp);
+//			n_constant_merged = getSumData(num_cst_arr);
+//			simplifyRadical(num_rad_arr_simp, n_constant_merged);
+//			mergeRadical(num_rad_arr_simp);
+//		}
+//		else
+//		{
 			denominator_state = true;
 			preProcessRadical(num_rad_arr_simp);
 			preProcessRadical(den_rad_arr_simp);
@@ -976,7 +980,7 @@ public:
 			selectCoefficient(den_rad_arr_simp);
 			gcd_tmp.count = gcd_tmp.data_array.size();
 			gcd = getGreatestCommonDivisor(gcd_tmp);
-		}
+//		}
 		is_simped = true;
 		return;
 	}
@@ -991,9 +995,9 @@ public:
 			return;
 		}
 		// TODO:分子分母可整体约（eg.√2 + 5 / 2√2 + 10 = 1 / 2）
-		// 另：上下互为相反数，可整体约
-		// 另：负号提出来显示在最前端
-		// bug反馈：异常显示时内存地址始终不变
+		// TODO:上下互为相反数，可整体约
+		// TODO:负号提出来显示在最前端
+		// TODO:异常显示时内存地址始终不变
 		vector<var> tmp1, tmp2;
 		tmp1 = sortRadical(num_rad_arr_simp);
 		tmp2 = sortRadical(den_rad_arr_simp);
@@ -1083,6 +1087,8 @@ public:
 		temp.num_rad_arr = this->num_rad_arr;
 		temp.den_cst_arr = this->den_cst_arr;
 		temp.den_rad_arr = this->den_rad_arr;
+		temp.is_simped = this->is_simped;
+		temp.have_pre_process_den = this->have_pre_process_den;
 		return temp;
 	}
 
@@ -1114,17 +1120,17 @@ public:
 	mult operator+(const mult& mult_2)
 	{
 		this->is_simped = false;
-		mult temp;
-		// 检查分母，若分母存在，则通分
-		// case1：均无分母，分子直接相加
-		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
-		{
-			temp.num_cst_arr = this->num_cst_arr + mult_2.num_cst_arr;
-			temp.num_rad_arr = this->num_rad_arr + mult_2.num_rad_arr;
-		}
-		// case2：有分母存在
-		else
-		{
+//		mult temp;
+//		// 检查分母，若分母存在，则通分
+//		// case1：均无分母，分子直接相加
+//		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
+//		{
+//			temp.num_cst_arr = this->num_cst_arr + mult_2.num_cst_arr;
+//			temp.num_rad_arr = this->num_rad_arr + mult_2.num_rad_arr;
+//		}
+//		// case2：有分母存在
+//		else
+//		{
 			mult simp_tmp_1, simp_tmp_2;	// 存储原分母，用于通分
 			mult simp_tmp_3, simp_tmp_4;	// 存储原分子
 			mult num_mult_1, num_mult_2, den_mult;		// 存储结果
@@ -1145,7 +1151,7 @@ public:
 			temp = num_mult_1 + num_mult_2;	// 存储最终分子
 			temp.den_cst_arr = den_mult.den_cst_arr;
 			temp.den_rad_arr = den_mult.den_rad_arr;
-		}
+//		}
 		return temp;
 	}
 
@@ -1186,6 +1192,7 @@ public:
 		*/
 		this->is_simped = false;
 		mult temp;
+		// 开始计算分子
 		var nc_sum_1 = getSumData(this->num_cst_arr);
 		var nc_sum_2 = getSumData(mult_2.num_cst_arr);
 		temp.num_cst_arr.push_back(nc_sum_1 * nc_sum_2);	// 所有常数相乘（仅限常数）
@@ -1196,14 +1203,14 @@ public:
 		for (auto item1 : this->num_rad_arr)
 			for (auto item2 : mult_2.num_rad_arr)
 				temp.num_rad_arr.push_back(item1 * item2);	// 所有根号相乘（仅限根号）
-		// 若二式分母均不存在，则退出
-		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
-			return temp;
-		// 若其中一式分母不存在，强制增加分母"1"
-		if (this->den_cst_arr.empty() && this->den_rad_arr.empty())
-			this->setDenominator_constant(1);
-		if (mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
-			temp.setDenominator_constant(1);
+//		// 若二式分母均不存在，则退出
+//		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
+//			return temp;
+//		if (this->den_cst_arr.empty() && this->den_rad_arr.empty())
+//			this->setDenominator_constant(1);
+		// 若mult_2分母不存在，强制增加分母"1"
+//		if (mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
+//			temp.setDenominator_constant(1);
 		// 开始计算分母
 		var dc_sum_1 = getSumData(this->den_cst_arr);
 		var dc_sum_2 = getSumData(mult_2.den_cst_arr);
