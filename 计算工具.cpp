@@ -47,8 +47,8 @@
 #define FZA factor_a.data_array
 #define FZC factor_c.data_array
 #define abnormality 	-1
-#define add				0
-#define subtract		1
+#define ADD				0
+#define SUBTRACT		1
 #define multiply		2
 #define divide			3
 // #pragma execution_character_set("utf-8")
@@ -704,7 +704,7 @@ class action
 		showGeneralErrorMsg();
 		cerr << "异常消息：在进行平方根运算时根号内的值为负（001）" << endl;
 		cerr << "异常值：" << error_value << endl;
-		cerr << "异常值地址：" << &error_value << endl;
+		cerr << "异常值内存地址：" << &error_value << endl;
 		system("pause");
 	}
 
@@ -719,7 +719,7 @@ class action
 
 class mult
 {
-	// TODO:preProcessDen()运用到全局
+// TODO:preProcessDen()运用到全局
 /*
 Tips:
 1.若不需要分母，则分母不set任何数据；反之若要使用分母，则set任一非零数（一般对用户数据不做处理）。
@@ -739,10 +739,10 @@ private:
 	var gcd = 1;
 
 	// 存储状态（布尔值区）
-	bool is_simped				= false;
-	bool have_pre_process_den	= false;
+	bool is_simped		= false;
+	bool had_one_in_den	= true;
 
-	// 分母预处理函数
+/*	// 分母预处理函数
 	void preProcessDen()
 	{
 		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && !have_pre_process_den)
@@ -751,7 +751,7 @@ private:
 			have_pre_process_den = true;
 		}
 		return;
-	}
+	}*/
 
 	// 根式预处理函数
 	void preProcessRadical(vector<var>& temp)
@@ -898,7 +898,8 @@ private:
 			for (var j = 0; j < vectmp.size(); j += 2)
 			{
 				// 前部分（系数）
-				if (vectmp[j] == 0 || vectmp[j + 1] == 0) continue;
+				if (vectmp[j] == 0 || vectmp[j + 1] == 0)
+					continue;
 				if (vectmp[j] / gcd < 0)
 					cout << "-";
 				else if (cst != 0)
@@ -917,41 +918,57 @@ public:
 		is_simped = false;
 	}
 	
-	void setNumerator_radical(var nri, bool state = add)
+	void setNumerator_radical(var nri, bool state = ADD)
 	{
 		if (nri < 0)
+		{
 			throw nri;
-/* 			cout << "error! minus-nums is not expected!" << endl;*/
-		if (state == add)
+			cerr << "error! minus-nums is not expected!" << endl;
+		}
+		if (state == ADD)
 			num_rad_arr.push_back(nri);
-		if (state == subtract)	// 允许负数的存在
+		if (state == SUBTRACT)	// 允许负数的存在
 			num_rad_arr.push_back(-nri);
 		is_simped = false;
 	}
 	
 	void setDenominator_constant(var dci)
 	{
+		if (had_one_in_den)	// 若分母在开头强制加入1，则删除分母1
+		{
+			den_cst_arr.erase(den_cst_arr.begin());
+			had_one_in_den = false;
+		}
 		den_cst_arr.push_back(dci);
 		is_simped = false;
 	}
 	
-	void setDenominator_radical(var dri, bool state = add)
+	void setDenominator_radical(var dri, bool state = ADD)
 	{
 		if (dri < 0)
+		{
 			throw dri;
-/* 			cout << "error! minus-nums is not expected!" << endl;*/
-		if (state == add)
+			cerr << "error! minus-nums is not expected!" << endl;
+		}
+		if (had_one_in_den)	// 若分母在开头强制加入1，则删除分母1
+		{
+			den_cst_arr.erase(den_cst_arr.begin());
+			had_one_in_den = false;
+		}
+		if (state == ADD)
 			den_rad_arr.push_back(dri);
-		if (state == subtract)	// 允许负数的存在
+		if (state == SUBTRACT)	// 允许负数的存在
 			den_rad_arr.push_back(-dri);
 		is_simped = false;
 	}
 
 	void simplifyMult()
 	{
-		preProcessDen();
 		if (is_simped)
 			return;
+		// 重置容器，避免调用时多次化简造成错误
+		num_rad_arr_simp.clear();
+		den_rad_arr_simp.clear();
 		num_rad_arr_simp = num_rad_arr;
 		den_rad_arr_simp = den_rad_arr;
 		// 检查两个分母容器状态，若均为空则判定为分母无效
@@ -965,7 +982,7 @@ public:
 //		}
 //		else
 //		{
-			denominator_state = true;
+//			denominator_state = true;
 			preProcessRadical(num_rad_arr_simp);
 			preProcessRadical(den_rad_arr_simp);
 			n_constant_merged = getSumData(num_cst_arr);
@@ -988,8 +1005,8 @@ public:
 	void displayMult()
 	{
 		simplifyMult();
-		// 检查两个分母容器状态，若均为空则判定为分母无效，单独显示分子
-		if (!denominator_state)
+		// 若分母无效，单独显示分子
+		if (had_one_in_den)
 		{
 			displayLine(n_constant_merged, num_rad_arr_simp);
 			return;
@@ -1043,7 +1060,6 @@ public:
 	
 	long double getApproximateValue()
 	{
-		preProcessDen()
 		long double numerator = 0.0;
 		numerator = getSumData(this->num_cst_arr);
 		for (auto item : this->num_rad_arr)
@@ -1065,19 +1081,17 @@ public:
 		if (num_cst_arr.empty() && num_rad_arr.empty())
 			return;
 		mult temp = getThis() * -1;
-		this->denominator_state = clearAll();
+		this->clearAll();
 		this->num_cst_arr = temp.num_cst_arr;
 		this->num_rad_arr = temp.num_rad_arr;
 		this->den_cst_arr = temp.den_cst_arr;
 		this->den_rad_arr = temp.den_rad_arr;
 	}
 
-	void reciprocal()
+	void reciprocal() // TODO:取倒先后分母为零
 	{
 		swapVec(num_cst_arr, den_cst_arr);
 		swapVec(num_rad_arr, den_rad_arr);
-		if (!denominator_state)	// 若原分母不存在，则取倒后分子为1
-			num_cst_arr.push_back(1);
 	}
 
 	mult getThis()
@@ -1088,16 +1102,16 @@ public:
 		temp.den_cst_arr = this->den_cst_arr;
 		temp.den_rad_arr = this->den_rad_arr;
 		temp.is_simped = this->is_simped;
-		temp.have_pre_process_den = this->have_pre_process_den;
+		temp.had_one_in_den = this->had_one_in_den;
 		return temp;
 	}
 
-	void setThis(const mult&)
+	void setThis(const mult&)	// TODO:void setThis(const mult&)未完工
 	{
-		this->denominator_state = this->clearAll();
+		
 	}
 
-	bool clearAll()
+	void clearAll()
 	{
 		this->num_cst_arr.clear();
 		this->num_rad_arr.clear();
@@ -1110,17 +1124,16 @@ public:
 		this->n_constant_merged = 0;
 		this->d_constant_merged = 0;
 		this->gcd = 1;
-		bool temp = this->denominator_state;
-		this->denominator_state	= true;
+		this->den_cst_arr.push_back(1);
+		this->had_one_in_den	= true;
 		this->is_simped			= false;
-		return temp;
 	}
 
 	// 重载"+"运算符
 	mult operator+(const mult& mult_2)
 	{
 		this->is_simped = false;
-//		mult temp;
+		mult temp;
 //		// 检查分母，若分母存在，则通分
 //		// case1：均无分母，分子直接相加
 //		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
@@ -1258,8 +1271,11 @@ public:
 		setThis(getThis() + 1);
 	}
 
-	//mult() {};
-	//~mult() {};
+	mult()	// 构造函数
+	{
+		this->den_cst_arr.push_back(1);
+	}
+	//~mult() {}
 
 };
 // 反序计算，在类外部定义
@@ -1370,13 +1386,11 @@ Select_Num_Scan:
 			display.displayMult();
 			cout << "." << endl << endl;
 		}
-		var x_numerator, x_denominator, y_numerator, y_denominator;	// 声明x轴、y轴坐标
-		// 开始运算，赋值
+		var x_numerator, x_denominator, y_numerator, y_denominator;	// x轴、y轴坐标
 		x_numerator   = - *b;
 		x_denominator = 2 * *a;
 		y_numerator   = 4 * *a * *c - *b * *b;
 		y_denominator = 4 * *a;
-		// 调用函数
 		cout << "顶点坐标：( ";
 		displayFraction(getSimplifiedFraction(x_numerator, x_denominator));
 		cout << " , ";
@@ -1499,7 +1513,7 @@ Select_Num_Scan:
 				displayx1.displayMult();
 				cout << "，x(2)=";
 				displayx2.setNumerator_constant(-*b);
-				displayx2.setNumerator_radical(*delta, subtract);
+				displayx2.setNumerator_radical(*delta, SUBTRACT);
 				displayx2.setDenominator_constant(2 * *a);
 				displayx2.displayMult();
 				cout << "." << endl;
