@@ -717,6 +717,7 @@ class action
 };
 
 
+template <typename Dtype>
 class mult
 {
 // TODO:preProcessDen()运用到全局
@@ -727,12 +728,12 @@ Tips:
 */
 private:
 	// 存储mult
-	vector<var> num_cst_arr;
-	vector<var> num_rad_arr;
-	vector<var> den_cst_arr;
-	vector<var> den_rad_arr;
-	vector<var> num_rad_arr_simp;
-	vector<var> den_rad_arr_simp;
+	vector<Dtype> num_cst_arr;
+	vector<Dtype> num_rad_arr;
+	vector<Dtype> den_cst_arr;
+	vector<Dtype> den_rad_arr;
+	vector<Dtype> num_rad_arr_simp;
+	vector<Dtype> den_rad_arr_simp;
 	var n_constant_merged = 0, d_constant_merged = 0;
 
 	general_struct_1 gcd_tmp;	// 用于计算公约数
@@ -754,7 +755,7 @@ private:
 	}*/
 
 	// 根式预处理函数
-	void preProcessRadical(vector<var>& temp)
+	void preProcessRadical(vector<Dtype>& temp)
 	{
 		// 数据预处理：删除为0的元素
 		for (var i = 0; i < temp.size(); i++)
@@ -768,7 +769,7 @@ private:
 	}
 
 	// 化简根式函数
-	void simplifyRadical(vector<var>& temp, var& cst)
+	void simplifyRadical(vector<Dtype>& temp, var& cst)
 	{
 		// 检查容器是否有数据
 		if (temp.empty()) return;
@@ -781,7 +782,7 @@ private:
 				sqr = simplifyQuadraticRadical(temp[i]);
 			else
 				sqr = simplifyQuadraticRadical(getAbsoluteData(temp[i]));
-			if (sqr.in_radical == 1)		// 若可以开完全平方，则加入常数项
+			if (sqr.in_radical == 1)	// 若可以开完全平方，则加入常数项
 			{
 				cst = cst + sqr.out_radical;
 				continue;
@@ -798,7 +799,7 @@ private:
 	}
 	
 	// 合并根式函数
-	void mergeRadical(vector<var>& temp)
+	void mergeRadical(vector<Dtype>& temp)
 	{
 		// 检查容器是否有数据
 		if (temp.empty()) return;
@@ -830,7 +831,7 @@ private:
 	}
 	
 	// 选择系数函数
-	void selectCoefficient(const vector<var>& temp)
+	void selectCoefficient(const vector<Dtype>& temp)
 	{
 		for (var i = 0; i < temp.size(); i += 2)
 			gcd_tmp.data_array.push_back(temp[i]);
@@ -861,7 +862,7 @@ private:
 	}
 	
 	// 根式排序函数
-	vector<var> sortRadical(vector<var> temp)
+	vector<Dtype> sortRadical(vector<Dtype> temp)
 	{
 		// 系数由小至大
 		for (var k = 0; k < temp.size(); k++)
@@ -891,7 +892,7 @@ private:
 	}
 	
 	// 输出单行函数
-	void displayLine(const var& cst, const vector<var>& vectmp, var gcd = 1)
+	void displayLine(const var& cst, const vector<Dtype>& vectmp, var gcd = 1)
 	{
 			if (cst != 0)
 				cout << cst / gcd;
@@ -912,13 +913,13 @@ private:
 	}
 
 public:
-	void setNumerator_constant(var nci)
+	void setNumerator_constant(Dtype nci)
 	{
 		num_cst_arr.push_back(nci);
 		is_simped = false;
 	}
 	
-	void setNumerator_radical(var nri, bool state = ADD)
+	void setNumerator_radical(Dtype nri, bool state = ADD)
 	{
 		if (nri < 0)
 		{
@@ -932,7 +933,7 @@ public:
 		is_simped = false;
 	}
 	
-	void setDenominator_constant(var dci)
+	void setDenominator_constant(Dtype dci)
 	{
 		if (had_one_in_den)	// 若分母在开头强制加入1，则删除分母1
 		{
@@ -943,7 +944,7 @@ public:
 		is_simped = false;
 	}
 	
-	void setDenominator_radical(var dri, bool state = ADD)
+	void setDenominator_radical(Dtype dri, bool state = ADD)
 	{
 		if (dri < 0)
 		{
@@ -1015,7 +1016,7 @@ public:
 		// TODO:上下互为相反数，可整体约
 		// TODO:负号提出来显示在最前端
 		// TODO:异常显示时内存地址始终不变
-		vector<var> tmp1, tmp2;
+		vector<Dtype> tmp1, tmp2;
 		tmp1 = sortRadical(num_rad_arr_simp);
 		tmp2 = sortRadical(den_rad_arr_simp);
 		tmp1.push_back(n_constant_merged);
@@ -1093,7 +1094,7 @@ public:
 		swapVec(num_cst_arr, den_cst_arr);
 		swapVec(num_rad_arr, den_rad_arr);
 	}
-
+	
 	mult getThis()
 	{
 		mult temp;
@@ -1279,28 +1280,101 @@ public:
 
 };
 // 反序计算，在类外部定义
-mult operator+(const var& num, const mult& num_mult)
+template <typename Dtype, typename Ntype>
+mult<Dtype> operator+(const Ntype& num, const mult<Dtype>& num_mult)
 {
-	mult temp;
+	mult<Dtype> temp;
 	temp.setNumerator_constant(num);
 	return temp + num_mult;
 }
-mult operator-(const var& num, const mult& num_mult)
+template <typename Dtype, typename Ntype>
+mult<Dtype> operator-(const Ntype& num, const mult<Dtype>& num_mult)
 {
-	mult temp;
+	mult<Dtype> temp;
 	temp.setNumerator_constant(num);
 	return temp - num_mult;
 }
-mult operator*(var& num, mult& num_mult)
+template <typename Dtype, typename Ntype>
+mult<Dtype> operator*(const Ntype& num, const mult<Dtype>& num_mult)
 {
 	return num_mult * num;
 }
-mult operator/(const var& num, const mult& num_mult)
+template <typename Dtype, typename Ntype>
+mult<Dtype> operator/(const Ntype& num, const mult<Dtype>& num_mult)
 {
-	mult temp;
+	mult<Dtype> temp;
 	temp.setNumerator_constant(num);
 	return temp / num_mult;
 }
+
+
+template <typename Dtype>
+class mult_plus
+{
+private:
+	vector<mult<Dtype>> num_cst_arr;
+	vector<mult<Dtype>> num_rad_arr;
+	vector<mult<Dtype>> den_cst_arr;
+	vector<mult<Dtype>> den_rad_arr;
+
+	// 存储状态（布尔值区）
+	bool is_simped = false;
+	bool had_one_in_den = true;
+
+public:
+	void setNumerator_constant(mult nci)
+	{
+		num_cst_arr.push_back(nci);
+		is_simped = false;
+	}
+
+	void setNumerator_radical(mult nri, bool state = ADD)
+	{
+		if (nri < 0)
+		{
+			throw nri;
+			cerr << "error! minus-nums is not expected!" << endl;
+		}
+		if (state == ADD)
+			num_rad_arr.push_back(nri);
+		if (state == SUBTRACT)	// 允许负数的存在
+			num_rad_arr.push_back(-nri);
+		is_simped = false;
+	}
+
+	void setDenominator_constant(mult dci)
+	{
+		if (had_one_in_den)	// 若分母在开头强制加入1，则删除分母1
+		{
+			den_cst_arr.erase(den_cst_arr.begin());
+			had_one_in_den = false;
+		}
+		den_cst_arr.push_back(dci);
+		is_simped = false;
+	}
+
+	void setDenominator_radical(mult dri, bool state = ADD)
+	{
+		if (dri < 0)
+		{
+			throw dri;
+			cerr << "error! minus-nums is not expected!" << endl;
+		}
+		if (had_one_in_den)	// 若分母在开头强制加入1，则删除分母1
+		{
+			den_cst_arr.erase(den_cst_arr.begin());
+			had_one_in_den = false;
+		}
+		if (state == ADD)
+			den_rad_arr.push_back(dri);
+		if (state == SUBTRACT)	// 允许负数的存在
+			den_rad_arr.push_back(-dri);
+		is_simped = false;
+	}
+
+	mult_plus() {};
+	~mult_plus() {};
+};
 
 
 class equation
