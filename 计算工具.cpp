@@ -83,7 +83,7 @@ struct general_struct_1
 struct simplify_fraction_struct
 {
 	var simplified_numerator;		// 分子
-	var simplified_denominator;	// 分母
+	var simplified_denominator;		// 分母
 	var greatest_common_divisor;	// 最大公约数
 	bool single_display_state;
 	bool minus_display_state;
@@ -743,16 +743,7 @@ private:
 	bool is_simped		= false;
 	bool had_one_in_den	= true;
 
-/*	// 分母预处理函数
-	void preProcessDen()
-	{
-		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && !have_pre_process_den)
-		{
-			this->setDenominator_constant(1);
-			have_pre_process_den = true;
-		}
-		return;
-	}*/
+	static var mult_count;		// 用于统计mult数量
 
 	// 根式预处理函数
 	void preProcessRadical(vector<Dtype>& temp)
@@ -772,7 +763,8 @@ private:
 	void simplifyRadical(vector<Dtype>& temp, var& cst)
 	{
 		// 检查容器是否有数据
-		if (temp.empty()) return;
+		if (temp.empty())
+			return;
 		simplify_quadratic_radical_struct sqr;
 		var end_const = temp.size();	// 缓冲常量，避免temp.end()内存地址随元素的插入而改变
 		// 计算+暂存
@@ -802,7 +794,8 @@ private:
 	void mergeRadical(vector<Dtype>& temp)
 	{
 		// 检查容器是否有数据
-		if (temp.empty()) return;
+		if (temp.empty())
+			return;
 		for (var j = 1; j < temp.size(); j += 2)
 		{
 			for (var i = 1; i < temp.size(); i += 2)
@@ -825,7 +818,7 @@ private:
 			if (temp[i] == 0)
 			{
 				temp.erase(temp.begin() + i, temp.begin() + i + 2);
-				i = i - 2;
+				i -= 2;
 			}
 		}
 	}
@@ -972,33 +965,26 @@ public:
 		den_rad_arr_simp.clear();
 		num_rad_arr_simp = num_rad_arr;
 		den_rad_arr_simp = den_rad_arr;
-		// 检查两个分母容器状态，若均为空则判定为分母无效
-//		if (den_cst_arr.empty() && den_rad_arr.empty())
-//		{
-//			denominator_state = false;
-//			preProcessRadical(num_rad_arr_simp);
-//			n_constant_merged = getSumData(num_cst_arr);
-//			simplifyRadical(num_rad_arr_simp, n_constant_merged);
-//			mergeRadical(num_rad_arr_simp);
-//		}
-//		else
-//		{
-//			denominator_state = true;
-			preProcessRadical(num_rad_arr_simp);
-			preProcessRadical(den_rad_arr_simp);
-			n_constant_merged = getSumData(num_cst_arr);
-			d_constant_merged = getSumData(den_cst_arr);
-			simplifyRadical(num_rad_arr_simp, n_constant_merged);
-			simplifyRadical(den_rad_arr_simp, d_constant_merged);
-			mergeRadical(num_rad_arr_simp);
-			mergeRadical(den_rad_arr_simp);
-			gcd_tmp.data_array.push_back(n_constant_merged);
-			gcd_tmp.data_array.push_back(d_constant_merged);
-			selectCoefficient(num_rad_arr_simp);
-			selectCoefficient(den_rad_arr_simp);
-			gcd_tmp.count = gcd_tmp.data_array.size();
-			gcd = getGreatestCommonDivisor(gcd_tmp);
-//		}
+		preProcessRadical(num_rad_arr_simp);
+		preProcessRadical(den_rad_arr_simp);
+		n_constant_merged = getSumData(num_cst_arr);
+		d_constant_merged = getSumData(den_cst_arr);
+		simplifyRadical(num_rad_arr_simp, n_constant_merged);
+		simplifyRadical(den_rad_arr_simp, d_constant_merged);
+		mergeRadical(num_rad_arr_simp);
+		mergeRadical(den_rad_arr_simp);
+		if (den_rad_arr_simp.empty() && d_constant_merged == 0)
+		{
+			// 分母为0（暂时先抛出这个，以后会引入异常类，程序崩溃了就先不管）
+			cerr << "error!den == 0!" << endl;
+			throw d_constant_merged;
+		}
+		gcd_tmp.data_array.push_back(n_constant_merged);
+		gcd_tmp.data_array.push_back(d_constant_merged);
+		selectCoefficient(num_rad_arr_simp);
+		selectCoefficient(den_rad_arr_simp);
+		gcd_tmp.count = gcd_tmp.data_array.size();
+		gcd = getGreatestCommonDivisor(gcd_tmp);
 		is_simped = true;
 		return;
 	}
@@ -1021,12 +1007,6 @@ public:
 		tmp2 = sortRadical(den_rad_arr_simp);
 		tmp1.push_back(n_constant_merged);
 		tmp2.push_back(d_constant_merged);
-		if (den_rad_arr_simp.empty() && d_constant_merged == 0)
-		{
-			// 分母为0（暂时先抛出这个，以后会引入异常类，程序崩溃了就先不管）
-			cerr << "error!" << endl;
-			throw d_constant_merged;
-		}
 		if (isEqualArray(tmp1, tmp2))// 上下完全一致
 		{
 			cout << "1";
@@ -1130,42 +1110,77 @@ public:
 		this->is_simped			= false;
 	}
 
+	// 这些函数破坏了数据封装，仅供高级用户使用
+	mult<Dtype> getNumCstArr() const
+	{
+		return this->num_cst_arr;
+	}
+
+	mult<Dtype> getNumRadArr() const
+	{
+		return this->num_rad_arr;
+	}
+
+	mult<Dtype> getDenCstArr() const
+	{
+		return this->den_cst_arr;
+	}
+
+	mult<Dtype> getDenRadArr() const
+	{
+		return this->den_rad_arr;
+	}
+
+	mult<Dtype> getNumRadArrSimp() const
+	{
+		return this->num_rad_arr_simp;
+	}
+
+	mult<Dtype> getDenRadArrSimp() const
+	{
+		return this->den_rad_arr_simp;
+	}
+
+	Dtype getNConstantMerged() const
+	{
+		return this->n_constant_merged;
+	}
+
+	Dtype getDConstantMerged() const
+	{
+		return this->d_constant_merged;
+	}
+
+	var getMultCount() const
+	{
+		return mult_count;
+	}
+
 	// 重载"+"运算符
 	mult operator+(const mult& mult_2)
 	{
 		this->is_simped = false;
 		mult temp;
-//		// 检查分母，若分母存在，则通分
-//		// case1：均无分母，分子直接相加
-//		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
-//		{
-//			temp.num_cst_arr = this->num_cst_arr + mult_2.num_cst_arr;
-//			temp.num_rad_arr = this->num_rad_arr + mult_2.num_rad_arr;
-//		}
-//		// case2：有分母存在
-//		else
-//		{
-			mult simp_tmp_1, simp_tmp_2;	// 存储原分母，用于通分
-			mult simp_tmp_3, simp_tmp_4;	// 存储原分子
-			mult num_mult_1, num_mult_2, den_mult;		// 存储结果
-			// 计算分母
-			simp_tmp_1.num_cst_arr = this->den_cst_arr;
-			simp_tmp_1.num_rad_arr = this->den_rad_arr;
-			simp_tmp_2.num_cst_arr = mult_2.den_cst_arr;
-			simp_tmp_2.num_rad_arr = mult_2.den_rad_arr;
-			den_mult = simp_tmp_1 * simp_tmp_2;
-			// 计算分子（相乘后相加）
-			simp_tmp_3.num_cst_arr = this->num_cst_arr;
-			simp_tmp_3.num_rad_arr = this->num_rad_arr;
-			simp_tmp_4.num_cst_arr = mult_2.num_cst_arr;
-			simp_tmp_4.num_rad_arr = mult_2.num_rad_arr;
-			num_mult_1 = simp_tmp_3 * simp_tmp_2;
-			num_mult_2 = simp_tmp_4 * simp_tmp_1;
-			// 开始给temp赋值
-			temp = num_mult_1 + num_mult_2;	// 存储最终分子
-			temp.den_cst_arr = den_mult.den_cst_arr;
-			temp.den_rad_arr = den_mult.den_rad_arr;
-//		}
+		mult simp_tmp_1, simp_tmp_2;	// 存储原分母，用于通分
+		mult simp_tmp_3, simp_tmp_4;	// 存储原分子
+		mult num_mult_1, num_mult_2, den_mult;		// 存储结果
+		// 计算分母
+		simp_tmp_1.num_cst_arr = this->den_cst_arr;
+		simp_tmp_1.num_rad_arr = this->den_rad_arr;
+		simp_tmp_2.num_cst_arr = mult_2.den_cst_arr;
+		simp_tmp_2.num_rad_arr = mult_2.den_rad_arr;
+		den_mult = simp_tmp_1 * simp_tmp_2;
+		// 计算分子（相乘后相加）
+		simp_tmp_3.num_cst_arr = this->num_cst_arr;
+		simp_tmp_3.num_rad_arr = this->num_rad_arr;
+		simp_tmp_4.num_cst_arr = mult_2.num_cst_arr;
+		simp_tmp_4.num_rad_arr = mult_2.num_rad_arr;
+		num_mult_1 = simp_tmp_3 * simp_tmp_2;
+		num_mult_2 = simp_tmp_4 * simp_tmp_1;
+		// 开始给temp赋值
+		temp = num_mult_1 + num_mult_2;	// 存储最终分子
+		temp.den_cst_arr = den_mult.den_cst_arr;
+		temp.den_rad_arr = den_mult.den_rad_arr;
 		return temp;
 	}
 
@@ -1217,14 +1232,6 @@ public:
 		for (auto item1 : this->num_rad_arr)
 			for (auto item2 : mult_2.num_rad_arr)
 				temp.num_rad_arr.push_back(item1 * item2);	// 所有根号相乘（仅限根号）
-//		// 若二式分母均不存在，则退出
-//		if (this->den_cst_arr.empty() && this->den_rad_arr.empty() && mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
-//			return temp;
-//		if (this->den_cst_arr.empty() && this->den_rad_arr.empty())
-//			this->setDenominator_constant(1);
-		// 若mult_2分母不存在，强制增加分母"1"
-//		if (mult_2.den_cst_arr.empty() && mult_2.den_rad_arr.empty())
-//			temp.setDenominator_constant(1);
 		// 开始计算分母
 		var dc_sum_1 = getSumData(this->den_cst_arr);
 		var dc_sum_2 = getSumData(mult_2.den_cst_arr);
@@ -1239,7 +1246,7 @@ public:
 		return temp;
 	}
 
-	mult operator*(const var& num)
+	mult operator*(const Dtype& num)
 	{
 		this->is_simped = false;
 		mult temp;
@@ -1257,12 +1264,45 @@ public:
 		return getThis() * temp;
 	}
 
-	mult operator/(const var& num)
+	mult operator/(const Dtype& num)
 	{
 		this->is_simped = false;
 		mult temp;
 		temp.setNumerator_constant(num);
 		return getThis() / temp;
+	}
+
+	// 重载>运算符
+	bool operator>(const Dtype& num)
+	{
+		
+	}
+
+	// 重载<运算符
+	bool operator<(const Dtype& num)
+	{
+
+	}
+
+	// 重载==运算符（作差法判断值相等)
+	bool operator==(const Dtype& num)
+	{
+		mult<Dtype> temp;
+		temp = getThis() - num;
+		temp.simplifyMult();
+		if (temp.getNumRadArrSimp.empty() && temp.getNConstantMerged == 0)	// 分子为零，则相等
+			return true;
+		return false;
+	}
+
+	bool operator==(const mult<Dtype>& mult_temp)
+	{
+		mult<Dtype> temp;
+		temp = getThis() - mult_temp;
+		temp.simplifyMult();
+		if (temp.getNumRadArrSimp.empty() && temp.getNConstantMerged == 0)	// 分子为零，则相等
+			return true;
+		return false;
 	}
 
 	// 重载++运算符
@@ -1275,6 +1315,7 @@ public:
 	mult()	// 构造函数
 	{
 		this->den_cst_arr.push_back(1);
+		mult_count++;
 	}
 	//~mult() {}
 
@@ -1322,13 +1363,13 @@ private:
 	bool had_one_in_den = true;
 
 public:
-	void setNumerator_constant(mult nci)
+	void setNumerator_constant(mult<Dtype> nci)
 	{
 		num_cst_arr.push_back(nci);
 		is_simped = false;
 	}
 
-	void setNumerator_radical(mult nri, bool state = ADD)
+	void setNumerator_radical(mult<Dtype> nri, bool state = ADD)
 	{
 		if (nri < 0)
 		{
@@ -1342,7 +1383,7 @@ public:
 		is_simped = false;
 	}
 
-	void setDenominator_constant(mult dci)
+	void setDenominator_constant(mult<Dtype> dci)
 	{
 		if (had_one_in_den)	// 若分母在开头强制加入1，则删除分母1
 		{
@@ -1353,7 +1394,7 @@ public:
 		is_simped = false;
 	}
 
-	void setDenominator_radical(mult dri, bool state = ADD)
+	void setDenominator_radical(mult<Dtype> dri, bool state = ADD)
 	{
 		if (dri < 0)
 		{
@@ -1372,8 +1413,13 @@ public:
 		is_simped = false;
 	}
 
-	mult_plus() {};
-	~mult_plus() {};
+	mult_plus()
+	{
+		mult<Dtype> temp;
+		temp.setNumerator_constant(1);
+		this->den_cst_arr.push_back(temp);
+	}
+	//~mult_plus() {};
 };
 
 
@@ -1454,7 +1500,7 @@ Select_Num_Scan:
 			displayFraction(getSimplifiedFraction(*c, *a));
 			cout << "." << endl
 				 << "|x(1)-x(2)| = ";
-			mult display;
+			mult<var> display;
 			display.setNumerator_radical(*delta);
 			display.setDenominator_constant(getAbsoluteData(*a));
 			display.displayMult();
@@ -1580,7 +1626,7 @@ Select_Num_Scan:
 			}
 			else	// 不是完全平方数
 			{
-				mult displayx1, displayx2;
+				mult<var> displayx1, displayx2;
 				displayx1.setNumerator_constant(- *b);
 				displayx1.setNumerator_radical(*delta);
 				displayx1.setDenominator_constant(2 * *a);
@@ -1803,7 +1849,7 @@ Select_BigTask_Scan_Default:
 		cout << "已知两条平行直线y=kx+b，请依次输入k、b1、b2的值." << endl;
 		cin >> k >> b1 >> b2;
 		cout << "两直线距离为：";
-		mult display;
+		mult<var> display;
 		display.setNumerator_constant(getAbsoluteData(b1 - b2));
 		display.setDenominator_constant(k * k + 1);
 		display.displayMult();
@@ -1820,7 +1866,7 @@ Select_BigTask_Scan_Default:
 		cout << "已知A（m，n），直线l：y = kx + b，请依次输入m、n、k、b的值." << endl;
 		cin >> m >> n >> k >> b;
 		cout << "点A到直线l的距离为：";
-		mult display;
+		mult<var> display;
 		display.setNumerator_constant(getAbsoluteData(k * m - n + b));
 		display.setDenominator_radical(k * k + 1);
 		display.displayMult();
@@ -1835,7 +1881,7 @@ Select_BigTask_Scan_Default:
 		cout << "已知两个点的坐标A（x1，y1）、B（x2，y2），请依次输入x1、y1、x2、y2的值." << endl;
 		cin >> x1 >> y1 >> x2 >> y2;
 		cout << "两点之间的距离为：";
-		mult display;
+		mult<var> display;
 		display.setNumerator_radical(pow((x1 - x2), 2) + pow((y1 - y2), 2));
 		display.displayMult();
 		cout << endl;	// 空一行
@@ -1917,7 +1963,7 @@ Select_BigTask_Scan_Default:
 		cin >> ID;    
 		while(!_checkIDinput(ID))  // 防止输入过程中位数输入错误   
 		{
-			cout << "错误ID，请重新输入" << endl; 
+			cout << "错误ID，请重新输入" << endl;
 			cout << "[输入身份证号码]";
 			cin >> ID;   
 		} 
@@ -1940,7 +1986,7 @@ Select_BigTask_Scan_Default:
 			{
 			case 1:
 			{
-				mult m1, m2;
+				mult<var> m1, m2;
 				var nca, nra, dca, dra, nc, nr, dc, dr;
 				cout << "分子->常数\n"
 					<< "分子->根号\n"
@@ -1983,7 +2029,7 @@ Select_BigTask_Scan_Default:
 					action.showRadicalMinusErrorMsg(err_tmp);
 				}
 				cout << "=== end" << endl;
-				mult m3 = m1 - m1;
+				mult<var> m3 = m1 - m1;
 				//cout << (long double)m1.getApproximateValue() << endl;
 				m3.displayMult();
 				cout << endl;
