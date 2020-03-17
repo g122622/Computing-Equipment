@@ -42,15 +42,20 @@
 #include <algorithm>
 #include <cstring>
 #include <map>
-#define enabled 0
-#define disabled 1
+#include <list>
+#define ENABLED 0
+#define DISABLED 1
 #define FZA factor_a.data_array
 #define FZC factor_c.data_array
-#define abnormality 	-1
+#define ABNORMALITY 	-1
 #define ADD				0
 #define SUBTRACT		1
-#define multiply		2
-#define divide			3
+#define MULTIPLY		2
+#define DIVIDE			3
+#define RIGHT			0
+#define LEFT			1
+#define UP				2
+#define DOWN			3
 // #pragma execution_character_set("utf-8")
 #define debug
 
@@ -182,7 +187,7 @@ var getLowestCommonMultiple(general_struct_1 temp)
 		}
 	}
 	delete dm1, lm2;
-	return abnormality;			// 返回异常值
+	return ABNORMALITY;			// 返回异常值
 }
 
 
@@ -204,7 +209,7 @@ general_struct_1 getFactor(var num_input, bool minus_output_state)
 		temp.data_array.push_back(num_input / temp.data_array[i]);
 	if (sqrt(num_input) == (var)sqrt(num_input))	// 输入数为完全平方
 		temp.data_array.erase(temp.data_array.begin() + temp_size_1);
-	if (minus_output_state == enabled)	// 如果启用负数显示，往内存中再存负数
+	if (minus_output_state == ENABLED)	// 如果启用负数显示，往内存中再存负数
 	{
 		var temp_size_2 = temp.data_array.size();
 		for (var i = 0; i < temp_size_2; ++i)
@@ -345,19 +350,19 @@ simplify_fraction_struct getSimplifiedFraction(const var& numerator, const var& 
 	temp.simplified_denominator = denominator / temp.greatest_common_divisor;
 	// 判断分数是否显示负号
 	if (temp.simplified_numerator * temp.simplified_denominator >= 0)
-		temp.minus_display_state = disabled;
+		temp.minus_display_state = DISABLED;
 	else
-		temp.minus_display_state = enabled;
+		temp.minus_display_state = ENABLED;
 	// 分子分母全部取绝对值
 	temp.simplified_numerator = getAbsoluteData(temp.simplified_numerator);
 	temp.simplified_denominator = getAbsoluteData(temp.simplified_denominator);
 	// 默认启用整数显示（如果有特殊情况）
-	temp.single_display_state = enabled;
+	temp.single_display_state = ENABLED;
 	// 判断是否采用整数显示：如果最大公约数等于分母的绝对值，则启用整数显示
 	if (temp.greatest_common_divisor == getAbsoluteData(denominator))
-		temp.single_display_state = enabled;
+		temp.single_display_state = ENABLED;
 	else
-		temp.single_display_state = disabled;
+		temp.single_display_state = DISABLED;
 	return temp;
 }
 
@@ -367,9 +372,9 @@ void displayFraction(simplify_fraction_struct temp)
 {
 	if (temp.simplified_numerator != 0)			// 分子若为0，直接显示0
 	{
-		if (temp.minus_display_state == enabled)
+		if (temp.minus_display_state == ENABLED)
 			cout << "-";
-		if (temp.single_display_state == disabled)
+		if (temp.single_display_state == DISABLED)
 			cout << temp.simplified_numerator << "/" << temp.simplified_denominator;
 		else
 			cout << temp.simplified_numerator;
@@ -481,9 +486,9 @@ inline bool isIntNum(const T1& num)
 
 // 判断质数函数
 template<typename T1>
-bool isPrimeNum(T1 num)
+bool isPrimeNum(const T1& num)
 {
-	T1 count = 0;
+	int count = 0;	// count就算最大也只能为2，所以用int
 	for (T1 factor = 1; factor <= sqrt(num); ++factor)
 	{
 		if (!(num % factor))
@@ -1423,6 +1428,7 @@ public:
 };
 
 
+template <typename Dtype>
 class equation
 {
 private:
@@ -1435,11 +1441,134 @@ public:
 // 不等式类用继承的方式生成
 
 
+template <typename Dtype>
+class point
+{
+private:
+	Dtype x, y;
+
+public:
+	void setXY(const Dtype& X, const Dtype& Y)
+	{
+		this->x = X;
+		this->y = Y;
+	}
+
+	void move(const Dtype& X, const Dtype& Y)	// 默认右，上
+	{
+		this->x += X;
+		this->y += Y;
+	}
+
+	void move(const Dtype& X, const int& horizontal, const Dtype& Y, const int& vertical)
+	{
+		if (horizontal == RIGHT && vertical == UP)
+		{
+			this->x += X;
+			this->y += Y;
+		}
+		else if (horizontal == RIGHT && vertical == DOWN)
+		{
+			this->x += X;
+			this->y -= Y;
+		}
+		else if (horizontal == LEFT && vertical == UP)
+		{
+			this->x -= X;
+			this->y += Y;
+		}
+		else if(horizontal == LEFT && vertical == DOWN)
+		{
+			this->x -= X;
+			this->y -= Y;
+		}
+	}
+
+	void display()
+	{
+		cout << this->x << endl << this->y << endl;
+	}
+
+	equation() {};
+	~equation() {};
+};
+
+
+// 平面直角坐标系
+template <typename Dtype>
+class rectangular_coordinate_system
+{
+private:
+	// 使用链表，避免指针内存地址改变
+	list<point<Dtype>> points;
+
+	var points_count = 1;
+	
+public:
+	point& setPoint(const Dtype& x, const Dtype& y)
+	{
+		points.resize(this->points_count);// 重定义大小
+		points.back().setXY(x, y);
+		point& temp = points.back();// 创建引用，用于返回
+		this->points_count++;
+		return temp;
+	}
+
+	rectangular_coordinate_system() {};
+	~rectangular_coordinate_system() {};
+};
+
+
+class timer
+{
+private:
+	var delay_adapt_index;
+	var per_sec;
+	void delayUnit(const var& num)
+	{
+		for (var i = num; i > 0; i--)
+			for (var j = 0; j < 128; j++);
+	}
+
+	var adapt(const int& index)
+	{
+		var tmp = 1000;
+		for (var i = 0; i < index; i++)
+		{
+			clock_t start, stop;// 初始化计时函数
+			start = clock();	// 开始计时
+			delayUnit(tmp);
+			stop = clock();		// 停止计时
+			float duration = (float)(stop - start) / CLOCKS_PER_SEC;
+			if (duration > 0.1)
+				tmp -= 70000;
+			else if (duration < 0.1)
+				tmp += 70000;
+			else if (duration == 0.1)
+				return tmp * 10;
+		}
+		return tmp * 10;
+	}
+public:
+	void setDelayAdaptIndex(const var& index)
+	{
+		this->delay_adapt_index = index;
+		per_sec = adapt(delay_adapt_index);
+	}
+
+	void delay(var ms)
+	{
+		delayUnit(per_sec / 1000 * ms);
+	}
+
+	timer() {};
+	~timer() {};
+};
 /*----------全局变量/结构体/对象声明区/杂项区2----------*/
 long double pretime;
-bool speedTestState = enabled;		// 避免多次测速
+bool speedTestState = ENABLED;// 避免多次测速
 var SwitchNum;
-clock_t start, stop;			// 初始化计时函数
+clock_t start, stop;// 初始化计时函数
 
 /*----------主函数----------*/
 int main(void)
@@ -1528,12 +1657,12 @@ Select_Num_Scan:
 		cout << "." << endl << endl;
 		cout << "[解法1：因式分解法(实验性，bug可能较多)]" << endl;
 		// 开始a的因数计算，只需要正值即可
-		factor_a = getFactor(*a, disabled);
+		factor_a = getFactor(*a, DISABLED);
 		// 开始*c的因数计算，正负值都要计算，先讨论*c的正负性
 		if (*c >= 0)
-			factor_c = getFactor(*c, enabled);
+			factor_c = getFactor(*c, ENABLED);
 		else	// 计算*c的负数因数
-			factor_c = getFactor(-*c, enabled);	// 传入c的相反数，使c始终为正
+			factor_c = getFactor(-*c, ENABLED);	// 传入c的相反数，使c始终为正
 		// 因数计算完成，开始for循环+if条件匹配
 		for (var i = 0; i < factor_c.count; i++)
 		{
@@ -1667,15 +1796,15 @@ Select_Num_Scan:
 	case 2:		// 因数分解
 	{
 		general_struct_1 factor;
-		if (speedTestState == enabled) // 避免重复测速
+		if (speedTestState == ENABLED) // 避免重复测速
 		{
 			cout << "{!}程序开始执行。\n[正在测速，请稍侯。调试信息请忽略。]" << endl;
 			start = clock();	// 开始测速
-			factor = getFactor(10000000, disabled);
+			factor = getFactor(10000000, DISABLED);
 			stop = clock();		// 停止测速
 			pretime = (float)(stop - start) / CLOCKS_PER_SEC;
 			cout << "Time=" << pretime << endl << "测速完成。" << endl << endl;
-			speedTestState = disabled;
+			speedTestState = DISABLED;
 		}
 		// 测速结束
 		long double* predicttime = new long double;
@@ -1724,7 +1853,7 @@ Select_BigTask_Scan_Default:
 			goto Default_Output;
 	Default_Output:
 		// 调用函数(不启用负数输出)
-		factor = getFactor(*numscan, disabled);
+		factor = getFactor(*numscan, DISABLED);
 		// 开始输出
 		for (var i = 0; i < factor.count; i++)
 			printf("[整因数 %ld ] = %ld\n", i + 1, factor.data_array[i]);
