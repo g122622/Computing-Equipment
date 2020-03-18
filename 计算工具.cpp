@@ -32,6 +32,14 @@
 
 */
 
+/*
+从某种意义上来看，世间一切，都是遇见。
+就像，冷遇见暖，就有了雨；
+春遇见冬，有了岁月；
+天遇见地，有了永恒；
+人遇见人，有了生命。--董卿
+*/
+
 /*----------预处理器/预编译语句加载区----------*/
 #include <iostream>
 #include <cstdio> 
@@ -1445,52 +1453,79 @@ template <typename Dtype>
 class point
 {
 private:
-	Dtype x, y;
+	pair<Dtype, Dtype> coordinate;
 
 public:
-	void setXY(const Dtype& X, const Dtype& Y)
+	void setCoordinate(const Dtype& X, const Dtype& Y)
 	{
-		this->x = X;
-		this->y = Y;
+		this->coordinate.first() = X;
+		this->coordinate.second() = Y;
 	}
 
-	void move(const Dtype& X, const Dtype& Y)	// 默认右，上
+	void translate(const Dtype& X, const Dtype& Y)	// 默认右，上
 	{
-		this->x += X;
-		this->y += Y;
+		this->coordinate.first() += X;
+		this->coordinate.second() += Y;
 	}
 
-	void move(const Dtype& X, const int& horizontal, const Dtype& Y, const int& vertical)
+	void translate(const Dtype& X, const int& horizontal, const Dtype& Y, const int& vertical)
 	{
 		if (horizontal == RIGHT && vertical == UP)
 		{
-			this->x += X;
-			this->y += Y;
+			this->coordinate.first()x += X;
+			this->coordinate.second() += Y;
 		}
 		else if (horizontal == RIGHT && vertical == DOWN)
 		{
-			this->x += X;
-			this->y -= Y;
+			this->coordinate.first() += X;
+			this->coordinate.second() -= Y;
 		}
 		else if (horizontal == LEFT && vertical == UP)
 		{
-			this->x -= X;
-			this->y += Y;
+			this->coordinate.first() -= X;
+			this->coordinate.second() += Y;
 		}
 		else if(horizontal == LEFT && vertical == DOWN)
 		{
-			this->x -= X;
-			this->y -= Y;
+			this->coordinate.first() -= X;
+			this->coordinate.second() -= Y;
 		}
 	}
 
-	void display()
+	pair<Dtype, Dtype> getCoordinate()
 	{
-		cout << this->x << endl << this->y << endl;
+		return this->coordinate；
 	}
 
-	equation() {};
-	~equation() {};
+	point() {};
+	~point() {};
+};
+
+
+template <typename Dtype>
+class base_line
+{
+private:
+	point<Dtype> point1, point2;
+
+public:
+	void setPoint1(const Dtype& X, const Dtype& Y)
+	{
+		point1.setCoordinate(X, Y);
+	}
+
+	void setPoint2(const Dtype& X, const Dtype& Y)
+	{
+		point2.setCoordinate(X, Y);
+	}
+
+	pair<Dtype, Dtype> getAnalyticExpression()
+	{
+
+	}
+
+	base_line() {};
+	~base_line() {};
 };
 
 
@@ -1501,20 +1536,27 @@ class rectangular_coordinate_system
 private:
 	// 使用链表，避免指针内存地址改变
 	list<point<Dtype>> points;
+	const point<Dtype> origin;// 原点
 
-	var points_count = 1;
+	var points_count = 0;
 	
 public:
-	point& setPoint(const Dtype& x, const Dtype& y)
+	point<Dtype>& getOriginReference()
 	{
-		points.resize(this->points_count);// 重定义大小
-		points.back().setXY(x, y);
-		point& temp = points.back();// 创建引用，用于返回
-		this->points_count++;
+		point<Dtype>& temp = origin;// 创建引用，用于返回
 		return temp;
 	}
 
-	rectangular_coordinate_system() {};
+	point<Dtype>& setPoint(const Dtype& x, const Dtype& y)
+	{
+		this->points_count++;
+		points.resize(this->points_count);// 重定义链表大小
+		points.back().setCoordinate(x, y);
+		point<Dtype>& temp = points.back();// 创建引用，用于返回
+		return temp;
+	}
+
+	rectangular_coordinate_system() {/*setX轴，Y轴*/};
 	~rectangular_coordinate_system() {};
 };
 
@@ -1522,14 +1564,17 @@ public:
 class timer
 {
 private:
-	var delay_adapt_index;
-	var per_sec;
+	var delay_adapt_index = 30;// 计时精度（默认为30）
+	var per_sec;// 每秒计数
+
+	// 一个延迟单位（单元）
 	void delayUnit(const var& num)
 	{
 		for (var i = num; i > 0; i--)
 			for (var j = 0; j < 128; j++);
 	}
 
+	// 自适应函数
 	var adapt(const int& index)
 	{
 		var tmp = 1000;
@@ -1564,6 +1609,8 @@ public:
 	timer() {};
 	~timer() {};
 };
+
+
 /*----------全局变量/结构体/对象声明区/杂项区2----------*/
 long double pretime;
 bool speedTestState = ENABLED;// 避免多次测速
