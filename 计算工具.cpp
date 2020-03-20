@@ -37,7 +37,7 @@
 就像，冷遇见暖，就有了雨；
 春遇见冬，有了岁月；
 天遇见地，有了永恒；
-人遇见人，有了生命。--董卿
+人遇见人，有了生命。
 */
 
 /*----------预处理器/预编译语句加载区----------*/
@@ -1330,8 +1330,10 @@ public:
 		this->den_cst_arr.push_back(1);
 		mult_count++;
 	}
-	//~mult() {}
-
+	~mult()	// 析构函数
+	{
+		mult_count--;
+	}
 };
 // 反序计算，在类外部定义
 template <typename Dtype, typename Ntype>
@@ -1472,7 +1474,7 @@ public:
 	{
 		if (horizontal == RIGHT && vertical == UP)
 		{
-			this->coordinate.first()x += X;
+			this->coordinate.first() += X;
 			this->coordinate.second() += Y;
 		}
 		else if (horizontal == RIGHT && vertical == DOWN)
@@ -1494,7 +1496,7 @@ public:
 
 	pair<Dtype, Dtype> getCoordinate()
 	{
-		return this->coordinate；
+		return this->coordinate;
 	}
 
 	point() {};
@@ -1519,7 +1521,7 @@ public:
 		point2.setCoordinate(X, Y);
 	}
 
-	pair<Dtype, Dtype> getAnalyticExpression()
+	pair<Dtype, Dtype> getAnalyticExpression()	// 解二元一次方程，得到解析式
 	{
 
 	}
@@ -1529,17 +1531,67 @@ public:
 };
 
 
+template <typename Dtype>
+class line : public base_line<Dtype>
+{
+private:
+
+public:
+
+	line() {};
+	~line() {};
+};
+
+
+template <typename Dtype>
+class half_line : public base_line
+{
+private:
+	Dtype domain;
+
+public:
+	void setDomain(bool tmp) // 设定半直线的定义域（特有）
+	{
+		this->domain = tmp;
+	}
+
+	half_line() {};
+	~half_line() {};
+};
+
+
+template <typename Dtype>
+class segment : public base_line
+{
+private:
+
+public:
+
+	segment() {};
+	~segment() {};
+};
+
+
 // 平面直角坐标系
 template <typename Dtype>
 class rectangular_coordinate_system
 {
 private:
 	// 使用链表，避免指针内存地址改变
-	list<point<Dtype>> points;
-	const point<Dtype> origin;// 原点
+	list<point		<Dtype>>	points;
+	list<line		<Dtype>>	lines;
+	list<half_line	<Dtype>>	half_lines;
+	list<segment	<Dtype>>	segments;
 
-	var points_count = 0;
-	
+	const point<Dtype> origin;// 原点
+	const line<Dtype> x_axis;// x轴
+	const line<Dtype> y_axis;// y轴
+
+	var points_count		= 0;
+	var lines_count			= 0;
+	var half_lines_count	= 0;
+	var segments_count		= 0;
+
 public:
 	point<Dtype>& getOriginReference()
 	{
