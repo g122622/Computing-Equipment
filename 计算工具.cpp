@@ -1434,6 +1434,7 @@ public:
 		temp.setNumerator_constant(1);
 		this->den_cst_arr.push_back(temp);
 	}
+
 	//~mult_plus() {};
 };
 
@@ -1511,19 +1512,38 @@ private:
 	point<Dtype> point1, point2;
 
 public:
-	void setPoint1(const Dtype& X, const Dtype& Y)
+
+	void setPoints(const Dtype& X1, const Dtype& Y1, const Dtype& X2, const Dtype& Y2)// set两点式
 	{
-		point1.setCoordinate(X, Y);
+		point1.setCoordinate(X1, Y1);
+		point2.setCoordinate(X2, Y2);
+	}
+	
+	void setPointAndSlope()// set点斜式
+	{
+		// 通过斜率反推第二个坐标点
+
 	}
 
-	void setPoint2(const Dtype& X, const Dtype& Y)
+	pair<Dtype, Dtype> getAnalyticExpression()// get解析式
 	{
-		point2.setCoordinate(X, Y);
+		Dtype a1 = this->point1.getCoordinate().first();
+		Dtype a2 = this->point2.getCoordinate().first();
+		Dtype c1 = this->point1.getCoordinate().second();
+		Dtype c2 = this->point2.getCoordinate().second();
+		// 解二元一次方程，得到解析式
+		Dtype k = (c2 - c1) / (a2 - a1);
+		Dtype b = (a1 * c2 - a2 * c1) / (a1 - a2);
+		pair<Dtype, Dtype> temp(k, b);
+		return temp;
 	}
 
-	pair<Dtype, Dtype> getAnalyticExpression()	// 解二元一次方程，得到解析式
+	Dtype getSlope()// get斜率（等于tanα）
 	{
-
+		Dtype num = this->point2.getCoordinate().second() - this->point1.getCoordinate().second();
+		Dtype den = this->point2.getCoordinate().first() - this->point1.getCoordinate().first();
+		Dtype slope = num / den;
+		return slope;
 	}
 
 	base_line() {};
@@ -1544,13 +1564,13 @@ public:
 
 
 template <typename Dtype>
-class half_line : public base_line
+class half_line : public base_line<Dtype>
 {
 private:
-	Dtype domain;
+	bool domain;
 
 public:
-	void setDomain(bool tmp) // 设定半直线的定义域（特有）
+	void setDomain(bool tmp) // 设定半直线的定义域（0->1，1->2）
 	{
 		this->domain = tmp;
 	}
@@ -1561,7 +1581,7 @@ public:
 
 
 template <typename Dtype>
-class segment : public base_line
+class segment : public base_line<Dtype>
 {
 private:
 
