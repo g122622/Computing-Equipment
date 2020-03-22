@@ -33,11 +33,24 @@
 */
 
 /*
-从某种意义上来看，世间一切，都是遇见。
-就像，冷遇见暖，就有了雨；
-春遇见冬，有了岁月；
-天遇见地，有了永恒；
-人遇见人，有了生命。
+そのすべてを愛してた あなたとともに
+【我深爱着和你在一起的点点滴滴】
+胸に残り離れない
+【残留在心中久久不离】
+苦いレモンの匂い
+【苦柠檬的香气】
+雨が降り止むまでは帰れない
+【雨停为止都无法回去】
+今でもあなたはわたしの光
+【至今为止你依然是我的光】
+暗闇であなたの背をなぞった
+【在黑暗中追寻着你的身影】
+その輪郭を鮮明に覚えている
+【那轮廓至今仍鲜明地刻印于心】
+受け止めきれないものと出会うたび
+【每当遇到无法承受的苦痛时】
+溢れてやまないのは涙だけ
+【总是不禁泪如泉涌】
 */
 
 /*----------预处理器/预编译语句加载区----------*/
@@ -1603,9 +1616,9 @@ private:
 	list<half_line	<Dtype>>	half_lines;
 	list<segment	<Dtype>>	segments;
 
-	const point<Dtype> origin;// 原点
-	const line<Dtype> x_axis;// x轴
-	const line<Dtype> y_axis;// y轴
+	const point	<Dtype>	origin;// 原点
+	const line	<Dtype>	x_axis;// x轴
+	const line	<Dtype>	y_axis;// y轴
 
 	var points_count		= 0;
 	var lines_count			= 0;
