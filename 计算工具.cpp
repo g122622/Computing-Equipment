@@ -51,6 +51,7 @@
 【每当遇到无法承受的苦痛时】
 溢れてやまないのは涙だけ
 【总是不禁泪如泉涌】
+
 */
 
 /*----------预处理器/预编译语句加载区----------*/
@@ -113,15 +114,6 @@ struct simplify_fraction_struct
 	var greatest_common_divisor;	// 最大公约数
 	bool single_display_state;
 	bool minus_display_state;
-};
-
-// 分母为零错误结构体
-struct den_zero_err_str
-{
-	vector<var> num_cst_arr;
-	vector<var> num_rad_arr;
-	vector<var> den_cst_arr;
-	vector<var> den_rad_arr;
 };
 
 
@@ -734,7 +726,7 @@ class action
 		system("pause");
 	}
 
-	inline void showDenZeroErrorMsg(den_zero_err_str error_str)
+	inline void showDenZeroErrorMsg()
 	{
 		showGeneralErrorMsg();
 		cerr << "异常消息：多项式运算中分母为零（002）" << endl;
@@ -1476,12 +1468,14 @@ public:
 	{
 		this->coordinate.first() = X;
 		this->coordinate.second() = Y;
+		return;
 	}
 
 	void translate(const Dtype& X, const Dtype& Y)	// 默认右，上
 	{
 		this->coordinate.first() += X;
 		this->coordinate.second() += Y;
+		return;
 	}
 
 	void translate(const Dtype& X, const int& horizontal, const Dtype& Y, const int& vertical)
@@ -1506,11 +1500,20 @@ public:
 			this->coordinate.first() -= X;
 			this->coordinate.second() -= Y;
 		}
+		return;
 	}
 
 	pair<Dtype, Dtype> getCoordinate()
 	{
 		return this->coordinate;
+	}
+
+	bool operator==(const point<Dtype>& point_tmp)
+	{
+		if (this->coordinate.first() == point_tmp.coordinate.first() \
+			&& this->coordinate.second() == point_tmp.coordinate.second())
+			return true;
+		return false;
 	}
 
 	point() {};
@@ -1525,17 +1528,27 @@ private:
 	point<Dtype> point1, point2;
 
 public:
-
 	void setPoints(const Dtype& X1, const Dtype& Y1, const Dtype& X2, const Dtype& Y2)// set两点式
 	{
 		point1.setCoordinate(X1, Y1);
 		point2.setCoordinate(X2, Y2);
+		return;
 	}
 	
-	void setPointAndSlope()// set点斜式
+	void setPointAndSlope(const Dtype& m, const Dtype& n, const Dtype& k)// set点斜式
 	{
-		// 通过斜率反推第二个坐标点
-
+		// set点一
+		this->point1.setCoordinate(m, n);
+		// 通过斜率反推第二个坐标点（默认与Y轴的交点，即X=0）
+		Dtype b = -k * m + n;
+		Dtype tmp = 0;
+		this->point2.setCoordinate(tmp, b);
+		if (this->point1 == this->point2)	// 两点坐标相同
+		{
+			tmp = 1;
+			point2.setCoordinate(tmp, k + b);
+		}
+		return;
 	}
 
 	pair<Dtype, Dtype> getAnalyticExpression()// get解析式
