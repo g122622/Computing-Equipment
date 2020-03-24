@@ -1632,7 +1632,7 @@ private:
 	const point	<Dtype>	origin;// 原点
 	const line	<Dtype>	x_axis;// x轴
 	const line	<Dtype>	y_axis;// y轴
-
+	
 	var points_count		= 0;
 	var lines_count			= 0;
 	var half_lines_count	= 0;
@@ -1645,7 +1645,7 @@ public:
 		return temp;
 	}
 
-	point<Dtype>& setPoint(const Dtype& x, const Dtype& y)
+	point<Dtype>& setLine(const Dtype& x, const Dtype& y)
 	{
 		this->points_count++;
 		points.resize(this->points_count);// 重定义链表大小
@@ -1654,6 +1654,32 @@ public:
 		return temp;
 	}
 
+	line<Dtype>& setHalfLine(const Dtype& x, const Dtype& y)
+	{
+		this->points_count++;
+		lines.resize(this->points_count);// 重定义链表大小
+		lines.back().setCoordinate(x, y);
+		line<Dtype>& temp = points.back();// 创建引用，用于返回
+		return temp;
+	}
+
+	segments<Dtype>& setSegment(const Dtype& x, const Dtype& y)
+	{
+		this->points_count++;
+		segments.resize(this->points_count);// 重定义链表大小
+		segments.back().setCoordinate(x, y);
+		point<Dtype>& temp = points.back();// 创建引用，用于返回
+		return temp;
+	}
+
+	point<Dtype>& setPoint(const Dtype& x, const Dtype& y)
+	{
+		this->points_count++;
+		points.resize(this->points_count);// 重定义链表大小
+		points.back().setCoordinate(x, y);
+		point<Dtype>& temp = points.back();// 创建引用，用于返回
+		return temp;
+	}
 	rectangular_coordinate_system() {/*setX轴，Y轴*/};
 	~rectangular_coordinate_system() {};
 };
