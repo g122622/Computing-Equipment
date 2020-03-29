@@ -56,7 +56,7 @@
 
 /*----------预处理器/预编译语句加载区----------*/
 #include <iostream>
-#include <cstdio> 
+#include <cstdio>
 #include <cmath>
 #include <ctime>
 #include <iomanip>
@@ -79,7 +79,7 @@
 #define UP				2
 #define DOWN			3
 // #pragma execution_character_set("utf-8")
-#define debug
+#define DEBUG
 
 
 /*----------全局变量/结构体/对象声明区/杂项区1----------*/
@@ -1368,7 +1368,7 @@ mult<Dtype> operator/(const Ntype& num, const mult<Dtype>& num_mult)
 	return temp / num_mult;
 }
 
-
+#ifdef DEBUG
 template <typename Dtype>
 class mult_plus
 {
@@ -1639,51 +1639,51 @@ private:
 	var segments_count		= 0;
 
 public:
-	point<Dtype>& getOriginReference()
+	point<Dtype>& getOriginReference()// get原点引用
 	{
 		point<Dtype>& temp = origin;// 创建引用，用于返回
 		return temp;
 	}
 
-	point<Dtype>& setLine(const Dtype& x, const Dtype& y)
+	point<Dtype>& setPoint(const Dtype& x, const Dtype& y)// set点
 	{
 		this->points_count++;
-		points.resize(this->points_count);// 重定义链表大小
-		points.back().setCoordinate(x, y);
+		this->points.resize(this->points_count);// 重定义链表大小
+		this->points.back().setCoordinate(x, y);
 		point<Dtype>& temp = points.back();// 创建引用，用于返回
 		return temp;
 	}
 
-	line<Dtype>& setHalfLine(const Dtype& x, const Dtype& y)
+	line<Dtype>& setLine(const Dtype& x, const Dtype& y)// set直线
 	{
-		this->points_count++;
-		lines.resize(this->points_count);// 重定义链表大小
-		lines.back().setCoordinate(x, y);
-		line<Dtype>& temp = points.back();// 创建引用，用于返回
+		this->lines_count++;
+		this->lines.resize(this->lines_count);// 重定义链表大小
+		
+		line<Dtype>& temp = lines.back();// 创建引用，用于返回
 		return temp;
 	}
 
-	segments<Dtype>& setSegment(const Dtype& x, const Dtype& y)
+	half_line<Dtype>& setHalfLine(const Dtype& x, const Dtype& y)// set射线
 	{
-		this->points_count++;
-		segments.resize(this->points_count);// 重定义链表大小
-		segments.back().setCoordinate(x, y);
-		point<Dtype>& temp = points.back();// 创建引用，用于返回
+		this->half_lines_count++;
+		this->half_lines.resize(this->half_lines_count);// 重定义链表大小
+		
+		half_line<Dtype>& temp = half_lines.back();// 创建引用，用于返回
 		return temp;
 	}
 
-	point<Dtype>& setPoint(const Dtype& x, const Dtype& y)
+	segment<Dtype>& setSegment(const Dtype& x, const Dtype& y)// set线段
 	{
-		this->points_count++;
-		points.resize(this->points_count);// 重定义链表大小
-		points.back().setCoordinate(x, y);
-		point<Dtype>& temp = points.back();// 创建引用，用于返回
+		this->segments_count++;
+		this->segments.resize(this->segments_count);// 重定义链表大小
+		
+		segment<Dtype>& temp = segments.back();// 创建引用，用于返回
 		return temp;
 	}
 	rectangular_coordinate_system() {/*setX轴，Y轴*/};
 	~rectangular_coordinate_system() {};
 };
-
+#endif // DEBUG
 
 class timer
 {
@@ -1732,6 +1732,23 @@ public:
 
 	timer() {};
 	~timer() {};
+};
+
+
+class big_num
+{
+private:
+	vector<short> data;
+	int lenth;
+	bool sign;
+
+public:
+
+	big_num()
+	{
+		lenth = 0;
+		sign = 1;
+	}
 };
 
 
