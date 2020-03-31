@@ -78,8 +78,8 @@
 #define LEFT			1
 #define UP				2
 #define DOWN			3
-// #pragma execution_character_set("utf-8")
-#define DEBUG
+//#pragma execution_character_set("utf-8")
+//#define DEBUG
 
 
 /*----------全局变量/结构体/对象声明区/杂项区1----------*/
@@ -513,6 +513,14 @@ bool isPrimeNum(const T1& num)
 		return true;
 	return false;
 }
+
+
+/*// 返回最大值函数
+template<typename T1>
+T1 getMaxData(const T1& a, const T1& b)
+{
+	return 
+}*/
 
 
 // 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
@@ -1628,7 +1636,13 @@ private:
 	list<line		<Dtype>>	lines;
 	list<half_line	<Dtype>>	half_lines;
 	list<segment	<Dtype>>	segments;
-
+	
+	// vector不能存储引用！！！
+/* 	vector<point	<Dtype>&>	points_ref;
+	vector<line		<Dtype>&>	lines_ref;
+	vector<half_line<Dtype>&>	half_lines_ref;
+	vector<segment	<Dtype>&>	segments_ref; */
+	
 	const point	<Dtype>	origin;// 原点
 	const line	<Dtype>	x_axis;// x轴
 	const line	<Dtype>	y_axis;// y轴
@@ -1639,12 +1653,24 @@ private:
 	var segments_count		= 0;
 
 public:
-	point<Dtype>& getOriginReference()// get原点引用
+	point<Dtype>& getOriginReference() const // get原点引用
 	{
 		point<Dtype>& temp = origin;// 创建引用，用于返回
 		return temp;
 	}
 
+	point<Dtype>& getOriginReference() const // get原点引用
+	{
+		point<Dtype>& temp = origin;// 创建引用，用于返回
+		return temp;
+	}
+	
+	point<Dtype>& getOriginReference() const // get原点引用
+	{
+		point<Dtype>& temp = origin;// 创建引用，用于返回
+		return temp;
+	}
+	
 	point<Dtype>& setPoint(const Dtype& x, const Dtype& y)// set点
 	{
 		this->points_count++;
@@ -1737,20 +1763,153 @@ public:
 
 class big_num
 {
-private:
-	vector<short> data;
-	int lenth;
-	bool sign;
-
+	/*
+	Tips：
+	1.使用数组存储，对于235813，定义数组d[1000]来存储，数组中每一个存储大整数的每一位。
+	即：d[0]=3,d[1]=1,d[2]=8,d[3]=5,d[4]=3,d[5]=2. 即整数的高位存储在数组的高位。
+	*/
 public:
+	vector<short> data;
+	bool sign;	// 符号
 
-	big_num()
+	big_num()	// 构造函数
 	{
-		lenth = 0;
-		sign = 1;
+		this->sign = 1;
+	}
+
+	big_num getThis() const
+	{
+		// copy一份副本
+		big_num temp;
+		temp.data = this->data;
+		temp.sign = this->sign;
+		return temp;
+	}
+
+	short getData(const var& index) const
+	{
+		if (index < this->data.size())
+			return this->data[index];
+		else
+			return 0;
 	}
 };
+big_num operator+(const big_num& num1, const big_num& num2)
+{
+	// 两个整数都是正数
+	/*
+	大数加法基本过程：从低位开始加，处理进位。
+	这样的写法的条件是两个对象都是非负数，如果有一方是负数，那么在$change()$去掉负号，采用下面的大整数减法；
+	如果两个都是负数，就都去掉负号后用大整数加法，最后再把负号加回去。
+	*/
+	big_num result;
+	short carry = 0;    // 进位
+	short temp;
+	for (var i = 0; i < num1.data.size() || i < num2.data.size(); i++)
+	{
+		temp = num1.getData(i) + num2.getData(i) + carry;
+		result.data.push_back(temp % 10);
+		carry = temp / 10;
+	}
+/*	const var size_min = (num1.data.size() <= num2.data.size()) ? num1.data.size() : num2.data.size();
+	const var size_max = (num1.data.size() >= num2.data.size()) ? num1.data.size() : num2.data.size();
+	const vector<short>& vec_max = (num1.data.size() >= num2.data.size()) ? \
+		num1.data : num2.data;
+	for (var j = size_min; j < size_max; j++)
+	{
+		temp = vec_max[j] + carry;
+		result.data.push_back(temp % 10);
+		carry = temp / 10;
+	}*/
+	if (carry != 0)
+		result.data.push_back(carry);
+	return result;
+}
 
+big_num operator-(big_num num1, const big_num& num2)
+{
+	/*
+	1.大数减法基本过程：用大数减小数（首先判断大小），从低位开始减，注意不够减的时候向高位借！
+	2.使用sub函数之前要比较两个大整数的大小，如果被减数小于减数，需要交换两个变量，然后输出负号，再使用sub函数。
+	3.奥利给！
+	*/
+	big_num result;
+	short temp;
+	for (var i = 0; i < num1.data.size() || i < num2.data.size(); i++)
+	{
+		if (num1.data[i] < num2.data[i])	// 不够减，向高位借1
+		{
+			num1.data[i] += 10;
+			num1.data[i + 1]--;
+		}
+		result.data.push_back(num1.data[i] - num2.data[i]);
+	}
+/*	const var size_min = (num1.data.size() <= num2.data.size()) ? num1.data.size() : num2.data.size();
+	const var size_max = (num1.data.size() >= num2.data.size()) ? num1.data.size() : num2.data.size();
+	const vector<short>& vec_max = (num1.data.size() >= num2.data.size()) ? \
+		num1.data : num2.data;
+	for (var j = size_min; j < size_max; j++)
+	{
+		// 不够减，向高位借1
+		num1.data[j] += 10;
+		num1.data[j + 1]--;
+		result.data.push_back(num1.data[j]);
+	}*/
+	// 删除多余的0
+	while (result.data.size() - 1 >= 1 && result.data.back() == 0)
+		result.data.erase(result.data.end());
+	return result;
+}
+
+big_num operator*(const big_num& num1, const big_num& num2)
+{
+	/*
+	1.大数乘法基本过程：用大数乘小数（首先判断大小），从低位开始，每次都用大数的低位乘以完整的小数，
+	结果对10取余放在结果对应的位置，整除10进位。
+	2.如果a或者b中有负号，需要先记录下其负数，然后取他们的绝对值带入函数。
+	*/
+	struct bigNum multi(struct bigNum a, int b) {
+		struct bigNum c;
+		int temp;
+		int carry = 0;
+		for (int i = 0; i < a.len; i++) {
+			temp = a.d[i] * b + carry;
+			c.d[c.len++] = temp % 10;
+			carry = temp / 10;
+		}
+		while (carry != 0) {
+			c.d[c.len++] = carry % 10;
+			carry /= 10;
+		}
+		return c;
+	}
+}
+
+big_num operator/(const big_num& num1, const big_num& num2)
+{
+	/*
+	大数除法基本过程：从高位开始，上一步的余数乘以10加上该步的位，得到该步临时的被除数，将其与被除数比较，
+	如果不够除，则该位的商位0；如果够除，则商即为对应的商，余数即为对应的余数。
+	*/
+	struct bigNum c;
+	int r = 0; //余数
+	c.len = a.len;//被除数的每一位和商的每一位一一对应，所以先让商的长度等于被除数的长度
+	for (int i = a.len - 1; i >= 0; i--) {//从高位开始除
+		r = r * 10 + a.d[i];
+		// if(r<b){//不够除，商0
+		//     c.d[i] = 0;
+		// }else{
+		//     c.d[i] = r/b;
+		//     r = r%b;
+		// }
+		c.d[i] = r / b;
+		r = r % b;
+	}
+	while (c.len - 1 >= 1 && c.d[len - 1] == 0) {
+		//去除最高位的0，同时至少保留1位最低位
+		c.len--;
+	}
+}
 
 /*----------全局变量/结构体/对象声明区/杂项区2----------*/
 long double pretime;
