@@ -1376,7 +1376,7 @@ mult<Dtype> operator/(const Ntype& num, const mult<Dtype>& num_mult)
 	return temp / num_mult;
 }
 
-#ifdef DEBUG
+//#ifdef DEBUG
 template <typename Dtype>
 class mult_plus
 {
@@ -1793,8 +1793,17 @@ public:
 		else
 			return 0;
 	}
+
+	void setBigNum(char str[])
+	{
+		//a.len = strlen(str);
+		this->data.resize(strlen(str));
+		for (int i = 0; i < strlen(str); i++)
+			this->data[strlen(str) - i - 1] = str[i] - '0';
+		return;
+	}
 };
-big_num operator+(const big_num& num1, const big_num& num2)
+big_num operator+(big_num num1, const big_num& num2)
 {
 	// 两个整数都是正数
 	/*
@@ -1803,24 +1812,14 @@ big_num operator+(const big_num& num1, const big_num& num2)
 	如果两个都是负数，就都去掉负号后用大整数加法，最后再把负号加回去。
 	*/
 	big_num result;
-	short carry = 0;    // 进位
 	short temp;
+	short carry = 0;    // 进位
 	for (var i = 0; i < num1.data.size() || i < num2.data.size(); i++)
 	{
 		temp = num1.getData(i) + num2.getData(i) + carry;
 		result.data.push_back(temp % 10);
 		carry = temp / 10;
 	}
-/*	const var size_min = (num1.data.size() <= num2.data.size()) ? num1.data.size() : num2.data.size();
-	const var size_max = (num1.data.size() >= num2.data.size()) ? num1.data.size() : num2.data.size();
-	const vector<short>& vec_max = (num1.data.size() >= num2.data.size()) ? \
-		num1.data : num2.data;
-	for (var j = size_min; j < size_max; j++)
-	{
-		temp = vec_max[j] + carry;
-		result.data.push_back(temp % 10);
-		carry = temp / 10;
-	}*/
 	if (carry != 0)
 		result.data.push_back(carry);
 	return result;
@@ -1837,78 +1836,156 @@ big_num operator-(big_num num1, const big_num& num2)
 	short temp;
 	for (var i = 0; i < num1.data.size() || i < num2.data.size(); i++)
 	{
-		if (num1.data[i] < num2.data[i])	// 不够减，向高位借1
+		if (num1.getData(i) < num2.getData(i))	// 不够减，向高位借1
 		{
 			num1.data[i] += 10;
 			num1.data[i + 1]--;
 		}
-		result.data.push_back(num1.data[i] - num2.data[i]);
+		result.data.push_back(num1.getData(i) - num2.getData(i));
 	}
-/*	const var size_min = (num1.data.size() <= num2.data.size()) ? num1.data.size() : num2.data.size();
-	const var size_max = (num1.data.size() >= num2.data.size()) ? num1.data.size() : num2.data.size();
-	const vector<short>& vec_max = (num1.data.size() >= num2.data.size()) ? \
-		num1.data : num2.data;
-	for (var j = size_min; j < size_max; j++)
-	{
-		// 不够减，向高位借1
-		num1.data[j] += 10;
-		num1.data[j + 1]--;
-		result.data.push_back(num1.data[j]);
-	}*/
 	// 删除多余的0
 	while (result.data.size() - 1 >= 1 && result.data.back() == 0)
 		result.data.erase(result.data.end());
 	return result;
 }
 
-big_num operator*(const big_num& num1, const big_num& num2)
+big_num operator*(const big_num& num1, const short& num2)
 {
 	/*
 	1.大数乘法基本过程：用大数乘小数（首先判断大小），从低位开始，每次都用大数的低位乘以完整的小数，
 	结果对10取余放在结果对应的位置，整除10进位。
 	2.如果a或者b中有负号，需要先记录下其负数，然后取他们的绝对值带入函数。
 	*/
-	struct bigNum multi(struct bigNum a, int b) {
-		struct bigNum c;
-		int temp;
-		int carry = 0;
-		for (int i = 0; i < a.len; i++) {
-			temp = a.d[i] * b + carry;
-			c.d[c.len++] = temp % 10;
-			carry = temp / 10;
-		}
-		while (carry != 0) {
-			c.d[c.len++] = carry % 10;
-			carry /= 10;
-		}
-		return c;
+	big_num result;
+	short temp;
+	short carry = 0;
+	// TODO:加入resize()
+	for (int i = 0; i < num1.data.size(); i++)
+	{
+		temp = num1.getData(i) * num2 + carry;
+		result.data.push_back(temp % 10);
+		carry = temp / 10;
 	}
+	while (carry != 0)
+	{
+		result.data.push_back(carry % 10);
+		carry /= 10;
+	}
+	return result;
 }
 
-big_num operator/(const big_num& num1, const big_num& num2)
+// 基于大数乘小数、大数加大数算法开发的大数乘大数
+big_num operator*(const big_num& num1, const big_num& num2)
+{
+	big_num result;
+	vector<big_num> temp;
+	// 使用resize()来避免频繁重分配内存导致的性能下降
+	temp.resize(num2.data.size());
+	for (var i = 0; i < num2.data.size(); i++)
+		temp[i] = num1 * num2.getData(i) * (i - 1) * 10;
+	for (auto item : temp)
+		result = result + item;
+	return result;
+}
+
+big_num operator/(const big_num& num1, big_num num2) // （by 缘起指尖）
 {
 	/*
 	大数除法基本过程：从高位开始，上一步的余数乘以10加上该步的位，得到该步临时的被除数，将其与被除数比较，
 	如果不够除，则该位的商位0；如果够除，则商即为对应的商，余数即为对应的余数。
 	*/
-	struct bigNum c;
-	int r = 0; //余数
-	c.len = a.len;//被除数的每一位和商的每一位一一对应，所以先让商的长度等于被除数的长度
-	for (int i = a.len - 1; i >= 0; i--) {//从高位开始除
-		r = r * 10 + a.d[i];
-		// if(r<b){//不够除，商0
-		//     c.d[i] = 0;
-		// }else{
-		//     c.d[i] = r/b;
-		//     r = r%b;
-		// }
-		c.d[i] = r / b;
-		r = r % b;
+//bn c;
+/*	if (a.p * b.p == 1) {//判断输出结果的符号
+		c.p = 1;
 	}
-	while (c.len - 1 >= 1 && c.d[len - 1] == 0) {
-		//去除最高位的0，同时至少保留1位最低位
+	else {//异号
+		c.p = -1;
+	}*/
+/*	if (bigCompare(a, b) == -1) {
+		c.data[c.len++] = 0;
+		return c;
+	}*/
+/*
+	c.len = a.len;
+	int bData = array2Data(b);
+	int r = 0; //余数
+	for (int i = a.len - 1; i >= 0; i--) {
+		a.data[i] = r * 10 + a.data[i];
+		c.data[i] = a.data[i] / bData;
+		r = a.data[i] % bData;
+	}
+	while (c.len > 1 && c.data[c.len - 1] == 0) {
 		c.len--;
 	}
+	return c;
+	}
+	*/
+	big_num result;
+	if (num1.data.size() < num2.data.size())// 当被除数位数 小于 除数位数时
+	{
+		/*printf("商是：0\n");
+		printf("余数是：");
+		puts(a);*/
+		result.setBigNum(0);
+		return result;
+	}
+	else // 当被除数位数 大于或者等于 除数位数时
+	{
+		var len_diff = num1.data.size() - num2.data.size();	// 两个大数位数的差值
+		for (var i = num1.data.size() - 1; i >= 0; i--)		// 将除数后补零，使得两个大数位数相同
+		{
+			if (i >= len_diff)
+				num2.data[i] = num2.data[i - len_diff];
+			else
+				num2.data[i] = 0;
+		}
+		//num2.data.size() = num1.data.size();// 将两个大数数位相同
+		digit = num1.data.size();			// 将原被除数位数赋值给digit
+		for (j = 0;j <= len;j++)
+		{
+			z[len - j] = 0;
+			// 判断两个数的大小以及被除数位数与除数原位数的关系
+			while (((temp = judge(x, y, len1, len2)) >= 0) && digit >= k)
+			{
+				sub(x, y, len1, len2); //大数减法函数
+
+				z[len - j]++;//储存商的每一位
+
+				len1 = digit;//重新修改被除数的长度
+
+				if (len1 < len2 && y[len2 - 1] == 0)
+					len2 = len1;  //将len1长度赋给len2;
+			}
+
+			if (temp < 0)//若被除数 小于 除数，除数减小一位。
+			{
+				for (i = 1;i < len2;i++)
+					y[i - 1] = y[i];
+				y[i - 1] = 0;
+				if (len1 < len2)
+					len2--;
+			}
+		}
+
+		printf("商是：");
+		for (i = len;i > 0;i--)//去掉前缀0
+		{
+			if (z[i])
+				break;
+		}
+		for (;i >= 0;i--)
+			printf("%d", z[i]);
+		printf("\n");
+
+		printf("余数是：");
+		for (i = len1;i > 0;i--)
+		{
+			if (x[i])
+				break;
+		}
+		for (;i >= 0;i--)
+			printf("%d", x[i]);
+		printf("\n");
 }
 
 /*----------全局变量/结构体/对象声明区/杂项区2----------*/
