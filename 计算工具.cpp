@@ -65,6 +65,11 @@
 #include <cstring>
 #include <map>
 #include <list>
+
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 #define ENABLED 0
 #define DISABLED 1
 #define FZA factor_a.data_array
@@ -78,8 +83,9 @@
 #define LEFT			1
 #define UP				2
 #define DOWN			3
+
 //#pragma execution_character_set("utf-8")
-//#define DEBUG
+#define DEBUG
 
 
 /*----------全局变量/结构体/对象声明区/杂项区1----------*/
@@ -1376,7 +1382,7 @@ mult<Dtype> operator/(const Ntype& num, const mult<Dtype>& num_mult)
 	return temp / num_mult;
 }
 
-//#ifdef DEBUG
+#ifdef DEBUG
 template <typename Dtype>
 class mult_plus
 {
@@ -1777,9 +1783,8 @@ public:
 		this->sign = 1;
 	}
 
-	big_num getThis() const
+	big_num getThis() const	// 生成一份副本
 	{
-		// copy一份副本
 		big_num temp;
 		temp.data = this->data;
 		temp.sign = this->sign;
@@ -1794,7 +1799,7 @@ public:
 			return 0;
 	}
 
-	void setBigNum(char str[])
+	void setBigNum(const char str[])
 	{
 		//a.len = strlen(str);
 		this->data.resize(strlen(str));
@@ -1803,6 +1808,25 @@ public:
 		return;
 	}
 };
+short judge(const vector<short>& x, const vector<short>& y)
+{
+	if (x.size() < y.size())
+		return -1;
+	if (x.size() == y.size())			// 若两个数位数相等
+	{
+		for (var index = x.size() - 1; index >= 0; index--)
+		{
+			if (x[index] == y[index])	// 对应位的数相等
+				continue;
+			else if (x[index] > y[index])	// 被除数 大于 除数，返回值为1
+				return 1;
+			else if (x[index] < y[index])	// 被除数 小于 除数，返回值为-1
+				return -1;
+		}
+		return 0;				// 被除数 等于 除数，返回值为0
+	}
+}
+
 big_num operator+(big_num num1, const big_num& num2)
 {
 	// 两个整数都是正数
@@ -1839,7 +1863,7 @@ big_num operator-(big_num num1, const big_num& num2)
 		if (num1.getData(i) < num2.getData(i))	// 不够减，向高位借1
 		{
 			num1.data[i] += 10;
-			num1.data[i + 1]--;
+			num1.data[i + 1]--;	// 不会越界
 		}
 		result.data.push_back(num1.getData(i) - num2.getData(i));
 	}
@@ -1888,7 +1912,8 @@ big_num operator*(const big_num& num1, const big_num& num2)
 	return result;
 }
 
-big_num operator/(const big_num& num1, big_num num2) // （by 缘起指尖）
+#ifdef DEBUG
+big_num operator/(big_num num1, big_num num2) // （by 缘起指尖）
 {
 	/*
 	大数除法基本过程：从高位开始，上一步的余数乘以10加上该步的位，得到该步临时的被除数，将其与被除数比较，
@@ -1921,43 +1946,41 @@ big_num operator/(const big_num& num1, big_num num2) // （by 缘起指尖）
 	}
 	*/
 	big_num result;
-	if (num1.data.size() < num2.data.size())// 当被除数位数 小于 除数位数时
+	var temp;
+	if (num1.data.size() < num2.data.size())// ------当被除数位数 小于 除数位数时
 	{
 		/*printf("商是：0\n");
 		printf("余数是：");
 		puts(a);*/
-		result.setBigNum(0);
+		result.setBigNum(0);	// 返回商0
 		return result;
 	}
-	else // 当被除数位数 大于或者等于 除数位数时
+	else	// ------当被除数位数 大于或者等于 除数位数时
 	{
 		var len_diff = num1.data.size() - num2.data.size();	// 两个大数位数的差值
-		for (var i = num1.data.size() - 1; i >= 0; i--)		// 将除数后补零，使得两个大数位数相同
+		num2.data.resize(num1.data.size());
+		for (var i = num1.data.size() - 1; i >= 0; i--)		// 将除数后补零，使得两个大数位数相同（eg.整数37->3700）
 		{
 			if (i >= len_diff)
 				num2.data[i] = num2.data[i - len_diff];
 			else
 				num2.data[i] = 0;
 		}
-		//num2.data.size() = num1.data.size();// 将两个大数数位相同
-		digit = num1.data.size();			// 将原被除数位数赋值给digit
-		for (j = 0;j <= len;j++)
+		//num2.data.size() = num1.data.size();	// 将两个大数数位相同
+		var digit = num1.data.size();			// 将原被除数位数赋值给digit
+		for (var j = 0; j <= len_diff; j++)
 		{
-			z[len - j] = 0;
+			result.data[len_diff - j] = 0;
 			// 判断两个数的大小以及被除数位数与除数原位数的关系
-			while (((temp = judge(x, y, len1, len2)) >= 0) && digit >= k)
+			while (((temp = judge(num1.data, num2.data)) >= 0) && digit >= k)
 			{
-				sub(x, y, len1, len2); //大数减法函数
-
-				z[len - j]++;//储存商的每一位
-
-				len1 = digit;//重新修改被除数的长度
-
+				num1 = num2 - num1;
+				result.data[len_diff - j]++;	// 储存商的每一位
+				len1 = digit;					// 重新修改被除数的长度
 				if (len1 < len2 && y[len2 - 1] == 0)
-					len2 = len1;  //将len1长度赋给len2;
+					len2 = len1;				// 将len1长度赋给len2
 			}
-
-			if (temp < 0)//若被除数 小于 除数，除数减小一位。
+			if (temp < 0)	// ------若被除数 小于 除数，除数减小一位
 			{
 				for (i = 1;i < len2;i++)
 					y[i - 1] = y[i];
@@ -1966,17 +1989,15 @@ big_num operator/(const big_num& num1, big_num num2) // （by 缘起指尖）
 					len2--;
 			}
 		}
-
 		printf("商是：");
-		for (i = len;i > 0;i--)//去掉前缀0
+		for (i = len;i > 0;i--)// 去掉前缀0
 		{
-			if (z[i])
+			if (result.data[i])
 				break;
 		}
 		for (;i >= 0;i--)
 			printf("%d", z[i]);
 		printf("\n");
-
 		printf("余数是：");
 		for (i = len1;i > 0;i--)
 		{
@@ -1987,6 +2008,7 @@ big_num operator/(const big_num& num1, big_num num2) // （by 缘起指尖）
 			printf("%d", x[i]);
 		printf("\n");
 }
+#endif // DEBUG
 
 /*----------全局变量/结构体/对象声明区/杂项区2----------*/
 long double pretime;
@@ -2000,6 +2022,7 @@ int main(void)
 #ifdef _WIN32
 	// 设置Unicode（UTF-8无签名）- 代码页65001，避免Windows环境下中文出现乱码
 	system("chcp 65001");
+	SetConsoleTitle("计算工具");
 #endif
 	action action;
 	action.showMasterConsole();	// 加载总控制台
@@ -2562,7 +2585,7 @@ Select_BigTask_Scan_Default:
 						m1.setNumerator_radical(nr);
 					}
 					cout << "=== end" << endl;
-					// ----------
+					// ----------Color Theme Editor for Visual Studio 2019：基础连接已经关闭：接收时发生错误。
 					cout << "分母->常数 --- begin" << endl;
 					for (var i = 0; i < dca; i++)
 					{
@@ -2599,6 +2622,16 @@ Select_BigTask_Scan_Default:
 				cout << getSumData(vec);
 			}
 
+			case 3:
+			{
+				big_num a, b;
+/*				const char* _a, _b;
+				_a = "12345";
+				_b = "12345";*/
+				a.setBigNum("12345");
+				b.setBigNum("12345");
+			}
+
 			case 0:
 			{
 				goto Select_Num_Scan;
@@ -2606,8 +2639,8 @@ Select_BigTask_Scan_Default:
 			
 			default:
 			{
-			action.showInputErrorMsg();
-			goto Select_Num_Scan;
+				action.showInputErrorMsg();
+				goto Select_Num_Scan;
 			}
 			}
 		}
