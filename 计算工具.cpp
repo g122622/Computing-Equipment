@@ -688,7 +688,7 @@ vector<var> operator+(const vector<var>& vec1, const vector<var>& vec2)
 }
 
 /*----------对象声明区----------*/
-class action
+class Action
 {
 	private:
 	inline void showGeneralErrorMsg()
@@ -744,6 +744,13 @@ class action
 	{
 		showGeneralErrorMsg();
 		cerr << "异常消息：多项式运算中分母为零（002）" << endl;
+		system("pause");
+	}
+
+	inline void showBaseNumZeroMsg()
+	{
+		showGeneralErrorMsg();
+		cerr << "异常消息：幂的底数和指数同时为零（003）" << endl;
 		system("pause");
 	}
 };
@@ -1766,6 +1773,14 @@ public:
 	~timer() {};
 };
 
+/*
+滑稽树上滑稽果。
+滑稽树下你和我。
+滑稽树前做游戏。
+欢乐多又多。
+至少曾经也拥有过。
+
+*/
 
 class big_num
 {
@@ -1919,34 +1934,35 @@ big_num operator/(big_num num1, big_num num2) // （by 缘起指尖）
 	大数除法基本过程：从高位开始，上一步的余数乘以10加上该步的位，得到该步临时的被除数，将其与被除数比较，
 	如果不够除，则该位的商位0；如果够除，则商即为对应的商，余数即为对应的余数。
 	*/
-//bn c;
-/*	if (a.p * b.p == 1) {//判断输出结果的符号
-		c.p = 1;
-	}
-	else {//异号
-		c.p = -1;
-	}*/
-/*	if (bigCompare(a, b) == -1) {
-		c.data[c.len++] = 0;
-		return c;
-	}*/
-/*
-	c.len = a.len;
-	int bData = array2Data(b);
-	int r = 0; //余数
-	for (int i = a.len - 1; i >= 0; i--) {
-		a.data[i] = r * 10 + a.data[i];
-		c.data[i] = a.data[i] / bData;
-		r = a.data[i] % bData;
-	}
-	while (c.len > 1 && c.data[c.len - 1] == 0) {
-		c.len--;
-	}
-	return c;
-	}
-	*/
+	//bn c;
+	/*	if (a.p * b.p == 1) {//判断输出结果的符号
+			c.p = 1;
+		}
+		else {//异号
+			c.p = -1;
+		}*/
+		/*	if (bigCompare(a, b) == -1) {
+				c.data[c.len++] = 0;
+				return c;
+			}*/
+			/*
+				c.len = a.len;
+				int bData = array2Data(b);
+				int r = 0; //余数
+				for (int i = a.len - 1; i >= 0; i--) {
+					a.data[i] = r * 10 + a.data[i];
+					c.data[i] = a.data[i] / bData;
+					r = a.data[i] % bData;
+				}
+				while (c.len > 1 && c.data[c.len - 1] == 0) {
+					c.len--;
+				}
+				return c;
+				}
+				*/
 	big_num result;
 	var temp;
+	var k = num2.data.size();
 	if (num1.data.size() < num2.data.size())// ------当被除数位数 小于 除数位数时
 	{
 		/*printf("商是：0\n");
@@ -1976,26 +1992,28 @@ big_num operator/(big_num num1, big_num num2) // （by 缘起指尖）
 			{
 				num1 = num2 - num1;
 				result.data[len_diff - j]++;	// 储存商的每一位
-				len1 = digit;					// 重新修改被除数的长度
-				if (len1 < len2 && y[len2 - 1] == 0)
-					len2 = len1;				// 将len1长度赋给len2
+				//len1 = digit;					// 重新修改被除数的长度
+				//if (len1 < len2 && y[len2 - 1] == 0)
+				//	len2 = len1;				// 将len1长度赋给len2
 			}
 			if (temp < 0)	// ------若被除数 小于 除数，除数减小一位
 			{
-				for (i = 1;i < len2;i++)
-					y[i - 1] = y[i];
-				y[i - 1] = 0;
-				if (len1 < len2)
-					len2--;
+				var i;
+				for (i = 1; i < num2.data.size(); i++)
+					num2.data[i - 1] = num2.data[i];
+				num2.data[i - 1] = 0;
+				if (num1.data.size() < num2.data.size())
+					num2.data.erase(num2.data.end());
 			}
 		}
-		printf("商是：");
-		for (i = len;i > 0;i--)// 去掉前缀0
+		//printf("商是：");
+		var i;
+		for (i = len_diff; i > 0; i--)// 去掉前缀0
 		{
 			if (result.data[i])
 				break;
 		}
-		for (;i >= 0;i--)
+		/*for (;i >= 0;i--)
 			printf("%d", z[i]);
 		printf("\n");
 		printf("余数是：");
@@ -2006,9 +2024,123 @@ big_num operator/(big_num num1, big_num num2) // （by 缘起指尖）
 		}
 		for (;i >= 0;i--)
 			printf("%d", x[i]);
-		printf("\n");
+		printf("\n");*/
+	}
 }
 #endif // DEBUG
+
+
+/*template<typename Dtype>
+class poly_unit_base
+{
+private:
+	
+public:
+	virtual Dtype getValue() {
+		
+	}
+
+	virtual long double getApproximateValue() {
+		
+	}
+};*/
+
+
+Action action;
+
+
+template<typename Dtype>
+class constant
+{
+private:
+	Dtype numerator, denominator;
+	//Dtype n_exponent
+	bool sign;	// 符号，true->+，false->-
+
+public:
+	void setConstant(Dtype num, Dtype n_exponent_tmp, Dtype den, Dtype d_exponent_tmp, bool calc_state) {
+		if (den == 0) {
+			action.showDenZeroErrorMsg();
+			throw 0;	// 分母为零，抛出异常
+		}
+		if ((num == 0 && n_exponent_tmp == 0) || (den == 0 && d_exponent_tmp == 0)) {
+			action.showBaseNumZeroMsg();
+			throw 0;	// 底数和指数同时为零，抛出异常
+		}
+		if (num != 0 && n_exponent_tmp == 0)
+			this->numerator = 1;
+		else
+			this->numerator = pow(num, n_exponent_tmp);
+		if (den != 0 && d_exponent_tmp == 0)
+			this->denominator = 1;
+		else
+			this->denominator = pow(den, d_exponent_tmp);
+		if ((this->numerator > 0 && this->denominator < 0) || \
+			(this->numerator < 0 && this->denominator > 0))	// 判断符号
+			this->sign = false;
+		else
+			this->sign = true;
+		this->numerator = getAbsoluteData(this->numerator);
+		this->denominator = getAbsoluteData(this->denominator);
+		return;
+	}
+
+	Dtype getNumerator() {
+		return this->numerator;
+	}
+
+	Dtype getDenominator() {
+		return this->denominator;
+	}
+
+	bool getSign() {
+		return this->sign;
+	}
+
+	long double getApproximateValue() {	// TODO:适配大数
+		return this->numerator / this->denominator;
+	}
+
+	constant() {
+		this->numerator = 0;
+		this->denominator = 0;
+		this->sign = true;
+	}
+	~constant() {}
+};
+
+
+template<typename Dtype>
+class radical : public constant<Dtype>
+{
+private:
+	void setRadical(Dtype num, Dtype den) {
+		setConstant(num, 1, den, 1)
+	}
+public:
+
+};
+
+
+class polynomial
+{
+private:
+
+public:
+
+	polynomial() {};
+	~polynomial() {};
+};
+
+class polynomial
+{
+private:
+
+public:
+
+	polynomial() {};
+	~polynomial() {};
+};
 
 /*----------全局变量/结构体/对象声明区/杂项区2----------*/
 long double pretime;
@@ -2024,7 +2156,6 @@ int main(void)
 	system("chcp 65001");
 	SetConsoleTitle("计算工具");
 #endif
-	action action;
 	action.showMasterConsole();	// 加载总控制台
 Select_Num_Scan:
 	cout << endl
