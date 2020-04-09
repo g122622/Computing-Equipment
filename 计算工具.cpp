@@ -731,12 +731,12 @@ class Action
 		cout << "系统消息：请输入正确的数。" << endl << endl;
 	}
 	
-	inline void showRadicalMinusErrorMsg(var& error_value)
+	inline void showRadicalMinusErrorMsg(/*var& error_value*/)
 	{
 		showGeneralErrorMsg();
 		cerr << "异常消息：在进行平方根运算时根号内的值为负（001）" << endl;
-		cerr << "异常值：" << error_value << endl;
-		cerr << "异常值内存地址：" << &error_value << endl;
+		/*cerr << "异常值：" << error_value << endl;
+		cerr << "异常值内存地址：" << &error_value << endl;*/
 		system("pause");
 	}
 
@@ -747,7 +747,7 @@ class Action
 		system("pause");
 	}
 
-	inline void showBaseNumZeroMsg()
+	inline void showBaseNumZeroErrorMsg()
 	{
 		showGeneralErrorMsg();
 		cerr << "异常消息：幂的底数和指数同时为零（003）" << endl;
@@ -2064,7 +2064,7 @@ public:
 			throw 0;	// 分母为零，抛出异常
 		}
 		if ((num == 0 && n_exponent_tmp == 0) || (den == 0 && d_exponent_tmp == 0)) {
-			action.showBaseNumZeroMsg();
+			action.showBaseNumZeroErrorMsg();
 			throw 0;	// 底数和指数同时为零，抛出异常
 		}
 		if (num != 0 && n_exponent_tmp == 0)
@@ -2085,19 +2085,19 @@ public:
 		return;
 	}
 
-	Dtype getNumerator() {
+	Dtype getNumerator() const {
 		return this->numerator;
 	}
 
-	Dtype getDenominator() {
+	Dtype getDenominator() const {
 		return this->denominator;
 	}
 
-	bool getSign() {
+	bool getSign() const {
 		return this->sign;
 	}
 
-	long double getApproximateValue() {	// TODO:适配大数
+	long double getApproximateValue() const {	// TODO:适配大数
 		return this->numerator / this->denominator;
 	}
 
@@ -2114,10 +2114,21 @@ template<typename Dtype>
 class radical : public constant<Dtype>
 {
 private:
-	void setRadical(Dtype num, Dtype den) {
-		setConstant(num, 1, den, 1)
-	}
+	constant<Dtype> data;
+
 public:
+	void setRadical(Dtype num, Dtype den) {
+		data.setConstant(num, 1, den, 1);
+		if (data.getSign() == false) {	// 根号内的值为负
+			action.showRadicalMinusErrorMsg();
+			throw data.getSign();
+		}
+		return;
+
+		long double getApproximateValue() const {	// TODO:适配大数
+			return sqrt(this->numerator / this->denominator);
+		}
+	}
 
 };
 
@@ -2733,7 +2744,7 @@ Select_BigTask_Scan_Default:
 				}
 				catch (var err_tmp)
 				{
-					action.showRadicalMinusErrorMsg(err_tmp);
+					action.showRadicalMinusErrorMsg(/*err_tmp*/);
 				}
 				cout << "=== end" << endl;
 				mult<var> m3 = m1 - m1;
@@ -2794,7 +2805,8 @@ Select_BigTask_Scan_Default:
 	return 0;
 }							// main
 
-/*C语言printf格式化字符串类型（by 低调额低调额）：
+/*
+C语言printf格式化字符串类型（by 低调额低调额）：
 1、%d 十进制有符号整数。
 2、%u 十进制无符号整数。
 3、%ld 输出long整数 。
@@ -2805,6 +2817,7 @@ Select_BigTask_Scan_Default:
 8、%x, %X 无符号以十六进制表示的整数。
 9、%0 无符号以八进制表示的整数。
 10、%g 自动选择合适的表示法。
+
 */
 
 /*// 要用到的函数：sqrt(num)开平方 pow(num, 2)平方
