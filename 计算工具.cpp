@@ -2056,6 +2056,7 @@ private:
 	Dtype numerator, denominator;
 	//Dtype n_exponent
 	bool sign;	// 符号，true->+，false->-
+	bool is_radical;
 
 public:
 	void setConstant(Dtype num, Dtype n_exponent_tmp, Dtype den, Dtype d_exponent_tmp, bool calc_state) {
@@ -2085,6 +2086,21 @@ public:
 		return;
 	}
 
+	void setRadical(Dtype num, Dtype den) {
+		this->setConstant(num, 1, den, 1);
+		this->is_radical = true;
+		if (this->sign == false) {	// 根号内的值为负
+			action.showRadicalMinusErrorMsg();
+			throw data.getSign();
+		}
+		return;
+	}
+
+	void setSign(bool tmp) {
+		this->sign = tmp;
+		return;
+	}
+
 	Dtype getNumerator() const {
 		return this->numerator;
 	}
@@ -2098,18 +2114,23 @@ public:
 	}
 
 	long double getApproximateValue() const {	// TODO:适配大数
-		return this->numerator / this->denominator;
+		if (this->is_radical)
+			return sqrt(data.getNumerator() / data.getDenominator());
+		else
+			return this->numerator / this->denominator;
 	}
 
 	constant() {
 		this->numerator = 0;
 		this->denominator = 0;
 		this->sign = true;
+		this->is_radical = false;
 	}
 	~constant() {}
 };
 
 
+/*
 template<typename Dtype>
 class radical : public constant<Dtype>
 {
@@ -2124,13 +2145,49 @@ public:
 			throw data.getSign();
 		}
 		return;
-
-		long double getApproximateValue() const {	// TODO:适配大数
-			return sqrt(this->numerator / this->denominator);
-		}
 	}
 
+	constant<Dtype> getData() const {
+		return data;
+	}
+
+	long double getApproximateValue() const {	// TODO:适配大数
+		return sqrt(data.getNumerator() / data.getDenominator());
+	}
+};*/
+
+
+template<typename Dtype>
+class unknown
+{
+private:
+	constant<Dtype> coefficient;
+	Dtype exponent;
+//	var id;				// 用于标识不同的未知数
+//	static var id_s;	// 用于生成不同的未知数标识
+
+public:
+	Dtype getCoefficient() const {
+		return this->coefficient;
+	}
+
+	unknown() {
+		this->exponent = 1;
+//		this->id = id_s;
+//		id_s++;
+	}
+
+	~unknown() {
+//		id_s--;
+	}
 };
+template<typename Dtype>
+bool operator==(const unknown<Dtype>& unk, Dtype& num) {
+	if (unk.getCoefficient() == 0 && num == 0)
+		return true;
+	if (unk.getCoefficient() )
+	return false;
+}
 
 
 class polynomial
