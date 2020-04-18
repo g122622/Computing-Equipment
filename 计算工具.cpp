@@ -1,5 +1,5 @@
 // 工程名称：计算工具
-// 日期：20200208
+// 日期：20200417
 // 版本：v0.0.0（还没有release过）
 // 开发平台：Windows：Microsoft Visual Studio；Notepad++；Android：c4droid；Web：Github
 // 开发语言：C++
@@ -27,7 +27,7 @@
 （代码千万条，注释第一条。格式不规范，版主两行泪！！！ヾ(￣▽￣)）
 命名规范：
 函数（function）：abcDefgh
-字符串/对象/结构体：abc_defgh
+字符串/对象/结构体：Abc_defgh
 标签（label）：Abc_Defgh
 
 */
@@ -529,7 +529,7 @@ T1 getMaxData(const T1& a, const T1& b)
 }*/
 
 
-// 以下都是miller_rabin算法分解质因数所需要的函数（by 倚剑笑紅尘）
+// 以下都是使用miller_rabin算法实现分解质因数所需要的函数（by 倚剑笑紅尘）
 map<var, int>m;
 var Random(var n)
 {
@@ -656,7 +656,7 @@ void find(var n, var c)
 }
 
 
-// 以下都是身份证验证码计算所需要的函数（by boshuzhang）
+// 以下都是实现身份证验证码计算所需要的函数（by boshuzhang）
 int _checkIDinput(char ID[])	// 检验身份证是否为18位 
 { 
 	if (strlen(ID) == 18)		// 字符串最后一位/0 
@@ -677,6 +677,72 @@ void _checkID(int IDNumber[], char ID[])
 }
 
 
+// 以下都是实现二叉树所需要的代码（by 雪峰流云）
+struct TreeNode {
+	int value;
+	std::vector<TreeNode*> vec_children;
+};
+
+
+TreeNode* CreateTreeNode(int value) {
+	TreeNode* pNode = new TreeNode();
+	pNode->value = value;
+
+	return pNode;
+}
+
+
+void ConnectTreeNodes(TreeNode* pParent, TreeNode* pChild) {
+	if (pParent != NULL) {
+		pParent->vec_children.push_back(pChild);
+	}
+}
+
+
+void PrintTreeNode(TreeNode* pNode) {
+	if (pNode != NULL) {
+		printf("value of this node is: %d\n", pNode->value);
+
+		printf("its children is as the following");
+		std::vector<TreeNode*>::iterator i = pNode->vec_children.begin();
+		while (i < pNode->vec_children.end()) {
+			if (*i != NULL)
+				printf("%d\t", (*i)->value);
+		}
+		printf("\n");
+	}
+	else {
+		printf("this node is null.\n");
+	}
+	printf("\n");
+}
+
+
+void PrintTree(TreeNode* pRoot) {
+	PrintTreeNode(pRoot);
+
+	if (pRoot != NULL) {
+		std::vector<TreeNode*>::iterator i = pRoot->vec_children.begin();
+		while (i < pRoot->vec_children.end()) {
+			PrintTreeNode(*i);
+			++i;
+		}
+	}
+}
+
+
+void DestroyTree(TreeNode* pRoot) {
+	if (pRoot != NULL) {
+		std::vector<TreeNode*>::iterator i = pRoot->vec_children.begin();
+		while (i < pRoot->vec_children.end()) {
+			DestroyTree(*i);
+			++i;
+		}
+		delete pRoot;
+	}
+}
+
+
 /*----------运算符重载区----------*/
 // vector重载"+"运算符
 vector<var> operator+(const vector<var>& vec1, const vector<var>& vec2)
@@ -688,7 +754,7 @@ vector<var> operator+(const vector<var>& vec1, const vector<var>& vec2)
 }
 
 /*----------对象声明区----------*/
-class Action
+class action
 {
 	private:
 	inline void showGeneralErrorMsg()
@@ -2046,7 +2112,7 @@ public:
 };*/
 
 
-Action action;
+action Action;
 
 
 template<typename Dtype>
@@ -2061,11 +2127,11 @@ private:
 public:
 	void setConstant(Dtype num, Dtype n_exponent_tmp, Dtype den, Dtype d_exponent_tmp, bool calc_state) {
 		if (den == 0) {
-			action.showDenZeroErrorMsg();
+			Action.showDenZeroErrorMsg();
 			throw 0;	// 分母为零，抛出异常
 		}
 		if ((num == 0 && n_exponent_tmp == 0) || (den == 0 && d_exponent_tmp == 0)) {
-			action.showBaseNumZeroErrorMsg();
+			Action.showBaseNumZeroErrorMsg();
 			throw 0;	// 底数和指数同时为零，抛出异常
 		}
 		if (num != 0 && n_exponent_tmp == 0)
@@ -2090,7 +2156,7 @@ public:
 		this->setConstant(num, 1, den, 1);
 		this->is_radical = true;
 		if (this->sign == false) {	// 根号内的值为负
-			action.showRadicalMinusErrorMsg();
+			Action.showRadicalMinusErrorMsg();
 			throw data.getSign();
 		}
 		return;
@@ -2128,6 +2194,11 @@ public:
 	}
 	~constant() {}
 };
+template<typename Dtype>
+constant<Dtype> operator+(const constant<Dtype>& cst1, constant<Dtype> cst2) {
+
+
+}
 
 
 /*
@@ -2141,7 +2212,7 @@ public:
 	void setRadical(Dtype num, Dtype den) {
 		data.setConstant(num, 1, den, 1);
 		if (data.getSign() == false) {	// 根号内的值为负
-			action.showRadicalMinusErrorMsg();
+			Action.showRadicalMinusErrorMsg();
 			throw data.getSign();
 		}
 		return;
@@ -2186,7 +2257,7 @@ bool operator==(const unknown<Dtype>& unk, Dtype& num) {
 	if (unk.getCoefficient() == 0 && num == 0)
 		return true;
 	if (unk.getCoefficient() )
-	return false;
+		return false;
 }
 
 
@@ -2224,7 +2295,7 @@ int main(void)
 	system("chcp 65001");
 	SetConsoleTitle("计算工具");
 #endif
-	action.showMasterConsole();	// 加载总控制台
+	Action.showMasterConsole();	// 加载总控制台
 Select_Num_Scan:
 	cout << endl
 		 << "[输入]";
@@ -2801,7 +2872,7 @@ Select_BigTask_Scan_Default:
 				}
 				catch (var err_tmp)
 				{
-					action.showRadicalMinusErrorMsg(/*err_tmp*/);
+					Action.showRadicalMinusErrorMsg(/*err_tmp*/);
 				}
 				cout << "=== end" << endl;
 				mult<var> m3 = m1 - m1;
@@ -2838,7 +2909,7 @@ Select_BigTask_Scan_Default:
 			
 			default:
 			{
-				action.showInputErrorMsg();
+				Action.showInputErrorMsg();
 				goto Select_Num_Scan;
 			}
 			}
@@ -2848,14 +2919,14 @@ Select_BigTask_Scan_Default:
 
 	case 0:		// 显示控制台
 	{
-		action.showMasterConsole();
+		Action.showMasterConsole();
 		goto Select_Num_Scan;
 	}						// case 0
 
 
 	default:	// 输入错误
 	{
-		action.showInputErrorMsg();
+		Action.showInputErrorMsg();
 		goto Select_Num_Scan;
 	}						// default
 	}						// switch
