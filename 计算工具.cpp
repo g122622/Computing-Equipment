@@ -676,7 +676,7 @@ void _checkID(int IDNumber[], char ID[])
 	else cout << "错误身份证号码/n"; 
 }
 
-
+/*
 // 以下都是实现二叉树所需要的代码（by 雪峰流云）
 struct TreeNode {
 	int value;
@@ -687,15 +687,13 @@ struct TreeNode {
 TreeNode* CreateTreeNode(int value) {
 	TreeNode* pNode = new TreeNode();
 	pNode->value = value;
-
 	return pNode;
 }
 
 
 void ConnectTreeNodes(TreeNode* pParent, TreeNode* pChild) {
-	if (pParent != NULL) {
+	if (pParent != NULL)
 		pParent->vec_children.push_back(pChild);
-	}
 }
 
 
@@ -741,6 +739,7 @@ void DestroyTree(TreeNode* pRoot) {
 		delete pRoot;
 	}
 }
+*/
 
 
 /*----------运算符重载区----------*/
@@ -1790,6 +1789,7 @@ public:
 };
 #endif // DEBUG
 
+
 class timer
 {
 private:
@@ -2115,7 +2115,85 @@ public:
 action Action;
 
 
-template<typename Dtype>
+// 以下是自己写的Tree对象（先实现了再说，以后再优化qwq）
+template <typename Dtype>
+struct Node
+{
+	Dtype data;
+	var parent;
+};
+
+
+template <typename Dtype>
+class Tree
+{
+private:
+
+
+	/*vector<Dtype> data;
+	vector<var> layer;
+	vector<var> degree;*/
+
+public:
+/*	void creatTree(var _depth) {
+		depth = _depth;
+		return;
+	}*/
+	var depth = 0;
+	vector<Node<Dtype>> nodes;
+
+	void setTreeNode(var parent, Dtype value) {
+		depth++;
+		nodes.resize(depth);
+		nodes[depth - 1].data = value;
+		nodes[depth - 1].parent = parent;
+		return;
+	}
+
+	void arrange() {
+		vector<var> temp;	/*同父级表，内存值随arrange不断改变*/
+		vector<var> copy_map;/*原、现下标对应表，用于copy替换后的父节点指针*/
+		var tmp_size = 0;	/*暂存size，避免容器size随值的加入而改变*/
+		var total = 0;		/*总计数*/
+		Tree tree_tmp;		/*作为最终res，替换原Tree*/
+		for (var i = 0; i < depth; i++) {
+			if (nodes[i].parent == 0) {
+				temp.push_back(i);
+				tree_tmp.nodes[total].push_back(nodes[i]);
+				copy_map.push_back(i);
+				total++;
+			}
+		}
+		for (; total < depth; ) {
+			tmp_size = temp.size();
+			for (var i = 0; i < depth; i++) {
+				for (var j = 0; j < tmp_size; j++) {
+					if (nodes[i].parent == temp[j]) {
+						temp.push_back(i);
+						tree_tmp.nodes[total].push_back(nodes[i]);
+						copy_map.push_back(i);
+						total++;
+					}
+				}
+			}
+			temp.erase(temp.begin(), temp.begin() + tmp_size);
+		}
+		tree_tmp.depth = depth;
+		/*copy替换后的父节点指针*/
+
+	}
+	/*void setTreeNode(var _layer, Dtype value) {
+		if (_layer >= depth || _layer < 0)
+			throw _layer;
+		layer.push_back(layer);
+		degree.push_back();
+		data.push_back(value);
+		return;
+	}*/
+};
+
+
+template <typename Dtype>
 class constant
 {
 private:
@@ -2194,7 +2272,7 @@ public:
 	}
 	~constant() {}
 };
-template<typename Dtype>
+template <typename Dtype>
 constant<Dtype> operator+(const constant<Dtype>& cst1, constant<Dtype> cst2) {
 
 
@@ -2228,7 +2306,7 @@ public:
 };*/
 
 
-template<typename Dtype>
+template <typename Dtype>
 class unknown
 {
 private:
@@ -2252,7 +2330,7 @@ public:
 //		id_s--;
 	}
 };
-template<typename Dtype>
+template <typename Dtype>
 bool operator==(const unknown<Dtype>& unk, Dtype& num) {
 	if (unk.getCoefficient() == 0 && num == 0)
 		return true;
