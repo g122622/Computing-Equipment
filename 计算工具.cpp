@@ -2147,7 +2147,6 @@ public:
 		nodes.resize(depth);
 		nodes[depth - 1].data = value;
 		nodes[depth - 1].parent = parent;
-		return;
 	}
 
 	void arrange() {
@@ -2157,10 +2156,11 @@ public:
 		var tmp_size = 0;			/*暂存size，避免容器size随值的加入而改变*/
 		var total = 0;				/*总计数*/
 		Tree tree_res;				/*作为最终res，替换原Tree*/
+		/*起个头*/
 		for (var i = 0; i < depth; i++) {
 			if (nodes[i].parent == 0) {
 				temp_table.push_back(i);
-				tree_res.nodes[total].push_back(nodes[i]);
+				tree_res.nodes[total].data = nodes[i]);
 				copy_map.push_back(i);
 				ori_par_table.push_back(nodes[i].parent);
 				total++;
@@ -2172,7 +2172,7 @@ public:
 				for (var j = 0; j < tmp_size; j++) {
 					if (nodes[i].parent == temp_table[j]) {
 						temp_table.push_back(i);
-						tree_res.nodes[total].push_back(nodes[i]);
+						tree_res.nodes[total].data = nodes[i]);
 						copy_map.push_back(i);
 						ori_par_table.push_back(nodes[i].parent);
 						total++;
@@ -2196,8 +2196,10 @@ public:
 				}
 			}
 		}
-		/*copy替换后的父节点指针*/
-		
+		/*copy back 替换后的父节点指针*/
+		for (var i = 0; i < depth; i++) {
+			tree_res.nodes[i].parent = ori_par_table[i];
+		}
 	}
 	/*void setTreeNode(var _layer, Dtype value) {
 		if (_layer >= depth || _layer < 0)
@@ -2207,6 +2209,10 @@ public:
 		data.push_back(value);
 		return;
 	}*/
+
+	vector<var> getBrother(node_id) {
+		/*把节点ID打包成vec容器*/
+	}
 };
 
 
