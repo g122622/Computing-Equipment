@@ -2116,6 +2116,10 @@ action Action;
 
 
 // 以下是自己写的Tree对象（先实现了再说，以后再优化qwq）
+/*技术特征：
+理论最大索引节点数：∞
+索引性能：较低（未做任何优化）
+*/
 template <typename Dtype>
 struct Node
 {
@@ -2128,8 +2132,6 @@ template <typename Dtype>
 class Tree
 {
 private:
-
-
 	/*vector<Dtype> data;
 	vector<var> layer;
 	vector<var> degree;*/
