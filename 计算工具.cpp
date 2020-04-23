@@ -2117,14 +2117,17 @@ action Action;
 
 // 以下是自己写的Tree对象（先实现了再说，以后再优化qwq）
 /*技术特征：
-理论最大索引节点数：∞
+理论最大索引节点数：9223372036854775807（2^63-1）
 索引性能：较低（未做任何优化）
+内存占用：较高
 */
 template <typename Dtype>
 struct Node
 {
 	Dtype data;
 	var parent;
+	var depth;
+	var correspond;
 };
 
 
@@ -2138,58 +2141,61 @@ private:
 
 public:
 /*	void creatTree(var _depth) {
-		depth = _depth;
+		node_count = _depth;
 		return;
 	}*/
-	var depth = 0;
+	var node_count = 0;
 	vector<Node<Dtype>> nodes;
 
 	void setTreeNode(var parent, Dtype value) {
-		depth++;
-		nodes.resize(depth);
-		nodes[depth - 1].data = value;
-		nodes[depth - 1].parent = parent;
+		node_count++;
+		nodes.resize(node_count);
+		nodes[node_count - 1].data = value;
+		nodes[node_count - 1].parent = parent;
 	}
 
 	void arrange() {
 		vector<var> temp_table;		/*同父级表，内存值随arrange动态变化*/
-		vector<var> ori_par_table;	/*原父节点存储表*/
-		vector<var> copy_map;		/*原、现下标对应表，用于copy替换后的父节点指针*/
+//		vector<var> ori_par_table;	/*原父节点存储表*/
+//		vector<var> copy_map;		/*原、现下标对应表，用于copy替换后的父节点指针*/
 		var tmp_size = 0;			/*暂存size，避免容器size随值的加入而改变*/
 		var total = 0;				/*总计数*/
 		Tree tree_res;				/*作为最终res，替换原Tree*/
-		/*起个头*/
-		for (var i = 0; i < depth; i++) {
+		/*起个头，给主干打标记*/
+		for (var i = 0; i < node_count; i++) {
 			if (nodes[i].parent == 0) {
 				temp_table.push_back(i);
 				tree_res.nodes[total].data = nodes[i]);
-				copy_map.push_back(i);
-				ori_par_table.push_back(nodes[i].parent);
+//				copy_map.push_back(i);
+				//ori_par_table.push_back(nodes[i].parent);
+				nodes[i].correspond = i;
 				total++;
 			}
 		}
-		for (; total < depth; ) {
+		/*var i = total 是实验性用法*/
+		for (; total < node_count; ) {
 			tmp_size = temp_table.size();
-			for (var i = 0; i < depth; i++) {
+			for (var i = total; i < node_count; i++) {
 				for (var j = 0; j < tmp_size; j++) {
 					if (nodes[i].parent == temp_table[j]) {
 						temp_table.push_back(i);
 						tree_res.nodes[total].data = nodes[i]);
-						copy_map.push_back(i);
-						ori_par_table.push_back(nodes[i].parent);
+//						copy_map.push_back(i);
+						//ori_par_table.push_back(nodes[i].parent);
+						nodes[i].correspond = i;
 						total++;
 					}
 				}
 			}
 			temp_table.erase(temp_table.begin(), temp_table.begin() + tmp_size);
 		}
-		tree_res.depth = depth;
+		tree_res.node_count = node_count;
 		/*替换父节点指针*/
 		/*值说明：
 		i：控制原父节点存储表的匹配
 		j：控制copy_map的匹配
 		*/
-		for (var i = 0; i < ori_par_table.size(); i++) {
+/*		for (var i = 0; i < ori_par_table.size(); i++) {
 			var j;
 			for (var j = 0; j < copy_map.size(); j++) {
 				if (ori_par_table[i] == copy_map[j]) {
@@ -2197,14 +2203,14 @@ public:
 					break;
 				}
 			}
-		}
+		}*/
 		/*copy back 替换后的父节点指针*/
-		for (var i = 0; i < depth; i++) {
-			tree_res.nodes[i].parent = ori_par_table[i];
-		}
+//		for (var i = 0; i < node_count; i++) {
+			//tree_res.nodes[i].parent = ori_par_table[i];
+//		}
 	}
 	/*void setTreeNode(var _layer, Dtype value) {
-		if (_layer >= depth || _layer < 0)
+		if (_layer >= node_count || _layer < 0)
 			throw _layer;
 		layer.push_back(layer);
 		degree.push_back();
