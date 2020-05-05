@@ -170,17 +170,17 @@ var getLowestCommonMultiple(general_struct_1 temp)
 		return 0;
 	var data_amount = temp.count;	// 非引用
 	// 数据预处理1：输入数全部取绝对值，同时赋值给temp
-	for (var i = 0; i < data_amount; i++)
+	for (var i = 0; i < data_amount; ++i)
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	// 数据预处理2：冒泡排序，选出最小值(函数返回值类型为结构体，可以函数全局使用temp，但count已失效）
 	temp = getSortedData(temp, data_amount);
 	// 数据预处理3：删除值为零的元素，容器大小相应缩减
-	for (var i = 0; i < temp.data_array.size(); i++)
+	for (var i = 0; i < temp.data_array.size(); ++i)
 	{
 		if (temp.data_array[i] == 0)
 		{
 			temp.data_array.erase(temp.data_array.begin() + i);
-			i--;
+			--i;
 			data_amount--;
 		}
 		else break;
@@ -192,10 +192,10 @@ var getLowestCommonMultiple(general_struct_1 temp)
 	// 这两个临时值为缩减代码横向体积而设立，便于编辑和浏览
 	double* dm1 = new double;
 	var* lm2 = new var;
-	for (var i = 1; i > 0; i++)
+	for (var i = 1; i > 0; ++i)
 	{
 		LowestCommonMultiple = temp.data_array[data_amount - 1] * i;	// 选取最大值
-		for (var j = data_amount - 2; j >= 0; j--)	// 选取第二大的值
+		for (var j = data_amount - 2; j >= 0; --j)	// 选取第二大的值
 		{
 			*dm1 = (double)LowestCommonMultiple / temp.data_array[j];
 			*lm2 = (var)LowestCommonMultiple / temp.data_array[j];
@@ -246,19 +246,19 @@ var getGreatestCommonDivisor(general_struct_1 temp)
 		return 1;
 	var data_amount = temp.count;				// 不可使用引用，避免count的值被冒泡排序函数所改变
 	// 数据预处理1：输入数全部取绝对值，同时赋值给temp
-	for (var i = 0; i < data_amount; i++)
+	for (var i = 0; i < data_amount; ++i)
 		temp.data_array[i] = getAbsoluteData(temp.data_array[i]);
 	// 数据预处理2：冒泡排序，选出最小值(函数返回值类型为结构体，可以函数全局使用temp，但count已失效）
 	temp = getSortedData(temp, data_amount);
 	if (data_amount == 1 && temp.data_array[0] == 0)
 		return 1;
 	// 数据预处理3：删除值为零的元素，容器大小相应缩减
-	for (var i = 0; i < temp.data_array.size(); i++)
+	for (var i = 0; i < temp.data_array.size(); ++i)
 	{
 		if (temp.data_array[i] == 0)
 		{
 			temp.data_array.erase(temp.data_array.begin() + i);
-			i--;
+			--i;
 			data_amount--;
 		}
 		else break;
@@ -266,9 +266,9 @@ var getGreatestCommonDivisor(general_struct_1 temp)
 	if (temp.data_array.empty())
 		return 1;
 	//<---数据预处理结束--->
-	for (var j = temp.data_array[0]; j > 0; j--)	// 选取最小数进行嵌套循环，j的最终结果为最大公约数
+	for (var j = temp.data_array[0]; j > 0; --j)	// 选取最小数进行嵌套循环，j的最终结果为最大公约数
 	{
-		for (var k = data_amount - 1; k >= 0; k--)
+		for (var k = data_amount - 1; k >= 0; --k)
 		{
 			// 判断是否能整除，若不能则直接break
 			if ((double)temp.data_array[k] / j != (var)temp.data_array[k] / j)
@@ -309,7 +309,7 @@ simplify_quadratic_radical_struct simplifyQuadraticRadical(var numscan)
 		temp.out_radical = 0;
 		return temp;
 	}
-	for (var i = numscan; i > 0; i--)
+	for (var i = numscan; i > 0; --i)
 	{
 		if ((double)numscan / i == (var)numscan / i && (double)sqrt(i) == (var)sqrt(i))
 			// 第一个条件：确保i为numscan的整因数；第二个条件：确保i是最大的完全平方因数
@@ -336,9 +336,9 @@ void swapData(T1& num1, T1& num2)
 // 冒泡排序函数（从小到大）
 general_struct_1 getSortedData(general_struct_1 temp, var& dataamount)
 {
-	for (var k = 0; k < dataamount; k++)
+	for (var k = 0; k < dataamount; ++k)
 	{
-		for (var j = dataamount - 1; j > 0; j--)
+		for (var j = dataamount - 1; j > 0; --j)
 		{
 			if (temp.data_array[j] < temp.data_array[j - 1])
 			{
@@ -429,7 +429,7 @@ bool isEqualArray(const vector<var>& vec1, const vector<var>& vec2)
 {
 	if (vec1.size() != vec2.size())
 		return false;
-	for (var i = 0; i < vec1.size(); i++)
+	for (var i = 0; i < vec1.size(); ++i)
 		if (vec1[i] != vec2[i])
 			return false;
 	return true;
@@ -450,7 +450,7 @@ void swapVec(vector<var>& vec1, vector<var>& vec2)
 template<typename T1>
 void invertVec(vector<T1>& vec)
 {
-	for (var i = 0; i < (float)vec.size() / 2; i++)
+	for (var i = 0; i < (float)vec.size() / 2; ++i)
 		swapData(vec[i], vec[vec.size() - i - 1]);
 }
 
@@ -576,12 +576,12 @@ bool witness(var a, var n)	// miller_rabin算法的精华
 	while (tem % 2 == 0)
 	{
 		tem /= 2;
-		j++;
+		++j;
 	}
 
 	var x = q_pow(a, tem, n);		// 得到a^(n-1) mod n
 	if (x == 1 || x == n - 1) return true;
-	while (j--)
+	while (--j)
 	{
 		x = q_mul(x, x, n);
 		if (x = n - 1) return true;
@@ -597,7 +597,7 @@ bool miller_rabin(var n)  // 检验n是否是素数
 		return true;
 	if (n < 2 || n % 2 == 0)
 		return false;
-	for (int i = 1; i <= times; i++)		// 做times次随机检验
+	for (int i = 1; i <= times; ++i)		// 做times次随机检验
 	{
 		var a = Random(n - 2) + 1;	// 得到随机检验算子 a
 		if (!witness(a, n))					// 用a检验n是否是素数
@@ -622,7 +622,7 @@ var pollard_rho(var n, var c)// 找到n的一个因子
 	y = x;
 	while (1)
 	{
-		i++;
+		++i;
 		x = (q_mul(x, x, n) + c) % n;
 		d = gcd(y - x, n);
 		if (1 < d && d < n)
@@ -669,7 +669,7 @@ void _checkID(int IDNumber[], char ID[])
 {
 	int i = 0;	// i为计数器
 	int checksum = 0;
-	for (; i < 17; i++)
+	for (; i < 17; ++i)
 		checksum += IDNumber[i] * factor[i];
 	if (IDNumber[17] == check_table[checksum % 11] or (ID[17] == 'x' and check_table[checksum % 11] == 2))
 		cout << "正确身份证号码/n";
@@ -853,12 +853,12 @@ private:
 	void preProcessRadical(vector<Dtype>& temp)
 	{
 		// 数据预处理：删除为0的元素
-		for (var i = 0; i < temp.size(); i++)
+		for (var i = 0; i < temp.size(); ++i)
 		{
 			if (temp[i] == 0)
 			{
 				temp.erase(temp.begin() + i);
-				i--;	// 经过多次检验，这里出错的概率较小
+				--i;	// 经过多次检验，这里出错的概率较小
 			}
 		}
 	}
@@ -872,7 +872,7 @@ private:
 		simplify_quadratic_radical_struct sqr;
 		var end_const = temp.size();	// 缓冲常量，避免temp.end()内存地址随元素的插入而改变
 		// 计算+暂存
-		for (var i = 0; i < end_const; i++)
+		for (var i = 0; i < end_const; ++i)
 		{
 			if (temp[i] >= 0)			// 判断是否为减
 				sqr = simplifyQuadraticRadical(temp[i]);
@@ -890,7 +890,7 @@ private:
 			temp.push_back(sqr.in_radical);
 		}
 		temp.erase(temp.begin(), temp.begin() + end_const);	// 清除原数据
-/*		for (int i = 0; i < temp.size(); i++)
+/*		for (int i = 0; i < temp.size(); ++i)
 			cout << temp[i] << endl;*/
 	}
 	
@@ -962,7 +962,7 @@ private:
 	vector<Dtype> sortRadical(vector<Dtype> temp)
 	{
 		// 系数由小至大
-		for (var k = 0; k < temp.size(); k++)
+		for (var k = 0; k < temp.size(); ++k)
 		{
 			for (var j = temp.size() - 2; j > 0; j -= 2)
 			{
@@ -974,9 +974,9 @@ private:
 			}
 		}
 		// 在前面的基础上根号内由小至大
-		for (var k = 0; k < temp.size(); k++)
+		for (var k = 0; k < temp.size(); ++k)
 		{
-			for (var j = 1; j < temp.size() - 1; j++)
+			for (var j = 1; j < temp.size() - 1; ++j)
 			{
 				if (temp[j - 1] == temp[j + 1])
 				{
@@ -1799,15 +1799,15 @@ private:
 	// 一个延迟单位（单元）
 	void delayUnit(const var& num)
 	{
-		for (var i = num; i > 0; i--)
-			for (var j = 0; j < 128; j++);
+		for (var i = num; i > 0; --i)
+			for (var j = 0; j < 128; ++j);
 	}
 
 	// 自适应函数
 	var adapt(const int& index)
 	{
 		var tmp = 1000;
-		for (var i = 0; i < index; i++)
+		for (var i = 0; i < index; ++i)
 		{
 			clock_t start, stop;// 初始化计时函数
 			start = clock();	// 开始计时
@@ -1884,7 +1884,7 @@ public:
 	{
 		//a.len = strlen(str);
 		this->data.resize(strlen(str));
-		for (int i = 0; i < strlen(str); i++)
+		for (int i = 0; i < strlen(str); ++i)
 			this->data[strlen(str) - i - 1] = str[i] - '0';
 		return;
 	}
@@ -1919,7 +1919,7 @@ big_num operator+(big_num num1, const big_num& num2)
 	big_num result;
 	short temp;
 	short carry = 0;    // 进位
-	for (var i = 0; i < num1.data.size() || i < num2.data.size(); i++)
+	for (var i = 0; i < num1.data.size() || i < num2.data.size(); ++i)
 	{
 		temp = num1.getData(i) + num2.getData(i) + carry;
 		result.data.push_back(temp % 10);
@@ -1939,7 +1939,7 @@ big_num operator-(big_num num1, const big_num& num2)
 	*/
 	big_num result;
 	short temp;
-	for (var i = 0; i < num1.data.size() || i < num2.data.size(); i++)
+	for (var i = 0; i < num1.data.size() || i < num2.data.size(); ++i)
 	{
 		if (num1.getData(i) < num2.getData(i))	// 不够减，向高位借1
 		{
@@ -1965,7 +1965,7 @@ big_num operator*(const big_num& num1, const short& num2)
 	short temp;
 	short carry = 0;
 	// TODO:加入resize()
-	for (int i = 0; i < num1.data.size(); i++)
+	for (int i = 0; i < num1.data.size(); ++i)
 	{
 		temp = num1.getData(i) * num2 + carry;
 		result.data.push_back(temp % 10);
@@ -1986,7 +1986,7 @@ big_num operator*(const big_num& num1, const big_num& num2)
 	vector<big_num> temp;
 	// 使用resize()来避免频繁重分配内存导致的性能下降
 	temp.resize(num2.data.size());
-	for (var i = 0; i < num2.data.size(); i++)
+	for (var i = 0; i < num2.data.size(); ++i)
 		temp[i] = num1 * num2.getData(i) * (i - 1) * 10;
 	for (auto item : temp)
 		result = result + item;
@@ -2015,7 +2015,7 @@ big_num operator/(big_num num1, big_num num2) // （by 缘起指尖）
 				c.len = a.len;
 				int bData = array2Data(b);
 				int r = 0; //余数
-				for (int i = a.len - 1; i >= 0; i--) {
+				for (int i = a.len - 1; i >= 0; --i) {
 					a.data[i] = r * 10 + a.data[i];
 					c.data[i] = a.data[i] / bData;
 					r = a.data[i] % bData;
@@ -2041,7 +2041,7 @@ big_num operator/(big_num num1, big_num num2) // （by 缘起指尖）
 	{
 		var len_diff = num1.data.size() - num2.data.size();	// 两个大数位数的差值
 		num2.data.resize(num1.data.size());
-		for (var i = num1.data.size() - 1; i >= 0; i--)		// 将除数后补零，使得两个大数位数相同（eg.整数37->3700）
+		for (var i = num1.data.size() - 1; i >= 0; --i)		// 将除数后补零，使得两个大数位数相同（eg.整数37->3700）
 		{
 			if (i >= len_diff)
 				num2.data[i] = num2.data[i - len_diff];
@@ -2050,7 +2050,7 @@ big_num operator/(big_num num1, big_num num2) // （by 缘起指尖）
 		}
 		//num2.data.size() = num1.data.size();	// 将两个大数数位相同
 		var digit = num1.data.size();			// 将原被除数位数赋值给digit
-		for (var j = 0; j <= len_diff; j++)
+		for (var j = 0; j <= len_diff; ++j)
 		{
 			result.data[len_diff - j] = 0;
 			// 判断两个数的大小以及被除数位数与除数原位数的关系
@@ -2065,7 +2065,7 @@ big_num operator/(big_num num1, big_num num2) // （by 缘起指尖）
 			if (temp < 0)	// ------若被除数 小于 除数，除数减小一位
 			{
 				var i;
-				for (i = 1; i < num2.data.size(); i++)
+				for (i = 1; i < num2.data.size(); ++i)
 					num2.data[i - 1] = num2.data[i];
 				num2.data[i - 1] = 0;
 				if (num1.data.size() < num2.data.size())
@@ -2074,21 +2074,21 @@ big_num operator/(big_num num1, big_num num2) // （by 缘起指尖）
 		}
 		//printf("商是：");
 		var i;
-		for (i = len_diff; i > 0; i--)// 去掉前缀0
+		for (i = len_diff; i > 0; --i)// 去掉前缀0
 		{
 			if (result.data[i])
 				break;
 		}
-		/*for (;i >= 0;i--)
+		/*for (;i >= 0;--i)
 			printf("%d", z[i]);
 		printf("\n");
 		printf("余数是：");
-		for (i = len1;i > 0;i--)
+		for (i = len1;i > 0;--i)
 		{
 			if (x[i])
 				break;
 		}
-		for (;i >= 0;i--)
+		for (;i >= 0;--i)
 			printf("%d", x[i]);
 		printf("\n");*/
 	}
@@ -2125,89 +2125,95 @@ template <typename Dtype>
 struct Node
 {
 	Dtype data;
-	var parent;
-	var depth;
-	var correspond;
+	var parent;	/*root的parent为-1*/
+	var depth;	/*root的depth为0*/
+
+	void operator=(Node temp) {
+		this->data = temp.data;
+		this->depth = temp.depth;
+		this->parent = temp.parent;
+	}
 };
-
-
+/*
+Tips：
+1.树的root的id必须为0。
+*/
 template <typename Dtype>
 class Tree
 {
 private:
-	/*vector<Dtype> data;
-	vector<var> layer;
-	vector<var> degree;*/
 
 public:
-/*	void creatTree(var _depth) {
-		node_count = _depth;
-		return;
-	}*/
-	var node_count = 0;
-	vector<Node<Dtype>> nodes;
+	vector<Node<Dtype>> nodes_orginal;
 
-	void setTreeNode(var parent, Dtype value) {
-		node_count++;
-		nodes.resize(node_count);
-		nodes[node_count - 1].data = value;
-		nodes[node_count - 1].parent = parent;
+	void setTreeNode(var _parent, Dtype _data) {
+		Node<Dtype> temp;
+		temp.data = _data;
+		temp.parent = _parent;
+		nodes_orginal.push_back(temp);
 	}
 
 	void arrange() {
+		/*TODO:减少push_back的使用*/
 		vector<var> temp_table;		/*同父级表，内存值随arrange动态变化*/
-//		vector<var> ori_par_table;	/*原父节点存储表*/
-//		vector<var> copy_map;		/*原、现下标对应表，用于copy替换后的父节点指针*/
+		vector<var> ori_par_table;	/*原父节点存储表*/
+		vector<var> copy_map;		/*原、现下标对应表，用于copy替换后的父节点指针*/
 		var tmp_size = 0;			/*暂存size，避免容器size随值的加入而改变*/
 		var total = 0;				/*总计数*/
-		Tree tree_res;				/*作为最终res，替换原Tree*/
-		/*起个头，给主干打标记*/
-		for (var i = 0; i < node_count; i++) {
-			if (nodes[i].parent == 0) {
+		var _depth = 2;
+		vector<Node<Dtype>> nodes_sorted;/*替换原来的Nodes，避免每次都遍历*/
+		nodes_sorted.resize(nodes_orginal.size());
+		nodes_sorted[0] = ;
+		/*起个头，给主干打标记（基本原理与下面的相同）*/
+		for (var i = 1; i < this->nodes_orginal.size(); ++i) {
+			if (this->nodes_orginal[i].parent == 0) {
+				++total;
 				temp_table.push_back(i);
-				tree_res.nodes[total].data = nodes[i]);
-//				copy_map.push_back(i);
-				//ori_par_table.push_back(nodes[i].parent);
-				nodes[i].correspond = i;
-				total++;
+				nodes_sorted[total].depth = 1;
+				nodes_sorted[total].data = this->nodes_orginal[i].data;
+				copy_map.push_back(i);
+//				ori_par_table.push_back(nodes_orginal[i].parent);
 			}
 		}
 		/*var i = total 是实验性用法*/
-		for (; total < node_count; ) {
+		for (; total < this->nodes_orginal.size(); ) {
 			tmp_size = temp_table.size();
-			for (var i = total; i < node_count; i++) {
-				for (var j = 0; j < tmp_size; j++) {
-					if (nodes[i].parent == temp_table[j]) {
-						temp_table.push_back(i);
-						tree_res.nodes[total].data = nodes[i]);
-//						copy_map.push_back(i);
-						//ori_par_table.push_back(nodes[i].parent);
-						nodes[i].correspond = i;
-						total++;
+			for (var i = this->nodes_orginal.size(); i < this->nodes_orginal.size(); ++i) {
+				for (var j = 0; j < tmp_size; ++j) {
+					if (this->nodes_orginal[i].parent == temp_table[j]) {
+						++total;/*总计数自加1*/
+						temp_table.push_back(i);/*修改同父级表*/
+						nodes_sorted[total].depth = _depth;/*存储深度*/
+						nodes_sorted[total].data = this->nodes_orginal[i].data;/*复制数据*/
+						copy_map.push_back(i);/*id对应表做记录*/
+//						ori_par_table.push_back(nodes_orginal[i].parent);/*TODO:去掉这个*/
 					}
 				}
 			}
 			temp_table.erase(temp_table.begin(), temp_table.begin() + tmp_size);
+			if (temp_table.size() == 0)
+				break;
+			++_depth;
 		}
-		tree_res.node_count = node_count;
 		/*替换父节点指针*/
 		/*值说明：
 		i：控制原父节点存储表的匹配
 		j：控制copy_map的匹配
 		*/
-/*		for (var i = 0; i < ori_par_table.size(); i++) {
-			var j;
-			for (var j = 0; j < copy_map.size(); j++) {
-				if (ori_par_table[i] == copy_map[j]) {
-					ori_par_table[i] = j;
+		for (var i = 1; i < total + 1; ++i) {
+			for (var j = 0; j < copy_map.size(); ++j) {
+				if (nodes_orginal[i].parent == copy_map[j - 1]) {
+					nodes_orginal[i] = j;
 					break;
 				}
 			}
-		}*/
-		/*copy back 替换后的父节点指针*/
-//		for (var i = 0; i < node_count; i++) {
-			//tree_res.nodes[i].parent = ori_par_table[i];
+		}
+//		/*copy back 替换后的父节点指针*/
+//		for (var i = 1; i < node_count; ++i) {
+//			nodes_sorted[i].parent = ori_par_table[i];
 //		}
+		/*覆盖*//*TODO:重写*/
+		nodes_orginal = nodes_sorted;
 	}
 	/*void setTreeNode(var _layer, Dtype value) {
 		if (_layer >= node_count || _layer < 0)
@@ -2218,8 +2224,21 @@ public:
 		return;
 	}*/
 
+	getNode(var& id) {
+
+	}
 	vector<var> getBrother(node_id) {
-		/*把节点ID打包成vec容器*/
+
+		/*双向查找*/
+		/*把节点id打包成vec容器*/
+	}
+
+	vector<var> getSon(node_id) {
+
+	}
+
+	vector<var> getFather(node_id) {
+
 	}
 };
 
@@ -2380,21 +2399,23 @@ public:
 	~polynomial() {};
 };
 
-class polynomial
+class xxx
 {
 private:
 
 public:
 
-	polynomial() {};
-	~polynomial() {};
+	xxx() {};
+	~xxx() {};
 };
+
 
 /*----------全局变量/结构体/对象声明区/杂项区2----------*/
 long double pretime;
 bool speedTestState = ENABLED;// 避免多次测速
 var SwitchNum;
 clock_t start, stop;// 初始化计时函数
+
 
 /*----------主函数----------*/
 int main(void)
@@ -2490,9 +2511,9 @@ Select_Num_Scan:
 		else	// 计算*c的负数因数
 			factor_c = getFactor(-*c, ENABLED);	// 传入c的相反数，使c始终为正
 		// 因数计算完成，开始for循环+if条件匹配
-		for (var i = 0; i < factor_c.count; i++)
+		for (var i = 0; i < factor_c.count; ++i)
 		{
-			for (var j = 0; j < factor_a.count; j++)
+			for (var j = 0; j < factor_a.count; ++j)
 			{
 				if (factor_a.data_array[j] * (*c / factor_c.data_array[i]) + factor_c.data_array[i] * (*a / factor_a.data_array[j]) == *b)// 触发输出的条件
 				{
@@ -2681,7 +2702,7 @@ Select_BigTask_Scan_Default:
 		// 调用函数(不启用负数输出)
 		factor = getFactor(*numscan, DISABLED);
 		// 开始输出
-		for (var i = 0; i < factor.count; i++)
+		for (var i = 0; i < factor.count; ++i)
 			printf("[整因数 %ld ] = %ld\n", i + 1, factor.data_array[i]);
 	PrimeNum_Output:
 		if (factor.count < 3)
@@ -2702,7 +2723,7 @@ Select_BigTask_Scan_Default:
 	Case3_Scan:
 		cout << "[数据的数量] = " << endl;
 		cin >> temp.count;
-		for (var i = 0; i < temp.count; i++)
+		for (var i = 0; i < temp.count; ++i)
 		{
 		printf("[输入数据%ld] = ", i + 1);
 		temp.data_array.push_back(0);
@@ -2739,7 +2760,7 @@ Select_BigTask_Scan_Default:
 		cout << "请输入数据的数量" << endl << "[数量]";
 		cin >> *numamount;
 		cout << "请依次输入各个数据" << endl;
-		for (var i = 0; i < *numamount; i++)	// 输入数据
+		for (var i = 0; i < *numamount; ++i)	// 输入数据
 		{
 			printf("[输入数%ld] = ", i + 1);
 			input.data_array.push_back(0);		// 容器内存初始化
@@ -2864,14 +2885,14 @@ Select_BigTask_Scan_Default:
 		if (*min >= 0)	 // min累加/减一次，避免值域出问题的bug
 		{
 			(*min)++;
-			for (var i = 0;i < 3;i++)
+			for (var i = 0;i < 3;++i)
 				(*max)++;
 		}
 			(*min)++;
-			for (var i = 0;i < 3;i++)
+			for (var i = 0;i < 3;++i)
 				(*max)++;
 		// 开始调用，生成随机数
-		for (var i = 0;i < *randnumamount;i++)
+		for (var i = 0;i < *randnumamount;++i)
 		{
 			*randnum = getRandData(*min, *max);
 			printf("[输出数%ld] = ", i + 1);
@@ -2922,7 +2943,7 @@ Select_BigTask_Scan_Default:
 			cout << "[输入身份证号码]";
 			cin >> ID;   
 		} 
-		for (int i = 0; i < 18; i++)// 相当于类型转换
+		for (int i = 0; i < 18; ++i)// 相当于类型转换
 			IDNumber[i] = ID[i] - 48; 
 		_checkID(IDNumber, ID);
 		goto Select_Num_Scan;
@@ -2951,14 +2972,14 @@ Select_BigTask_Scan_Default:
 				cout << "分子->常数 --- begin" << endl;
 				try
 				{
-					for (var i = 0; i < nca; i++)
+					for (var i = 0; i < nca; ++i)
 					{
 						cin >> nc;
 						m1.setNumerator_constant(nc);
 					}
 					cout << "=== end" << endl;
 					cout << "分子->根号 --- begin" << endl;
-					for (var i = 0; i < nra; i++)
+					for (var i = 0; i < nra; ++i)
 					{
 						cin >> nr;
 						m1.setNumerator_radical(nr);
@@ -2966,14 +2987,14 @@ Select_BigTask_Scan_Default:
 					cout << "=== end" << endl;
 					// ----------Color Theme Editor for Visual Studio 2019：基础连接已经关闭：接收时发生错误。
 					cout << "分母->常数 --- begin" << endl;
-					for (var i = 0; i < dca; i++)
+					for (var i = 0; i < dca; ++i)
 					{
 						cin >> dc;
 						m1.setDenominator_constant(dc);
 					}
 					cout << "=== end" << endl;
 					cout << "分母->根号 --- begin" << endl;
-					for (var i = 0; i < dra; i++)
+					for (var i = 0; i < dra; ++i)
 					{
 						cin >> dr;
 						m1.setDenominator_radical(dr);
@@ -2993,7 +3014,7 @@ Select_BigTask_Scan_Default:
 			case 2:
 			{
 				vector<var> vec;
-				for (var i = 0; i < 5; i++)
+				for (var i = 0; i < 5; ++i)
 				{
 					vec.push_back(0);
 					cin >> vec[i];
