@@ -2142,55 +2142,68 @@ template <typename Dtype>
 class Tree
 {
 private:
+	var translateId(var org) {
+		var i;
+		/*遍历对应表，得到present id*/
+		for (i = 0; i < copy_map.size(); ++i) {
+			if (copy_map[i] == org)
+				break;/*TODO:copy_map加上root节点*/
+		}
+		return i;
+	}
 
 public:
-	vector<Node<Dtype>> nodes_orginal;
+	vector<Node<Dtype>> nodes;
+	vector<var> copy_map;		/*原、现下标对应表*/
+	/*----------
+	PRESENT/ID	0 1 2 3 4 5 6 ...
+	ORIGINAL	0 7 9 4 6 1 2 ...
+	Ps:不会出现-1。
+	----------*/
 
 	void setTreeNode(var _parent, Dtype _data) {
 		Node<Dtype> temp;
 		temp.data = _data;
 		temp.parent = _parent;
-		nodes_orginal.push_back(temp);
+		nodes.push_back(temp);
 	}
 
+	/*Tip：数据设定完毕时调用此函数，否则后面调用相关algorithm时会出错。*/
 	void arrange() {
-		/*TODO:减少push_back的使用*/
+		/*TODO:内存性能优化：减少push_back的使用*/
 		vector<var> temp_table;		/*同父级表，内存值随arrange动态变化*/
 		vector<var> ori_par_table;	/*原父节点存储表*/
-		vector<var> copy_map;		/*原、现下标对应表，用于copy替换后的父节点指针*/
 		var tmp_size = 0;			/*暂存size，避免容器size随值的加入而改变*/
 		var total = 0;				/*总计数*/
 		var _depth = 2;
 		vector<Node<Dtype>> nodes_sorted;/*替换原来的Nodes，避免每次都遍历*/
-		nodes_sorted.resize(nodes_orginal.size());
-		nodes_sorted[0] = ;
+		nodes_sorted.resize(nodes.size());
+//		nodes_sorted[0] = ;无需再给root赋值，因为root的各项数据始终不修改
 		/*起个头，给主干打标记（基本原理与下面的相同）*/
-		for (var i = 1; i < this->nodes_orginal.size(); ++i) {
-			if (this->nodes_orginal[i].parent == 0) {
+		for (var i = 1; i < this->nodes.size(); ++i) {
+			if (this->nodes[i].parent == 0) {
 				++total;
 				temp_table.push_back(i);
 				nodes_sorted[total].depth = 1;
-				nodes_sorted[total].data = this->nodes_orginal[i].data;
+				nodes_sorted[total].data = this->nodes[i].data;
 				copy_map.push_back(i);
-//				ori_par_table.push_back(nodes_orginal[i].parent);
 			}
 		}
 		/*var i = total 是实验性用法*/
-		for (; total < this->nodes_orginal.size(); ) {
+		for (; total < this->nodes.size(); ) {
 			tmp_size = temp_table.size();
-			for (var i = this->nodes_orginal.size(); i < this->nodes_orginal.size(); ++i) {
+			for (var i = this->nodes.size(); i < this->nodes.size(); ++i) {
 				for (var j = 0; j < tmp_size; ++j) {
-					if (this->nodes_orginal[i].parent == temp_table[j]) {
+					if (this->nodes[i].parent == temp_table[j]) {
 						++total;/*总计数自加1*/
 						temp_table.push_back(i);/*修改同父级表*/
 						nodes_sorted[total].depth = _depth;/*存储深度*/
-						nodes_sorted[total].data = this->nodes_orginal[i].data;/*复制数据*/
+						nodes_sorted[total].data = this->nodes[i].data;/*复制数据*/
 						copy_map.push_back(i);/*id对应表做记录*/
-//						ori_par_table.push_back(nodes_orginal[i].parent);/*TODO:去掉这个*/
 					}
 				}
 			}
-			temp_table.erase(temp_table.begin(), temp_table.begin() + tmp_size);
+			temp_table.erase(temp_table.begin(), temp_table.begin() + tmp_size);/*erase这一步很重要*/
 			if (temp_table.size() == 0)
 				break;
 			++_depth;
@@ -2200,10 +2213,11 @@ public:
 		i：控制原父节点存储表的匹配
 		j：控制copy_map的匹配
 		*/
+		/*total由于比总数小1，故在for循环中加1*/
 		for (var i = 1; i < total + 1; ++i) {
 			for (var j = 0; j < copy_map.size(); ++j) {
-				if (nodes_orginal[i].parent == copy_map[j - 1]) {
-					nodes_orginal[i] = j;
+				if (nodes[i].parent == copy_map[j - 1]) {
+					nodes[i] = j;
 					break;
 				}
 			}
@@ -2212,8 +2226,11 @@ public:
 //		for (var i = 1; i < node_count; ++i) {
 //			nodes_sorted[i].parent = ori_par_table[i];
 //		}
-		/*覆盖*//*TODO:重写*/
-		nodes_orginal = nodes_sorted;
+		/*将其他数据复制回原nodes*/
+		for (var i = 1; i < total + 1; ++i) {
+			nodes[i].data = nodes_sorted[i].data;
+			nodes[i].depth = nodes_sorted[i].depth;
+		}
 	}
 	/*void setTreeNode(var _layer, Dtype value) {
 		if (_layer >= node_count || _layer < 0)
@@ -2224,20 +2241,40 @@ public:
 		return;
 	}*/
 
-	getNode(var& id) {
+	vector<var> getBrother(var id) {
+		vector<var> brother_id_vec;
+		id = translateId(id);/*将原id转换成现id*/
+
+		/*双向查找同parent的node，并把节点id打包成vec容器*/
+		var i = id;
+		while (true) {
+			++i;/*正向查找*/
+			if (i >= nodes.size())/*检查边界*/
+				break;
+			if (nodes[i].parent == nodes[id].parent)
+				brother_id_vec.push_back(i);
+			else
+				break;
+		}
+		while (true) {
+			--i;/*反向查找*/
+			if (i < 0)/*检查边界*/
+				break;
+			if (nodes[i].parent == nodes[id].parent)
+				brother_id_vec.push_back(i);
+			else
+				break;
+		}
+		return brother_id_vec;
+	}
+
+	vector<var> getSon(var id) {
+		id = translateId(id);/*将原id转换成现id*/
 
 	}
-	vector<var> getBrother(node_id) {
 
-		/*双向查找*/
-		/*把节点id打包成vec容器*/
-	}
-
-	vector<var> getSon(node_id) {
-
-	}
-
-	vector<var> getFather(node_id) {
+	vector<var> getFather(var id) {
+		id = translateId(id);/*将原id转换成现id*/
 
 	}
 };
@@ -2384,7 +2421,7 @@ template <typename Dtype>
 bool operator==(const unknown<Dtype>& unk, Dtype& num) {
 	if (unk.getCoefficient() == 0 && num == 0)
 		return true;
-	if (unk.getCoefficient() )
+	if (unk.getCoefficient() )/*TODO:<--*/
 		return false;
 }
 
