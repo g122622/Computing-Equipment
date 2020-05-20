@@ -84,8 +84,9 @@
 #define UP				2
 #define DOWN			3
 
-//#pragma execution_character_set("utf-8")
+#define DELAY_ADAPT_INDEX 30	// 设定计时精度
 #define DEBUG
+//#pragma execution_character_set("utf-8")
 
 
 /*----------全局变量/结构体/对象声明区/杂项区1----------*/
@@ -758,9 +759,69 @@ class action
 	private:
 	inline void showGeneralErrorMsg()
 	{
-		cerr << "抱歉，程序运行出现异常，你可以选择把异常信息反馈给开发者。"  << endl;
+		cerr << "抱歉，程序运行出现异常。你可以选择把异常信息反馈给开发者。"  << endl;
 	}
-	
+
+	/*计时器*/
+	class timer
+	{
+	private:
+		var delay_adapt_index;
+		var per_sec;// 每秒计数
+		bool has_adaped;
+
+		// 一个延迟单位（单元）
+		void delayUnit(const var& num)
+		{
+			for (var i = num; i > 0; --i)
+				for (var j = 0; j < 128; ++j);
+		}
+
+		// 自适应函数
+		var adapt(const int& index)
+		{
+			var tmp = 1000;
+			for (var i = 0; i < index; ++i)
+			{
+				clock_t start, stop;// 初始化计时函数
+				start = clock();	// 开始计时
+				delayUnit(tmp);
+				stop = clock();		// 停止计时
+				float duration = (float)(stop - start) / CLOCKS_PER_SEC;
+				if (duration > 0.1)
+					tmp -= 70000;
+				else if (duration < 0.1)
+					tmp += 70000;
+				else if (duration == 0.1)
+					return tmp * 10;
+			}
+			return tmp * 10;
+		}
+	public:
+		void setDelayAdaptIndex(const var& index)
+		{
+			this->delay_adapt_index = index;
+			per_sec = adapt(delay_adapt_index);
+			has_adaped = true;
+		}
+
+		void delay(var ms)
+		{
+			if (has_adaped == false) {
+				per_sec = adapt(delay_adapt_index);
+				has_adaped = true;
+			}
+			delayUnit(per_sec / 1000 * ms);
+		}
+
+		timer()
+		{
+			delay_adapt_index = DELAY_ADAPT_INDEX;// 设定计时精度
+			has_adaped = false;
+		}
+		~timer() {}
+	};
+
 	public:
 	// 加载总控制台函数
 	inline void showMasterConsole()
@@ -818,6 +879,8 @@ class action
 		cerr << "异常消息：幂的底数和指数同时为零（003）" << endl;
 		system("pause");
 	}
+
+	timer Timer;/*初始化计时器对象*/
 };
 
 
@@ -1790,55 +1853,6 @@ public:
 #endif // DEBUG
 
 
-class timer
-{
-private:
-	var delay_adapt_index = 30;// 计时精度（默认为30）
-	var per_sec;// 每秒计数
-
-	// 一个延迟单位（单元）
-	void delayUnit(const var& num)
-	{
-		for (var i = num; i > 0; --i)
-			for (var j = 0; j < 128; ++j);
-	}
-
-	// 自适应函数
-	var adapt(const int& index)
-	{
-		var tmp = 1000;
-		for (var i = 0; i < index; ++i)
-		{
-			clock_t start, stop;// 初始化计时函数
-			start = clock();	// 开始计时
-			delayUnit(tmp);
-			stop = clock();		// 停止计时
-			float duration = (float)(stop - start) / CLOCKS_PER_SEC;
-			if (duration > 0.1)
-				tmp -= 70000;
-			else if (duration < 0.1)
-				tmp += 70000;
-			else if (duration == 0.1)
-				return tmp * 10;
-		}
-		return tmp * 10;
-	}
-public:
-	void setDelayAdaptIndex(const var& index)
-	{
-		this->delay_adapt_index = index;
-		per_sec = adapt(delay_adapt_index);
-	}
-
-	void delay(var ms)
-	{
-		delayUnit(per_sec / 1000 * ms);
-	}
-
-	timer() {};
-	~timer() {};
-};
-
 /*
 滑稽树上滑稽果。
 滑稽树下你和我。
@@ -2167,7 +2181,7 @@ public:
 		temp.parent = _parent;
 		nodes.push_back(temp);
 	}
-
+	
 	/*Tip：数据设定完毕时调用此函数，否则后面调用相关algorithm时会出错。*/
 	void arrange() {
 		/*TODO:内存性能优化：减少push_back的使用*/
@@ -2244,26 +2258,23 @@ public:
 	vector<var> getBrother(var id) {
 		vector<var> brother_id_vec;
 		id = translateId(id);/*将原id转换成现id*/
-
-		/*双向查找同parent的node，并把节点id打包成vec容器*/
 		var i = id;
-		while (true) {
-			++i;/*正向查找*/
-			if (i >= nodes.size())/*检查边界*/
-				break;
-			if (nodes[i].parent == nodes[id].parent)
-				brother_id_vec.push_back(i);
-			else
-				break;
-		}
+		/*双向查找同parent的node，并把节点id打包成vec容器*/
 		while (true) {
 			--i;/*反向查找*/
 			if (i < 0)/*检查边界*/
 				break;
 			if (nodes[i].parent == nodes[id].parent)
 				brother_id_vec.push_back(i);
-			else
+			else break;
+		}
+		while (true) {
+			++i;/*正向查找*/
+			if (i >= nodes.size())/*检查边界*/
 				break;
+			if (nodes[i].parent == nodes[id].parent)
+				brother_id_vec.push_back(i);
+			else break;
 		}
 		return brother_id_vec;
 	}
@@ -2983,6 +2994,13 @@ Select_BigTask_Scan_Default:
 		for (int i = 0; i < 18; ++i)// 相当于类型转换
 			IDNumber[i] = ID[i] - 48; 
 		_checkID(IDNumber, ID);
+		goto Select_Num_Scan;
+	}
+
+
+	case 520:/*小彩蛋*/
+	{
+		cout << "[小彩蛋]隔壁班的lch长得好好看鸭" << endl;
 		goto Select_Num_Scan;
 	}
 
