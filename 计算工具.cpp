@@ -84,13 +84,13 @@
 #define UP				2
 #define DOWN			3
 
-#define DELAY_ADAPT_INDEX 30	// 设定计时精度
+#define DELAY_ADAPT_INDEX 30	// 设定计时精度（根据不同的运行平台及平台性能设置不同的值）
+typedef long long var;
 #define DEBUG
 //#pragma execution_character_set("utf-8")
 
 
 /*----------全局变量/结构体/对象声明区/杂项区1----------*/
-typedef long long var;
 using namespace std;
 const int times = 50;
 int number = 0;
@@ -756,12 +756,7 @@ vector<var> operator+(const vector<var>& vec1, const vector<var>& vec2)
 /*----------对象声明区----------*/
 class action
 {
-	private:
-	inline void showGeneralErrorMsg()
-	{
-		cerr << "抱歉，程序运行出现异常。你可以选择把异常信息反馈给开发者。"  << endl;
-	}
-
+private:
 	/*计时器*/
 	class timer
 	{
@@ -771,15 +766,13 @@ class action
 		bool has_adaped;
 
 		// 一个延迟单位（单元）
-		void delayUnit(const var& num)
-		{
+		void delayUnit(const var& num) {
 			for (var i = num; i > 0; --i)
 				for (var j = 0; j < 128; ++j);
 		}
 
 		// 自适应函数
-		var adapt(const int& index)
-		{
+		var adapt(const int& index) {
 			var tmp = 1000;
 			for (var i = 0; i < index; ++i)
 			{
@@ -798,15 +791,13 @@ class action
 			return tmp * 10;
 		}
 	public:
-		void setDelayAdaptIndex(const var& index)
-		{
+		void setDelayAdaptIndex(const var& index) {
 			this->delay_adapt_index = index;
 			per_sec = adapt(delay_adapt_index);
 			has_adaped = true;
 		}
 
-		void delay(var ms)
-		{
+		void delay(var ms) {
 			if (has_adaped == false) {
 				per_sec = adapt(delay_adapt_index);
 				has_adaped = true;
@@ -814,15 +805,47 @@ class action
 			delayUnit(per_sec / 1000 * ms);
 		}
 
-		timer()
-		{
+		timer() {
 			delay_adapt_index = DELAY_ADAPT_INDEX;// 设定计时精度
 			has_adaped = false;
 		}
 		~timer() {}
 	};
 
+	class error
+	{
 	public:
+		inline void showGeneralErrorMsg() {
+			cerr << "抱歉，程序运行出现异常。你可以选择把异常信息反馈给开发者。" << endl;
+		}
+
+		// 显示输入错误信息函数
+		inline void showInputErrorMsg() {
+			cout << "系统消息：请输入正确的数。" << endl << endl;
+		}
+
+		inline void showRadicalMinusErrorMsg(/*var& error_value*/) {
+			showGeneralErrorMsg();
+			cerr << "异常消息：在进行平方根运算时根号内的值为负（001）" << endl;
+			/*cerr << "异常值：" << error_value << endl;
+			cerr << "异常值内存地址：" << &error_value << endl;*/
+			system("pause");
+		}
+
+		inline void showDenZeroErrorMsg() {
+			showGeneralErrorMsg();
+			cerr << "异常消息：多项式运算中分母为零（002）" << endl;
+			system("pause");
+		}
+
+		inline void showBaseNumZeroErrorMsg() {
+			showGeneralErrorMsg();
+			cerr << "异常消息：幂的底数和指数同时为零（003）" << endl;
+			system("pause");
+		}
+	};
+
+public:
 	// 加载总控制台函数
 	inline void showMasterConsole()
 	{
@@ -851,37 +874,11 @@ class action
 			*/
 			<< "0::显示总控制台" << endl;
 	}
-	// 显示输入错误信息函数
-	inline void showInputErrorMsg()
-	{
-		cout << "系统消息：请输入正确的数。" << endl << endl;
-	}
-	
-	inline void showRadicalMinusErrorMsg(/*var& error_value*/)
-	{
-		showGeneralErrorMsg();
-		cerr << "异常消息：在进行平方根运算时根号内的值为负（001）" << endl;
-		/*cerr << "异常值：" << error_value << endl;
-		cerr << "异常值内存地址：" << &error_value << endl;*/
-		system("pause");
-	}
-
-	inline void showDenZeroErrorMsg()
-	{
-		showGeneralErrorMsg();
-		cerr << "异常消息：多项式运算中分母为零（002）" << endl;
-		system("pause");
-	}
-
-	inline void showBaseNumZeroErrorMsg()
-	{
-		showGeneralErrorMsg();
-		cerr << "异常消息：幂的底数和指数同时为零（003）" << endl;
-		system("pause");
-	}
 
 	timer Timer;/*初始化计时器对象*/
+	error Error;
 };
+action Action;
 
 
 template <typename Dtype>
@@ -2126,9 +2123,6 @@ public:
 };*/
 
 
-action Action;
-
-
 // 以下是自己写的Tree对象（先实现了再说，以后再优化qwq）
 /*技术特征：
 理论最大索引节点数：9223372036854775807（2^63-1）
@@ -2192,15 +2186,14 @@ public:
 		var _depth = 2;
 		vector<Node<Dtype>> nodes_sorted;/*替换原来的Nodes，避免每次都遍历*/
 		nodes_sorted.resize(nodes.size());
-//		nodes_sorted[0] = ;无需再给root赋值，因为root的各项数据始终不修改
-		/*起个头，给主干打标记（基本原理与下面的相同）*/
+		/*起头，给主干打标记*/
 		for (var i = 1; i < this->nodes.size(); ++i) {
 			if (this->nodes[i].parent == 0) {
-				++total;
-				temp_table.push_back(i);
-				nodes_sorted[total].depth = 1;
-				nodes_sorted[total].data = this->nodes[i].data;
-				copy_map.push_back(i);
+				++total;						/*总计数自加1*/
+				temp_table.push_back(i);		/*修改同父级表*/
+				nodes_sorted[total].depth = 1;	/*存储深度*/
+				nodes_sorted[total].data = this->nodes[i].data;/*复制数据*/
+				copy_map.push_back(i);			/*id对应表做记录*/
 			}
 		}
 		/*var i = total 是实验性用法*/
@@ -2209,11 +2202,11 @@ public:
 			for (var i = this->nodes.size(); i < this->nodes.size(); ++i) {
 				for (var j = 0; j < tmp_size; ++j) {
 					if (this->nodes[i].parent == temp_table[j]) {
-						++total;/*总计数自加1*/
-						temp_table.push_back(i);/*修改同父级表*/
+						++total;					/*总计数自加1*/
+						temp_table.push_back(i);	/*修改同父级表*/
 						nodes_sorted[total].depth = _depth;/*存储深度*/
 						nodes_sorted[total].data = this->nodes[i].data;/*复制数据*/
-						copy_map.push_back(i);/*id对应表做记录*/
+						copy_map.push_back(i);		/*id对应表做记录*/
 					}
 				}
 			}
@@ -2256,16 +2249,16 @@ public:
 	}*/
 
 	vector<var> getBrother(var id) {
+		/*双向查找同parent的node，并把节点id打包成vec容器*/
 		vector<var> brother_id_vec;
 		id = translateId(id);/*将原id转换成现id*/
 		var i = id;
-		/*双向查找同parent的node，并把节点id打包成vec容器*/
 		while (true) {
 			--i;/*反向查找*/
 			if (i < 0)/*检查边界*/
 				break;
 			if (nodes[i].parent == nodes[id].parent)
-				brother_id_vec.push_back(i);
+				brother_id_vec.push_back(i);/*TODO:应该push_back转换后的id*/
 			else break;
 		}
 		while (true) {
@@ -2273,18 +2266,51 @@ public:
 			if (i >= nodes.size())/*检查边界*/
 				break;
 			if (nodes[i].parent == nodes[id].parent)
-				brother_id_vec.push_back(i);
+				brother_id_vec.push_back(i);/*TODO:应该push_back转换后的id*/
 			else break;
 		}
 		return brother_id_vec;
 	}
 
-	vector<var> getSon(var id) {
+	vector<var> getSonId(var id) {
 		id = translateId(id);/*将原id转换成现id*/
 
 	}
 
-	vector<var> getFather(var id) {
+	Dtype getSonVal(var id) {
+		id = translateId(id);/*将原id转换成现id*/
+
+	}
+
+	var getFatherId(var id) {
+		id = translateId(id);/*将原id转换成现id*/
+
+	}
+
+	Dtype getFatherVal(var id) {
+		id = translateId(id);/*将原id转换成现id*/
+
+	}
+
+	bool isLeaf(var id) {
+		id = translateId(id);/*将原id转换成现id*/
+		var i = id;
+		while (true) {
+			++i;
+			//TODO:改下面的
+			if (i == nodes.size())/*检查到id位于最末尾，直接判定属于叶节点*/
+				return true;
+			if ((nodes[i].depth == nodes[id].depth + 1) && (nodes[i].parent == id))
+				return false;
+			else if (nodes[i].depth == nodes[id].depth)
+				continue;
+			else if (nodes[i].depth == nodes[id].depth + 2)
+				return true;
+		}
+		return false;
+	}
+
+	var getDegree(var id) {
 		id = translateId(id);/*将原id转换成现id*/
 
 	}
@@ -2292,7 +2318,7 @@ public:
 
 
 template <typename Dtype>
-class constant
+class constant_old
 {
 private:
 	Dtype numerator, denominator;
@@ -2301,13 +2327,14 @@ private:
 	bool is_radical;
 
 public:
-	void setConstant(Dtype num, Dtype n_exponent_tmp, Dtype den, Dtype d_exponent_tmp, bool calc_state) {
+	void setConstant(Dtype num, Dtype n_exponent_tmp, Dtype den, \
+		Dtype d_exponent_tmp, bool calc_state) {
 		if (den == 0) {
-			Action.showDenZeroErrorMsg();
+			Action.Error.showDenZeroErrorMsg();
 			throw 0;	// 分母为零，抛出异常
 		}
 		if ((num == 0 && n_exponent_tmp == 0) || (den == 0 && d_exponent_tmp == 0)) {
-			Action.showBaseNumZeroErrorMsg();
+			Action.Error.showBaseNumZeroErrorMsg();
 			throw 0;	// 底数和指数同时为零，抛出异常
 		}
 		if (num != 0 && n_exponent_tmp == 0)
@@ -2332,7 +2359,7 @@ public:
 		this->setConstant(num, 1, den, 1);
 		this->is_radical = true;
 		if (this->sign == false) {	// 根号内的值为负
-			Action.showRadicalMinusErrorMsg();
+			Action.Error.showRadicalMinusErrorMsg();
 			throw data.getSign();
 		}
 		return;
@@ -2371,7 +2398,7 @@ public:
 	~constant() {}
 };
 template <typename Dtype>
-constant<Dtype> operator+(const constant<Dtype>& cst1, constant<Dtype> cst2) {
+constant_old<Dtype> operator+(const constant_old<Dtype>& cst1, constant_old<Dtype> cst2) {
 
 
 }
@@ -2437,16 +2464,29 @@ bool operator==(const unknown<Dtype>& unk, Dtype& num) {
 }
 
 
-class polynomial
+template <typename Dtype>
+class Polynomial
 {
 private:
+	Tree<Dtype> poly;
 
 public:
+	/*Tip:接受的Tree未经arrange*/
+	void setPolynomial(const Tree<Dtype>& temp) {
+		this->poly = temp;
+		poly.arrange();
+		return;
+	}
 
-	polynomial() {};
-	~polynomial() {};
+	void simpPolynomial() {
+
+	}
+	Polynomial() {};
+	~Polynomial() {};
 };
 
+
+/*
 class xxx
 {
 private:
@@ -2456,6 +2496,7 @@ public:
 	xxx() {};
 	~xxx() {};
 };
+*/
 
 
 /*----------全局变量/结构体/对象声明区/杂项区2----------*/
@@ -3057,7 +3098,7 @@ Select_BigTask_Scan_Default:
 				}
 				catch (var err_tmp)
 				{
-					Action.showRadicalMinusErrorMsg(/*err_tmp*/);
+					Action.Error.showRadicalMinusErrorMsg(/*err_tmp*/);
 				}
 				cout << "=== end" << endl;
 				mult<var> m3 = m1 - m1;
@@ -3094,7 +3135,7 @@ Select_BigTask_Scan_Default:
 			
 			default:
 			{
-				Action.showInputErrorMsg();
+				Action.Error.showInputErrorMsg();
 				goto Select_Num_Scan;
 			}
 			}
@@ -3111,7 +3152,7 @@ Select_BigTask_Scan_Default:
 
 	default:	// 输入错误
 	{
-		Action.showInputErrorMsg();
+		Action.Error.showInputErrorMsg();
 		goto Select_Num_Scan;
 	}						// default
 	}						// switch
